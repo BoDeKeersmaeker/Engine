@@ -1,28 +1,36 @@
 #include "MiniginPCH.h"
-#include <SDL.h>
-#include <SDL_ttf.h>
-
+#include "TextComponent.h"
+#include "Transform.h"
 #include "TextObject.h"
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
+#include <SDL.h>
+#include <SDL_ttf.h>
 
-dae::TextObject::TextObject(const std::string& text, const std::shared_ptr<Font>& font) 
-	: m_NeedsUpdate(true), m_Text(text), m_Font(font), m_Texture(nullptr)
-{ }
+dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font)
+	:Component(ComponentType::Text)
+	, m_NeedsUpdate(true)
+	, m_Text(text)
+	, m_Font(font)
+	, m_Texture(nullptr)
+	, m_TextColor{ 255,255,255 }
+{
 
-void dae::TextObject::Update()
+}
+
+void dae::TextComponent::Update()
 {
 	if (m_NeedsUpdate)
 	{
-		const SDL_Color color = { 255,255,255 }; // only white text is supported now
+		const SDL_Color color = { Uint8(m_TextColor.R), Uint8(m_TextColor.G), Uint8(m_TextColor.B) };
 		const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), color);
-		if (surf == nullptr) 
+		if (surf == nullptr)
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
 		}
 		auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
-		if (texture == nullptr) 
+		if (texture == nullptr)
 		{
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 		}
@@ -32,24 +40,17 @@ void dae::TextObject::Update()
 	}
 }
 
-void dae::TextObject::Render() const
+void dae::TextComponent::Render(const dae::Transform& transform)
 {
 	if (m_Texture != nullptr)
 	{
-		const auto pos = m_Transform.GetPosition();
+		const auto pos = transform.GetPosition();
 		Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 	}
 }
 
-void dae::TextObject::SetText(const std::string& text)
+void dae::TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
 	m_NeedsUpdate = true;
 }
-
-void dae::TextObject::SetPosition(const float x, const float y)
-{
-	m_Transform.SetPosition(x, y, 0.0f);
-}
-
-

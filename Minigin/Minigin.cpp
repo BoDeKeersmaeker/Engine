@@ -10,6 +10,11 @@
 #include "TextObject.h"
 #include "GameObject.h"
 #include "Scene.h"
+#include "TextureComponent.h"
+#include "TextComponent.h"
+#include "Time.h"
+#include "FPSComponent.h"
+#include "vld.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -45,18 +50,27 @@ void dae::Minigin::LoadGame() const
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
 	auto go = std::make_shared<GameObject>();
-	go->SetTexture("background.jpg");
+	go->AddComponent(std::make_shared<TextureComponent>());
+	std::static_pointer_cast<TextureComponent>(go->GetComponent(ComponentType::Texture))->SetTexture("background.jpg");
 	scene.Add(go);
 
 	go = std::make_shared<GameObject>();
-	go->SetTexture("logo.png");
+	go->AddComponent(std::make_shared<TextureComponent>());
+	std::static_pointer_cast<TextureComponent>(go->GetComponent(ComponentType::Texture))->SetTexture("logo.png");
 	go->SetPosition(216, 180);
 	scene.Add(go);
 
+	go = std::make_shared<GameObject>();
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto to = std::make_shared<TextObject>("Programming 4 Assignment", font);
-	to->SetPosition(80, 20);
-	scene.Add(to);
+	go->AddComponent(std::make_shared<TextComponent>("Programming 4 Assignment", font));
+	go->SetPosition(80, 20);
+	scene.Add(go);
+
+	go = std::make_shared<GameObject>();
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	go->AddComponent(std::make_shared<FPSComponent>(font));
+	go->SetPosition(10, 10);
+	scene.Add(go);
 }
 
 void dae::Minigin::Cleanup()
@@ -82,16 +96,19 @@ void dae::Minigin::Run()
 		auto& input = InputManager::GetInstance();
 
 		bool doContinue = true;
+		auto lastTime = std::chrono::high_resolution_clock::now();
 		while (doContinue)
 		{
 			const auto currentTime = high_resolution_clock::now();
-			
+			Time::GetInstance().UpdateElapsedSec(duration_cast<duration<float>>(currentTime - lastTime).count());
+
 			doContinue = input.ProcessInput();
 			sceneManager.Update();
 			renderer.Render();
 			
-			auto sleepTime = duration_cast<duration<float>>(currentTime + milliseconds(MsPerFrame) - high_resolution_clock::now());
-			this_thread::sleep_for(sleepTime);
+			lastTime = currentTime;
+			//auto sleepTime = duration_cast<duration<float>>(currentTime + milliseconds(MsPerFrame) - high_resolution_clock::now());
+			//this_thread::sleep_for(sleepTime);
 		}
 	}
 
