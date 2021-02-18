@@ -51,12 +51,16 @@ void dae::Minigin::LoadGame() const
 
 	auto go = std::make_shared<GameObject>();
 	go->AddComponent(std::make_shared<TextureComponent>());
-	std::static_pointer_cast<TextureComponent>(go->GetComponent(ComponentType::Texture))->SetTexture("background.jpg");
+	std::weak_ptr<TextureComponent> comp = go->GetComponent<TextureComponent>();
+	if(comp.lock() != nullptr)
+		comp.lock()->SetTexture("background.jpg");
 	scene.Add(go);
 
 	go = std::make_shared<GameObject>();
 	go->AddComponent(std::make_shared<TextureComponent>());
-	std::static_pointer_cast<TextureComponent>(go->GetComponent(ComponentType::Texture))->SetTexture("logo.png");
+	comp = go->GetComponent<TextureComponent>();
+	if (comp.lock() != nullptr)
+		comp.lock()->SetTexture("logo.png");
 	go->SetPosition(216, 180);
 	scene.Add(go);
 
@@ -107,8 +111,6 @@ void dae::Minigin::Run()
 			renderer.Render();
 			
 			lastTime = currentTime;
-			//auto sleepTime = duration_cast<duration<float>>(currentTime + milliseconds(MsPerFrame) - high_resolution_clock::now());
-			//this_thread::sleep_for(sleepTime);
 		}
 	}
 

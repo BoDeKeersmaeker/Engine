@@ -25,6 +25,9 @@
     <Filter Include="Helpers">
       <UniqueIdentifier>{15fcecb3-ea06-4bc2-8477-b2397d9dc060}</UniqueIdentifier>
     </Filter>
+    <Filter Include="IMGui">
+      <UniqueIdentifier>{7c295b90-b486-43af-8992-d8a0e3dee45a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniginPCH.h">
@@ -90,6 +93,30 @@
     <ClInclude Include="Structs.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui-1.81\imgui.h">
+      <Filter>IMGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui-1.81\imgui_internal.h">
+      <Filter>IMGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui-1.81\imstb_rectpack.h">
+      <Filter>IMGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui-1.81\imstb_textedit.h">
+      <Filter>IMGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui-1.81\imstb_truetype.h">
+      <Filter>IMGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui-1.81\imconfig.h">
+      <Filter>IMGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui-1.81\backends\imgui_impl_opengl2.h">
+      <Filter>IMGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui-1.81\backends\imgui_impl_sdl.h">
+      <Filter>IMGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -148,6 +175,27 @@
     </ClCompile>
     <ClCompile Include="TextComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\imgui-1.81\imgui.cpp">
+      <Filter>IMGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\imgui-1.81\imgui_demo.cpp">
+      <Filter>IMGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\imgui-1.81\imgui_draw.cpp">
+      <Filter>IMGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\imgui-1.81\imgui_tables.cpp">
+      <Filter>IMGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\imgui-1.81\imgui_widgets.cpp">
+      <Filter>IMGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\imgui-1.81\backends\imgui_impl_opengl2.cpp">
+      <Filter>IMGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\imgui-1.81\backends\imgui_impl_sdl.cpp">
+      <Filter>IMGui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "SceneObject.h"
 #include "Component.h"
+#include "TextureComponent.h"
 #include <unordered_map>
 
 namespace dae
@@ -16,7 +17,19 @@ namespace dae
 
 		void SetPosition(float x, float y);
 		void AddComponent(std::shared_ptr<Component> component);
-		std::shared_ptr<Component> GetComponent(ComponentType type);
+
+		template <typename T>
+		inline std::weak_ptr<T> GetComponent()
+		{
+			std::weak_ptr<T> temp;
+			for (std::shared_ptr<Component> component : m_pComponents)
+			{
+				temp = std::dynamic_pointer_cast<T>(component);
+				if (temp.lock() != nullptr)
+					return temp;
+			}
+			return temp;
+		}
 
 		GameObject() = default;
 		virtual ~GameObject();
@@ -27,8 +40,6 @@ namespace dae
 
 	private:
 		Transform m_Transform;
-		std::shared_ptr<Texture2D> m_Texture{};
-
-		std::unordered_map<ComponentType, std::shared_ptr<Component>> m_pComponents;
+		std::vector<std::shared_ptr<Component>> m_pComponents;
 	};
 }
