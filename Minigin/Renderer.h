@@ -4,7 +4,7 @@
 struct SDL_Window;
 struct SDL_Renderer;
 
-namespace dae
+namespace engine
 {
 	class Texture2D;
 	/**
@@ -21,10 +21,12 @@ namespace dae
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 
 		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
+		int GetOpenGLDriverIndex();
+
 	private:
 		SDL_Renderer* m_Renderer{};
-		SDL_Window* m_pWindow;
-		bool m_ShowDemo;
+		SDL_Window* m_pWindow = nullptr;
+		bool m_ShowDemo = false;
 	};
 }
 

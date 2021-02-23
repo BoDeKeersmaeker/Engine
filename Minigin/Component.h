@@ -2,7 +2,7 @@
 #include "Transform.h"
 #include "Structs.h"
 
-namespace dae
+namespace engine
 {
 	class Component
 	{
@@ -11,7 +11,7 @@ namespace dae
 		inline const ComponentType& GetType() const { return m_ComponentType; };
 
 		virtual void Update() = 0;
-		virtual void Render(const dae::Transform& transform) = 0;
+		virtual void Render(const engine::Transform& transform) = 0;
 
 	private:
 		ComponentType m_ComponentType;

@@ -1,14 +1,13 @@
 #include "MiniginPCH.h"
 #include "TextComponent.h"
 #include "Transform.h"
-#include "TextObject.h"
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font)
+engine::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font)
 	:Component(ComponentType::Text)
 	, m_NeedsUpdate(true)
 	, m_Text(text)
@@ -19,7 +18,7 @@ dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr
 
 }
 
-void dae::TextComponent::Update()
+void engine::TextComponent::Update()
 {
 	if (m_NeedsUpdate)
 	{
@@ -40,7 +39,7 @@ void dae::TextComponent::Update()
 	}
 }
 
-void dae::TextComponent::Render(const dae::Transform& transform)
+void engine::TextComponent::Render(const engine::Transform& transform)
 {
 	if (m_Texture != nullptr)
 	{
@@ -49,7 +48,7 @@ void dae::TextComponent::Render(const dae::Transform& transform)
 	}
 }
 
-void dae::TextComponent::SetText(const std::string& text)
+void engine::TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
 	m_NeedsUpdate = true;

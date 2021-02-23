@@ -3,14 +3,14 @@
 #include "TextComponent.h"
 #include "Time.h"
 
-dae::FPSComponent::FPSComponent(const std::shared_ptr<Font>& font)
+engine::FPSComponent::FPSComponent(const std::shared_ptr<Font>& font)
 	: Component(ComponentType::FPS)
 	,m_pTextComponent(std::make_shared<TextComponent>("60 FPS", font))
 {
 	m_pTextComponent->SetTextColor(Color{ 255.f, 255.f, 50.f });
 }
 
-void dae::FPSComponent::Update()
+void engine::FPSComponent::Update()
 {
 	m_FrameCount++;
 	m_ElapsedTime += Time::GetInstance().GetElapsedSec();
@@ -25,7 +25,7 @@ void dae::FPSComponent::Update()
 	m_pTextComponent->Update();
 }
 
-void dae::FPSComponent::Render(const dae::Transform& transform)
+void engine::FPSComponent::Render(const engine::Transform& transform)
 {
 	m_pTextComponent->Render(transform);
 }

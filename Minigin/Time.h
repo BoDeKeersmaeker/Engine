@@ -1,7 +1,7 @@
 #pragma once
 #include "Singleton.h"
 
-namespace dae
+namespace engine
 {
 	class Time final : public Singleton<Time>
 	{
@@ -16,6 +16,6 @@ namespace dae
 		friend class Singleton<Time>;
 		Time() = default;
 
-		float m_ElapsedSec;
+		float m_ElapsedSec{};
 	};
 }

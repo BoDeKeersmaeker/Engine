@@ -2,7 +2,7 @@
 #include "Component.h"
 #include "Structs.h"
 
-namespace dae
+namespace engine
 {
 	class Font;
 	class Texture2D;
@@ -15,7 +15,7 @@ namespace dae
 		inline void SetTextColor(Color color) { m_TextColor = color; };
 
 		virtual void Update() override;
-		virtual void Render(const dae::Transform& transform) override;
+		virtual void Render(const engine::Transform& transform) override;
 
 	private:
 		bool m_NeedsUpdate;

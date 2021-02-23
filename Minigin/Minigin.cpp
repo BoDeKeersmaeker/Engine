@@ -1,25 +1,22 @@
 #include "MiniginPCH.h"
 #include "Minigin.h"
 #include <chrono>
-#include <thread>
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <SDL.h>
-#include "TextObject.h"
 #include "GameObject.h"
 #include "Scene.h"
 #include "TextureComponent.h"
 #include "TextComponent.h"
 #include "Time.h"
 #include "FPSComponent.h"
-#include "vld.h"
 
 using namespace std;
 using namespace std::chrono;
 
-void dae::Minigin::Initialize()
+void engine::Minigin::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
@@ -45,11 +42,13 @@ void dae::Minigin::Initialize()
 /**
  * Code constructing the scene world starts here
  */
-void dae::Minigin::LoadGame() const
+void engine::Minigin::LoadGame() const
 {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
 	auto go = std::make_shared<GameObject>();
+	//const auto temp = std::make_shared<TextureComponent>();
+	//go->AddComponent(std::weak_ptr<TextureComponent>(temp));
 	go->AddComponent(std::make_shared<TextureComponent>());
 	std::weak_ptr<TextureComponent> comp = go->GetComponent<TextureComponent>();
 	if(comp.lock() != nullptr)
@@ -75,9 +74,14 @@ void dae::Minigin::LoadGame() const
 	go->AddComponent(std::make_shared<FPSComponent>(font));
 	go->SetPosition(10, 10);
 	scene.Add(go);
+
+	go = std::make_shared<GameObject>();
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	go->SetPosition(10, 10);
+	scene.Add(go);
 }
 
-void dae::Minigin::Cleanup()
+void engine::Minigin::Cleanup()
 {
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
@@ -85,7 +89,7 @@ void dae::Minigin::Cleanup()
 	SDL_Quit();
 }
 
-void dae::Minigin::Run()
+void engine::Minigin::Run()
 {
 	Initialize();
 
@@ -108,6 +112,7 @@ void dae::Minigin::Run()
 
 			doContinue = input.ProcessInput();
 			sceneManager.Update();
+			//lateupdate?
 			renderer.Render();
 			
 			lastTime = currentTime;

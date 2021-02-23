@@ -2,10 +2,9 @@
 #include "Transform.h"
 #include "SceneObject.h"
 #include "Component.h"
-#include "TextureComponent.h"
 #include <unordered_map>
 
-namespace dae
+namespace engine
 {
 	class Texture2D;
 
@@ -16,7 +15,7 @@ namespace dae
 		void Render() const override;
 
 		void SetPosition(float x, float y);
-		void AddComponent(std::shared_ptr<Component> component);
+		void AddComponent(const std::weak_ptr<Component>& component);
 
 		template <typename T>
 		inline std::weak_ptr<T> GetComponent()

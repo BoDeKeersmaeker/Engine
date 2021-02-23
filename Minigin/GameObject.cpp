@@ -1,30 +1,33 @@
 #include "MiniginPCH.h"
 #include "GameObject.h"
-#include "ResourceManager.h"
-#include "Renderer.h"
 #include "Component.h"
 
-dae::GameObject::~GameObject() = default;
+engine::GameObject::~GameObject() = default;
 
-void dae::GameObject::Update()
+void engine::GameObject::Update()
 {
 	for (std::shared_ptr<Component> component : m_pComponents)
 		component->Update();
 }
 
-void dae::GameObject::Render() const
+void engine::GameObject::Render() const
 {
 	
 	for (std::shared_ptr<Component> component : m_pComponents)
 		component->Render(m_Transform);
 }
 
-void dae::GameObject::SetPosition(float x, float y)
+void engine::GameObject::SetPosition(float x, float y)
 {
 	m_Transform.SetPosition(x, y, 0.0f);
 }
 
-void dae::GameObject::AddComponent(std::shared_ptr<Component> component)
+void engine::GameObject::AddComponent(const std::weak_ptr<Component>& component)
 {
-	m_pComponents.push_back(component);
+	if (component.expired())
+		std::cout << "Component is expired!\n";
+	else if(component.use_count() != 1)
+		std::cout << "Component is already added to another gameObject!\n";
+	else
+		m_pComponents.push_back(component.lock());
 }

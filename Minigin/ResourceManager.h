@@ -1,7 +1,7 @@
 #pragma once
 #include "Singleton.h"
 
-namespace dae
+namespace engine
 {
 	class Texture2D;
 	class Font;
@@ -14,6 +14,6 @@ namespace dae
 	private:
 		friend class Singleton<ResourceManager>;
 		ResourceManager() = default;
-		std::string m_DataPath;
+		std::string m_DataPath{};
 	};
 }

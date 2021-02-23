@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-namespace dae
+namespace engine
 {
 	class Font;
 	class Texture2D;
@@ -12,7 +12,7 @@ namespace dae
 		FPSComponent(const std::shared_ptr<Font>& font);
 
 		virtual void Update() override;
-		virtual void Render(const dae::Transform& transform) override;
+		virtual void Render(const engine::Transform& transform) override;
 
 	private:
 		std::shared_ptr<TextComponent> m_pTextComponent;

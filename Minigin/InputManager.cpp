@@ -3,10 +3,10 @@
 #include <SDL.h>
 
 
-bool dae::InputManager::ProcessInput()
+bool engine::InputManager::ProcessInput()
 {
 	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
-	XInputGetState(0, &m_CurrentState);
+	XInputGetKeystroke(0, 0,&m_CurrentState);
 
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
@@ -21,22 +21,35 @@ bool dae::InputManager::ProcessInput()
 		}
 	}
 
+	for (std::pair<Input, std::vector<std::shared_ptr<BaseCommand>>> command : m_Commands)
+	{
+		if (command.first.input == m_CurrentState.VirtualKey)
+		{
+			switch (command.first.triggertype)
+			{
+			case InputTriggerType::OnInputDown:
+				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYDOWN)
+					for (int i{ 0 }; i < command.second.size(); i++)
+						command.second[i]->Execute();
+				break;
+			case InputTriggerType::OnInputUp:
+				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYUP)
+					for (int i{ 0 }; i < command.second.size(); i++)
+						command.second[i]->Execute();
+				break;
+			case InputTriggerType::OnInputHold:
+				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_REPEAT)
+					for (int i{ 0 }; i < command.second.size(); i++)
+						command.second[i]->Execute();
+				break;
+			}
+		}
+	}
+	
 	return true;
 }
 
-bool dae::InputManager::IsPressed(ControllerButton button) const
+void engine::InputManager::AddCommand(Input input, const std::shared_ptr<BaseCommand>& command)
 {
-	switch (button)
-	{
-	case ControllerButton::ButtonA:
-		return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_A;
-	case ControllerButton::ButtonB:
-		return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_B;
-	case ControllerButton::ButtonX:
-		return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_X;
-	case ControllerButton::ButtonY:
-		return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_Y;
-	default: return false;
-	}
+	m_Commands[input].push_back(command);
 }
-

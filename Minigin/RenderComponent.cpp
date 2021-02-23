@@ -4,23 +4,23 @@
 #include "Renderer.h"
 #include "Transform.h"
 
-dae::RenderComponent::RenderComponent()
+engine::RenderComponent::RenderComponent()
 	:Component(ComponentType::invalid)
 {
 
 }
 
-void dae::RenderComponent::Update()
+void engine::RenderComponent::Update()
 {
 }
 
-void dae::RenderComponent::Render(const Transform& transform)
+void engine::RenderComponent::Render(const Transform& transform)
 {
 	const auto pos = transform.GetPosition();
 	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 }
 
-void dae::RenderComponent::SetTexture(const std::string& filename)
+void engine::RenderComponent::SetTexture(const std::string& filename)
 {
-	m_Texture = dae::ResourceManager::GetInstance().LoadTexture(filename);
+	m_Texture = engine::ResourceManager::GetInstance().LoadTexture(filename);
 }
