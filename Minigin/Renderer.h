@@ -24,6 +24,9 @@ namespace engine
 		int GetOpenGLDriverIndex();
 
 	private:
+		void RenderImguiDemo();
+		void RenderGameModeWindow();
+		
 		SDL_Renderer* m_Renderer{};
 		SDL_Window* m_pWindow = nullptr;
 		bool m_ShowDemo = false;

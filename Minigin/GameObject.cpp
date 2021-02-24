@@ -1,8 +1,12 @@
 #include "MiniginPCH.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "Observer.h"
 
-engine::GameObject::~GameObject() = default;
+engine::GameObject::~GameObject()
+{
+	Notify(*this, Event::GameObjectDestroyed);
+}
 
 void engine::GameObject::Update()
 {
@@ -20,14 +24,4 @@ void engine::GameObject::Render() const
 void engine::GameObject::SetPosition(float x, float y)
 {
 	m_Transform.SetPosition(x, y, 0.0f);
-}
-
-void engine::GameObject::AddComponent(const std::weak_ptr<Component>& component)
-{
-	if (component.expired())
-		std::cout << "Component is expired!\n";
-	else if(component.use_count() != 1)
-		std::cout << "Component is already added to another gameObject!\n";
-	else
-		m_pComponents.push_back(component.lock());
 }

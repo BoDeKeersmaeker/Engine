@@ -12,6 +12,9 @@
 #include "TextComponent.h"
 #include "Time.h"
 #include "FPSComponent.h"
+#include  "Kill.h"
+#include "Observer.h"
+#include "Reaper.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -49,14 +52,14 @@ void engine::Minigin::LoadGame() const
 	auto go = std::make_shared<GameObject>();
 	//const auto temp = std::make_shared<TextureComponent>();
 	//go->AddComponent(std::weak_ptr<TextureComponent>(temp));
-	go->AddComponent(std::make_shared<TextureComponent>());
+	go->AddComponent<TextureComponent>(std::make_shared<TextureComponent>(go));
 	std::weak_ptr<TextureComponent> comp = go->GetComponent<TextureComponent>();
 	if(comp.lock() != nullptr)
 		comp.lock()->SetTexture("background.jpg");
 	scene.Add(go);
 
 	go = std::make_shared<GameObject>();
-	go->AddComponent(std::make_shared<TextureComponent>());
+	go->AddComponent<TextureComponent>(std::make_shared<TextureComponent>(go));
 	comp = go->GetComponent<TextureComponent>();
 	if (comp.lock() != nullptr)
 		comp.lock()->SetTexture("logo.png");
@@ -65,20 +68,26 @@ void engine::Minigin::LoadGame() const
 
 	go = std::make_shared<GameObject>();
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	go->AddComponent(std::make_shared<TextComponent>("Programming 4 Assignment", font));
+	go->AddComponent<TextComponent>(std::make_shared<TextComponent>(go, "Programming 4 Assignment", font));
 	go->SetPosition(80, 20);
 	scene.Add(go);
 
 	go = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	go->AddComponent(std::make_shared<FPSComponent>(font));
+	go->AddComponent<FPSComponent>(std::make_shared<FPSComponent>(go, font));
 	go->SetPosition(10, 10);
 	scene.Add(go);
 
 	go = std::make_shared<GameObject>();
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	go->SetPosition(10, 10);
+	go->AddComponent<TextureComponent>(std::make_shared<TextureComponent>(go));
+	comp = go->GetComponent<TextureComponent>();
+	if (comp.lock() != nullptr)
+		comp.lock()->SetTexture("tempQbert.jpg");
+	go->SetPosition(100, 100);
+	go->AddObserver(std::make_shared<Reaper>());
 	scene.Add(go);
+	
+	InputManager::GetInstance().AddCommand({ VK_PAD_A, InputTriggerType::OnInputDown }, std::make_shared<Kill>(go));
 }
 
 void engine::Minigin::Cleanup()

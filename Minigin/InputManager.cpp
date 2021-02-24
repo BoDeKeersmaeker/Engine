@@ -27,18 +27,18 @@ bool engine::InputManager::ProcessInput()
 		{
 			switch (command.first.triggertype)
 			{
-			case InputTriggerType::OnInputDown:
-				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYDOWN)
-					for (int i{ 0 }; i < command.second.size(); i++)
-						command.second[i]->Execute();
-				break;
 			case InputTriggerType::OnInputUp:
 				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYUP)
 					for (int i{ 0 }; i < command.second.size(); i++)
 						command.second[i]->Execute();
 				break;
+			case InputTriggerType::OnInputDown:
+				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYDOWN && !(m_CurrentState.Flags & XINPUT_KEYSTROKE_REPEAT))
+					for (int i{ 0 }; i < command.second.size(); i++)
+						command.second[i]->Execute();
+				break;
 			case InputTriggerType::OnInputHold:
-				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_REPEAT)
+				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYDOWN)
 					for (int i{ 0 }; i < command.second.size(); i++)
 						command.second[i]->Execute();
 				break;

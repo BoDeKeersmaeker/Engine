@@ -10,7 +10,7 @@ namespace engine
 	class TextComponent final : public Component
 	{
 	public:
-		explicit TextComponent(const std::string& text, const std::shared_ptr<Font>& font);
+		explicit TextComponent(std::shared_ptr<GameObject> owner, const std::string& text, const std::shared_ptr<Font>& font);
 		void SetText(const std::string& text);
 		inline void SetTextColor(Color color) { m_TextColor = color; };
 

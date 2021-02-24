@@ -3,9 +3,9 @@
 #include "RenderComponent.h"
 #include "Transform.h"
 
-engine::TextureComponent::TextureComponent()
-	:Component(ComponentType::Texture)
-	,m_RenderComp(std::make_shared<RenderComponent>())
+engine::TextureComponent::TextureComponent(std::shared_ptr<GameObject> owner)
+	:Component(owner)
+	,m_RenderComp(std::make_shared<RenderComponent>(owner))
 {
 
 }

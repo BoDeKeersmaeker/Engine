@@ -28,14 +28,10 @@ void engine::Renderer::Render()
 	SDL_RenderClear(m_Renderer);
 
 	SceneManager::GetInstance().Render();
-	
-	ImGui_ImplOpenGL2_NewFrame();
-	ImGui_ImplSDL2_NewFrame(m_pWindow);
-	ImGui::NewFrame();
-	if (m_ShowDemo)
-		ImGui::ShowDemoWindow(&m_ShowDemo);
-	ImGui::Render();
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+
+	/*if(m_ShowDemo)
+		RenderImguiDemo();*/
+	RenderGameModeWindow();
 
 	SDL_RenderPresent(m_Renderer);
 }
@@ -84,4 +80,32 @@ int engine::Renderer::GetOpenGLDriverIndex()
 				openglIndex = i;
 	}
 	return openglIndex;
+}
+
+void engine::Renderer::RenderImguiDemo()
+{
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplSDL2_NewFrame(m_pWindow);
+	ImGui::NewFrame();
+	
+	ImGui::ShowDemoWindow(&m_ShowDemo);
+	
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+}
+
+void engine::Renderer::RenderGameModeWindow()
+{
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplSDL2_NewFrame(m_pWindow);
+	ImGui::NewFrame();
+
+	ImGui::Begin("GameModes");
+	ImGui::Button("SinglePlayer");
+	ImGui::Button("Co-op");
+	ImGui::Button("Versus");
+	ImGui::End();
+	
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 }

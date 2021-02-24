@@ -15,10 +15,21 @@ namespace engine
 		void Render() const override;
 
 		void SetPosition(float x, float y);
-		void AddComponent(const std::weak_ptr<Component>& component);
+		template <typename T>
+		void AddComponent(const std::weak_ptr<Component>& component)
+		{
+			if (component.expired())
+				std::cout << "Component is expired!\n";
+			else if (component.use_count() != 1)
+				std::cout << "Component is already added to another gameObject!\n";
+			else if (GetComponent<T>().lock() != nullptr)
+				std::cout << "Component of the same type already added!\n";
+			else
+				m_pComponents.push_back(component.lock());
+		}
 
 		template <typename T>
-		inline std::weak_ptr<T> GetComponent()
+		std::weak_ptr<T> GetComponent()
 		{
 			std::weak_ptr<T> temp;
 			for (std::shared_ptr<Component> component : m_pComponents)

@@ -7,8 +7,8 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-engine::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font)
-	:Component(ComponentType::Text)
+engine::TextComponent::TextComponent(std::shared_ptr<GameObject> owner, const std::string& text, const std::shared_ptr<Font>& font)
+	:Component(owner)
 	, m_NeedsUpdate(true)
 	, m_Text(text)
 	, m_Font(font)

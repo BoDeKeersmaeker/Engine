@@ -4,8 +4,8 @@
 #include "Renderer.h"
 #include "Transform.h"
 
-engine::RenderComponent::RenderComponent()
-	:Component(ComponentType::invalid)
+engine::RenderComponent::RenderComponent(std::shared_ptr<GameObject> owner)
+	:Component(owner)
 {
 
 }

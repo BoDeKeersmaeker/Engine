@@ -8,7 +8,7 @@ namespace engine
 	class TextureComponent final : public Component
 	{
 	public:
-		TextureComponent();
+		TextureComponent(std::shared_ptr<GameObject> owner);
 		void SetTexture(const std::string& filename);
 
 		virtual void Update() override;
