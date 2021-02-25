@@ -12,6 +12,7 @@ engine::RenderComponent::RenderComponent(std::shared_ptr<GameObject> owner)
 
 void engine::RenderComponent::Update()
 {
+	
 }
 
 void engine::RenderComponent::Render(const Transform& transform)

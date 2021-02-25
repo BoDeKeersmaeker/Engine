@@ -8,7 +8,8 @@ engine::FPSComponent::FPSComponent(std::shared_ptr<GameObject> owner, const std:
 	: Component(owner)
 {
 	owner->AddComponent<TextComponent>(std::make_shared<TextComponent>(owner, "60 FPS", font));
-	owner->GetComponent<TextComponent>().lock()->SetTextColor(Color{ 255.f, 255.f, 50.f });
+	m_pTextComponent = owner->GetComponent<TextComponent>();
+	m_pTextComponent.lock()->SetTextColor(Color{ 255.f, 255.f, 50.f });
 }
 
 void engine::FPSComponent::Update()
@@ -18,7 +19,7 @@ void engine::FPSComponent::Update()
 
 	if (m_ElapsedTime >= 1.f)
 	{
-		m_pOwner->GetComponent<TextComponent>().lock()->SetText(std::to_string(m_FrameCount) + " FPS");
+		m_pTextComponent.lock()->SetText(std::to_string(m_FrameCount) + " FPS");
 		m_ElapsedTime -= 1.f;
 		m_FrameCount = 0;
 	}

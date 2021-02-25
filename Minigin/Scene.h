@@ -9,7 +9,7 @@ namespace engine
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		void Add(const std::shared_ptr<SceneObject>& object);
-
+		
 		void Update();
 		void Render() const;
 

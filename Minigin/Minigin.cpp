@@ -8,13 +8,15 @@
 #include <SDL.h>
 #include "GameObject.h"
 #include "Scene.h"
-#include "TextureComponent.h"
 #include "TextComponent.h"
 #include "Time.h"
 #include "FPSComponent.h"
-#include  "Kill.h"
-#include "Observer.h"
-#include "Reaper.h"
+#include "Kill.h"
+#include "RenderComponent.h"
+#include "PlayerComponent.h"
+#include "SubjectComponent.h"
+#include "PlayerDeathObserver.h"
+#include "LivesComponent.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -49,45 +51,51 @@ void engine::Minigin::LoadGame() const
 {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
-	auto go = std::make_shared<GameObject>();
-	//const auto temp = std::make_shared<TextureComponent>();
-	//go->AddComponent(std::weak_ptr<TextureComponent>(temp));
-	go->AddComponent<TextureComponent>(std::make_shared<TextureComponent>(go));
-	std::weak_ptr<TextureComponent> comp = go->GetComponent<TextureComponent>();
+	auto background = std::make_shared<GameObject>();
+	background->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(background));
+	std::weak_ptr<RenderComponent> comp = background->GetComponent<RenderComponent>();
 	if(comp.lock() != nullptr)
 		comp.lock()->SetTexture("background.jpg");
-	scene.Add(go);
+	scene.Add(background);
 
-	go = std::make_shared<GameObject>();
-	go->AddComponent<TextureComponent>(std::make_shared<TextureComponent>(go));
-	comp = go->GetComponent<TextureComponent>();
+	auto logo = std::make_shared<GameObject>();
+	logo->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(logo));
+	comp = logo->GetComponent<RenderComponent>();
 	if (comp.lock() != nullptr)
 		comp.lock()->SetTexture("logo.png");
-	go->SetPosition(216, 180);
-	scene.Add(go);
+	logo->SetPosition(216, 180);
+	scene.Add(logo);
 
-	go = std::make_shared<GameObject>();
+	auto tekst = std::make_shared<GameObject>();
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	go->AddComponent<TextComponent>(std::make_shared<TextComponent>(go, "Programming 4 Assignment", font));
-	go->SetPosition(80, 20);
-	scene.Add(go);
+	tekst->AddComponent<TextComponent>(std::make_shared<TextComponent>(tekst, "Programming 4 Assignment", font));
+	tekst->SetPosition(80, 20);
+	scene.Add(tekst);
 
-	go = std::make_shared<GameObject>();
+	auto fpsCounter = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	go->AddComponent<FPSComponent>(std::make_shared<FPSComponent>(go, font));
-	go->SetPosition(10, 10);
-	scene.Add(go);
+	fpsCounter->AddComponent<FPSComponent>(std::make_shared<FPSComponent>(fpsCounter, font));
+	fpsCounter->SetPosition(10, 10);
+	scene.Add(fpsCounter);
 
-	go = std::make_shared<GameObject>();
-	go->AddComponent<TextureComponent>(std::make_shared<TextureComponent>(go));
-	comp = go->GetComponent<TextureComponent>();
+
+	auto livesCounter = std::make_shared<GameObject>();
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	livesCounter->AddComponent<LivesComponent>(std::make_shared<LivesComponent>(livesCounter, font));
+	livesCounter->SetPosition(100, 10);
+	scene.Add(livesCounter);
+	
+	auto qBert = std::make_shared<GameObject>();
+	qBert->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(qBert, 0, 5));
+	qBert->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(qBert));
+	qBert->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(livesCounter));
+	comp = qBert->GetComponent<RenderComponent>();
 	if (comp.lock() != nullptr)
 		comp.lock()->SetTexture("tempQbert.jpg");
-	go->SetPosition(100, 100);
-	go->AddObserver(std::make_shared<Reaper>());
-	scene.Add(go);
+	qBert->SetPosition(100, 100);
+	scene.Add(qBert);
 	
-	InputManager::GetInstance().AddCommand({ VK_PAD_A, InputTriggerType::OnInputDown }, std::make_shared<Kill>(go));
+	InputManager::GetInstance().AddCommand({ VK_PAD_A, InputTriggerType::OnInputDown }, std::make_shared<Kill>(qBert));
 }
 
 void engine::Minigin::Cleanup()

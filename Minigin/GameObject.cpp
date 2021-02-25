@@ -5,7 +5,6 @@
 
 engine::GameObject::~GameObject()
 {
-	Notify(*this, Event::GameObjectDestroyed);
 }
 
 void engine::GameObject::Update()

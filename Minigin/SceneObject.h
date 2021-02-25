@@ -19,13 +19,17 @@ namespace engine
 		SceneObject& operator=(const SceneObject& other) = delete;
 		SceneObject& operator=(SceneObject&& other) = delete;
 
-		virtual void AddObserver(std::shared_ptr<Observer> observer);
-		virtual void RemoveObserver(std::shared_ptr<Observer> observer);
+		virtual void AddObserver(const std::shared_ptr<Observer>& observer);
+		virtual void RemoveObserver(const std::shared_ptr<Observer>& observer);
 
+		void Destroy() { m_NeedsDestruction = true; };
+		bool NeedsDestruction() const { return m_NeedsDestruction; };
+	
 	protected:
-		void Notify(const GameObject& entity, Event event);
+		void Notify(std::weak_ptr<GameObject> entity, Event event);
 
 	private:
 		std::vector<std::shared_ptr<Observer>> m_pObservers;
+		bool m_NeedsDestruction = false;
 	};
 }

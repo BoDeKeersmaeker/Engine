@@ -1,18 +1,18 @@
 #pragma once
 
-class GameObject;
-
 namespace engine
 {
+	class GameObject;
+	
 	enum class Event
 	{
-		GameObjectDestroyed
+		PlayerDied
 	};
 	
 	class Observer
 	{
 	public:
-		virtual ~Observer() {};
-		virtual  void OnNotify(const GameObject& gameObject, Event event) = 0;
+		virtual ~Observer() =default;
+		virtual void OnNotify(std::weak_ptr<GameObject> gameObject, Event event) = 0;
 	};
 }

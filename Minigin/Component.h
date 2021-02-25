@@ -15,7 +15,7 @@ namespace engine
 		virtual void Render(const engine::Transform& transform) = 0;
 
 	protected:
-		std::shared_ptr<GameObject> m_pOwner;
+		std::weak_ptr<GameObject> m_pOwner;
 	};
 }
 

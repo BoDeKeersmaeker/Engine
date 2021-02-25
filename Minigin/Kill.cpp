@@ -1,7 +1,12 @@
 #include "MiniginPCH.h"
 #include "Kill.h"
 
-engine::Kill::Kill(std::shared_ptr<GameObject> target)
+#include <mutex>
+
+#include "GameObject.h"
+#include "PlayerComponent.h"
+
+engine::Kill::Kill(std::weak_ptr<GameObject> target)
 	:BaseCommand()
 	, m_pTarget{ target }
 {
@@ -10,6 +15,10 @@ engine::Kill::Kill(std::shared_ptr<GameObject> target)
 
 void engine::Kill::Execute()
 {
-	std::cout << "Kill called.\n";
+	if (m_pTarget.expired())
+		return;
 	
+	auto temp = m_pTarget.lock()->GetComponent<PlayerComponent>();
+	if(!temp.expired())
+		temp.lock()->Die();
 }

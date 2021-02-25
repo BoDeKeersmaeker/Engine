@@ -5,9 +5,6 @@
 
 bool engine::InputManager::ProcessInput()
 {
-	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
-	XInputGetKeystroke(0, 0,&m_CurrentState);
-
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {
@@ -21,31 +18,35 @@ bool engine::InputManager::ProcessInput()
 		}
 	}
 
-	for (std::pair<Input, std::vector<std::shared_ptr<BaseCommand>>> command : m_Commands)
+	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
+
+	while(XInputGetKeystroke(0, 0, &m_CurrentState) == ERROR_SUCCESS)
 	{
-		if (command.first.input == m_CurrentState.VirtualKey)
+		for (std::pair<Input, std::vector<std::shared_ptr<BaseCommand>>> command : m_Commands)
 		{
-			switch (command.first.triggertype)
+			if (command.first.input == m_CurrentState.VirtualKey)
 			{
-			case InputTriggerType::OnInputUp:
-				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYUP)
-					for (int i{ 0 }; i < command.second.size(); i++)
-						command.second[i]->Execute();
-				break;
-			case InputTriggerType::OnInputDown:
-				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYDOWN && !(m_CurrentState.Flags & XINPUT_KEYSTROKE_REPEAT))
-					for (int i{ 0 }; i < command.second.size(); i++)
-						command.second[i]->Execute();
-				break;
-			case InputTriggerType::OnInputHold:
-				if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYDOWN)
-					for (int i{ 0 }; i < command.second.size(); i++)
-						command.second[i]->Execute();
-				break;
+				switch (command.first.triggertype)
+				{
+				case InputTriggerType::OnInputUp:
+					if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYUP)
+						for (int i{ 0 }; i < command.second.size(); i++)
+							command.second[i]->Execute();
+					break;
+				case InputTriggerType::OnInputDown:
+					if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYDOWN && !(m_CurrentState.Flags & XINPUT_KEYSTROKE_REPEAT))
+						for (int i{ 0 }; i < command.second.size(); i++)
+							command.second[i]->Execute();
+					break;
+				case InputTriggerType::OnInputHold:
+					if (m_CurrentState.Flags & XINPUT_KEYSTROKE_KEYDOWN)
+						for (int i{ 0 }; i < command.second.size(); i++)
+							command.second[i]->Execute();
+					break;
+				}
 			}
 		}
 	}
-	
 	return true;
 }
 

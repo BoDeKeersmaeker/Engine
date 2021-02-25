@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include <algorithm>
 
 using namespace engine;
 
@@ -21,6 +22,11 @@ void Scene::Update()
 	{
 		object->Update();
 	}
+
+	const auto temp = std::remove_if(m_Objects.begin(), m_Objects.end(), [](std::shared_ptr<SceneObject> object) { return object->NeedsDestruction(); });
+	if(temp != m_Objects.end())
+		m_Objects.erase(temp, m_Objects.end());
+	
 }
 
 void Scene::Render() const
@@ -30,4 +36,3 @@ void Scene::Render() const
 		object->Render();
 	}
 }
-

@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Components">
       <UniqueIdentifier>{86db0a99-159a-44d3-9a0e-f80946903ad8}</UniqueIdentifier>
     </Filter>
@@ -24,18 +20,19 @@
     <Filter Include="Input">
       <UniqueIdentifier>{9110b72b-104e-4207-b6c1-933901a904a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core">
-      <UniqueIdentifier>{f2b8826a-d8b5-440f-8911-76ce24d774e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Observers">
       <UniqueIdentifier>{e77189da-8c6f-4102-9ed9-f90b8a3ca141}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{f2b8826a-d8b5-440f-8911-76ce24d774e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="RenderComponent.h">
@@ -90,10 +87,10 @@
       <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="MiniginPCH.h">
-      <Filter>core</Filter>
+      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Minigin.h">
-      <Filter>core</Filter>
+      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Components</Filter>
@@ -111,7 +108,7 @@
       <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>core</Filter>
+      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Kill.h">
       <Filter>Input</Filter>
@@ -122,18 +119,24 @@
     <ClInclude Include="Observer.h">
       <Filter>Observers</Filter>
     </ClInclude>
-    <ClInclude Include="Reaper.h">
-      <Filter>Observers</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SubjectComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDeathObserver.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="LivesComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="RenderComponent.cpp">
@@ -179,13 +182,13 @@
       <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="MiniginPCH.cpp">
-      <Filter>core</Filter>
+      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Minigin.cpp">
-      <Filter>core</Filter>
+      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>core</Filter>
+      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Components</Filter>
@@ -200,7 +203,7 @@
       <Filter>Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>core</Filter>
+      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Kill.cpp">
       <Filter>Input</Filter>
@@ -211,14 +214,23 @@
     <ClCompile Include="Observer.cpp">
       <Filter>Observers</Filter>
     </ClCompile>
-    <ClCompile Include="Reaper.cpp">
-      <Filter>Observers</Filter>
-    </ClCompile>
     <ClCompile Include="SceneObject.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SubjectComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDeathObserver.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="LivesComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

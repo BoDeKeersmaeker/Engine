@@ -7,12 +7,12 @@ namespace engine
 	class Kill : public engine::BaseCommand
 	{
 	public:
-		Kill(std::shared_ptr<GameObject> target);
+		Kill(std::weak_ptr<GameObject> target);
 		virtual ~Kill() = default;
 		void Execute() override;
 
 	private:
-		std::shared_ptr<GameObject> m_pTarget;
+		std::weak_ptr<GameObject> m_pTarget;
 	};
 }
 
