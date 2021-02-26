@@ -202,6 +202,9 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="..\3rdParty\imgui-1.81\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imgui-1.81\imstb_truetype.h" />
     <ClInclude Include="BaseCommand.h" />
+    <ClInclude Include="CatchSam.h" />
+    <ClInclude Include="CatchSlick.h" />
+    <ClInclude Include="CoilyDiscBait.h" />
     <ClInclude Include="ColorChange.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Font.h" />
@@ -216,6 +219,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerDeathObserver.h" />
     <ClInclude Include="PlayerScoreObserver.h" />
+    <ClInclude Include="RemainingDisc.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -302,6 +306,9 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="BaseCommand.cpp" />
+    <ClCompile Include="CatchSam.cpp" />
+    <ClCompile Include="CatchSlick.cpp" />
+    <ClCompile Include="CoilyDiscBait.cpp" />
     <ClCompile Include="ColorChange.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -323,6 +330,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerDeathObserver.cpp" />
     <ClCompile Include="PlayerScoreObserver.cpp" />
+    <ClCompile Include="RemainingDisc.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />

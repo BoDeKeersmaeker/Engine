@@ -1,18 +1,18 @@
 #pragma once
 #include "BaseCommand.h"
+
 namespace engine
 {
 	class PlayerComponent;
-	
-	class Kill final : public engine::BaseCommand
+
+	class CatchSlick : public engine::BaseCommand
 	{
 	public:
-		Kill(std::weak_ptr<PlayerComponent> target);
-		virtual ~Kill() = default;
+		CatchSlick(std::weak_ptr<PlayerComponent> target);
+		virtual ~CatchSlick() = default;
 		void Execute() override;
 
 	private:
 		std::weak_ptr<PlayerComponent> m_pTarget;
 	};
-}
-
+};

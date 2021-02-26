@@ -6,7 +6,7 @@ namespace engine
 	class PlayerComponent : public Component
 	{
 	public:
-		PlayerComponent(std::shared_ptr<GameObject> owner, int playerId,int lives = 5);
+		PlayerComponent(std::shared_ptr<GameObject> owner,int lives = 5);
 		virtual void Update() override;
 		virtual void Render(const Transform& transform) override;
 		
@@ -18,7 +18,6 @@ namespace engine
 	private:
 		void Respawn() const;
 		
-		int m_PlayerId;
 		int m_Lives;
 		int m_Score = 0;
 	};

@@ -9,6 +9,7 @@ engine::FPSComponent::FPSComponent(std::shared_ptr<GameObject> owner, const std:
 {
 	owner->AddComponent<TextComponent>(std::make_shared<TextComponent>(owner, "60 FPS", font));
 	m_pTextComponent = owner->GetComponent<TextComponent>();
+	
 	m_pTextComponent.lock()->SetTextColor(Color{ 255.f, 255.f, 50.f });
 }
 

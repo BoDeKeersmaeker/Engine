@@ -5,9 +5,8 @@
 #include "Observer.h"
 #include "SubjectComponent.h"
 
-engine::PlayerComponent::PlayerComponent(std::shared_ptr<GameObject> owner, int playerId, int lives)
+engine::PlayerComponent::PlayerComponent(std::shared_ptr<GameObject> owner, int lives)
 	:Component(owner)
-	,m_PlayerId{ playerId }
 	,m_Lives{ lives }
 {
 	owner->AddComponent<SubjectComponent>(std::make_shared<SubjectComponent>(owner));

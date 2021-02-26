@@ -4,10 +4,10 @@
 #include "Renderer.h"
 #include "Transform.h"
 
-engine::RenderComponent::RenderComponent(std::shared_ptr<GameObject> owner)
+engine::RenderComponent::RenderComponent(std::shared_ptr<GameObject> owner, std::string path)
 	:Component(owner)
 {
-
+	SetTexture(path);
 }
 
 void engine::RenderComponent::Update()

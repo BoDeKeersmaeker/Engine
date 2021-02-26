@@ -140,6 +140,18 @@
     <ClInclude Include="ColorChange.h">
       <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="RemainingDisc.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CatchSlick.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CoilyDiscBait.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CatchSam.h">
+      <Filter>Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component.cpp">
@@ -242,6 +254,18 @@
       <Filter>Observers</Filter>
     </ClCompile>
     <ClCompile Include="ColorChange.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="RemainingDisc.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="CatchSlick.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="CoilyDiscBait.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="CatchSam.cpp">
       <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>

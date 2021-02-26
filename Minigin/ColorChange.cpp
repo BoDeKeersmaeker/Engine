@@ -12,5 +12,8 @@ engine::ColorChange::ColorChange(std::weak_ptr<PlayerComponent> target)
 void engine::ColorChange::Execute()
 {
 	if (!m_pTarget.expired())
+	{
+		std::cout << "Color of a block changed.\n";
 		m_pTarget.lock()->ChangeScore(25);
+	}
 }

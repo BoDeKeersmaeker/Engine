@@ -1,25 +1,44 @@
 #include "MiniginPCH.h"
 #include "Minigin.h"
-#include <chrono>
-#include "InputManager.h"
-#include "SceneManager.h"
-#include "Renderer.h"
-#include "ResourceManager.h"
+
 #include <SDL.h>
+#include <chrono>
+
+#pragma region Core
+#include "Renderer.h"
 #include "GameObject.h"
 #include "Scene.h"
-#include "TextComponent.h"
 #include "Time.h"
-#include "FPSComponent.h"
-#include "Kill.h"
+#pragma endregion
+
+#pragma region Managers
+#include "InputManager.h"
+#include "SceneManager.h"
+#include "ResourceManager.h"
+#pragma endregion 
+
+#pragma region Components
+#include "TextComponent.h"
 #include "RenderComponent.h"
 #include "PlayerComponent.h"
 #include "SubjectComponent.h"
-#include "PlayerDeathObserver.h"
-#include "LivesComponent.h"
-#include "ColorChange.h"
-#include "PlayerScoreObserver.h"
+#include "FPSComponent.h"
 #include "ScoreComponent.h"
+#include "LivesComponent.h"
+#pragma endregion 
+
+#pragma region Commands
+#include "Kill.h"
+#include "ColorChange.h"
+#include "CoilyDiscBait.h"
+#include "CatchSlick.h"
+#include "CatchSam.h"
+#pragma endregion 
+
+#pragma region Observers
+#include "PlayerDeathObserver.h"
+#include "PlayerScoreObserver.h"
+#pragma endregion 
 
 using namespace std;
 using namespace std::chrono;
@@ -55,17 +74,11 @@ void engine::Minigin::LoadGame() const
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
 	auto background = std::make_shared<GameObject>();
-	background->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(background));
-	std::weak_ptr<RenderComponent> comp = background->GetComponent<RenderComponent>();
-	if(comp.lock() != nullptr)
-		comp.lock()->SetTexture("background.jpg");
+	background->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(background, "background.jpg"));
 	scene.Add(background);
 
 	auto logo = std::make_shared<GameObject>();
-	logo->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(logo));
-	comp = logo->GetComponent<RenderComponent>();
-	if (comp.lock() != nullptr)
-		comp.lock()->SetTexture("logo.png");
+	logo->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(logo, "logo.png"));
 	logo->SetPosition(216, 180);
 	scene.Add(logo);
 
@@ -81,30 +94,55 @@ void engine::Minigin::LoadGame() const
 	fpsCounter->SetPosition(10, 10);
 	scene.Add(fpsCounter);
 
-	auto livesCounter = std::make_shared<GameObject>();
+	auto lifeCounter1 = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	livesCounter->AddComponent<LivesComponent>(std::make_shared<LivesComponent>(livesCounter, font));
-	livesCounter->SetPosition(540, 10);
-	scene.Add(livesCounter);
+	lifeCounter1->AddComponent<LivesComponent>(std::make_shared<LivesComponent>(lifeCounter1, font));
+	lifeCounter1->SetPosition(540, 10);
+	scene.Add(lifeCounter1);
 
-	auto scoreCounter = std::make_shared<GameObject>();
+	auto lifeCounter2 = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	scoreCounter->AddComponent<ScoreComponent>(std::make_shared<ScoreComponent>(scoreCounter, font));
-	scoreCounter->SetPosition(540, 380);
-	scene.Add(scoreCounter);
+	lifeCounter2->AddComponent<LivesComponent>(std::make_shared<LivesComponent>(lifeCounter2, font));
+	lifeCounter2->SetPosition(340, 10);
+	scene.Add(lifeCounter2);
+
+	auto scoreCounter1 = std::make_shared<GameObject>();
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	scoreCounter1->AddComponent<ScoreComponent>(std::make_shared<ScoreComponent>(scoreCounter1, font));
+	scoreCounter1->SetPosition(540, 380);
+	scene.Add(scoreCounter1);
+
+	auto scoreCounter2 = std::make_shared<GameObject>();
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	scoreCounter2->AddComponent<ScoreComponent>(std::make_shared<ScoreComponent>(scoreCounter2, font));
+	scoreCounter2->SetPosition(340, 380);
+	scene.Add(scoreCounter2);
 	
-	auto qBert = std::make_shared<GameObject>();
-	qBert->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(qBert, 0));
-	qBert->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(qBert));
-	qBert->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(livesCounter->GetComponent<LivesComponent>()));
-	qBert->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerScoreObserver>(scoreCounter->GetComponent<ScoreComponent>()));
-	comp = qBert->GetComponent<RenderComponent>();
-	if (comp.lock() != nullptr)
-		comp.lock()->SetTexture("tempQbert.jpg");
-	scene.Add(qBert);
+	auto Player1 = std::make_shared<GameObject>();
+	Player1->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(Player1));
+	Player1->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(Player1, "tempQbert2.jpg"));
+	Player1->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(lifeCounter1->GetComponent<LivesComponent>()));
+	Player1->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerScoreObserver>(scoreCounter1->GetComponent<ScoreComponent>()));
+	scene.Add(Player1);
+
+	auto Player2 = std::make_shared<GameObject>();
+	Player2->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(Player2));
+	Player2->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(Player2, "tempQbert2.jpg"));
+	Player2->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(lifeCounter2->GetComponent<LivesComponent>()));
+	Player2->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerScoreObserver>(scoreCounter2->GetComponent<ScoreComponent>()));
+	scene.Add(Player2);
 	
-	InputManager::GetInstance().AddCommand({ VK_PAD_A, InputTriggerType::OnInputDown }, std::make_shared<Kill>(qBert->GetComponent<PlayerComponent>()));
-	InputManager::GetInstance().AddCommand({ VK_PAD_B, InputTriggerType::OnInputDown }, std::make_shared<ColorChange>(qBert->GetComponent<PlayerComponent>()));
+	InputManager::GetInstance().AddCommand({ VK_PAD_RSHOULDER, InputTriggerType::OnInputDown }, std::make_shared<Kill>(Player1->GetComponent<PlayerComponent>()));
+	InputManager::GetInstance().AddCommand({ VK_PAD_A, InputTriggerType::OnInputDown }, std::make_shared<ColorChange>(Player1->GetComponent<PlayerComponent>()));
+	InputManager::GetInstance().AddCommand({ VK_PAD_B, InputTriggerType::OnInputDown }, std::make_shared<CoilyDiscBait>(Player1->GetComponent<PlayerComponent>()));
+	InputManager::GetInstance().AddCommand({ VK_PAD_X, InputTriggerType::OnInputDown }, std::make_shared<CatchSlick>(Player1->GetComponent<PlayerComponent>()));
+	InputManager::GetInstance().AddCommand({ VK_PAD_Y, InputTriggerType::OnInputDown }, std::make_shared<CatchSam>(Player1->GetComponent<PlayerComponent>()));
+	
+	InputManager::GetInstance().AddCommand({ VK_PAD_LSHOULDER, InputTriggerType::OnInputDown }, std::make_shared<Kill>(Player2->GetComponent<PlayerComponent>()));
+	InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_DOWN, InputTriggerType::OnInputDown }, std::make_shared<ColorChange>(Player2->GetComponent<PlayerComponent>()));
+	InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_RIGHT, InputTriggerType::OnInputDown }, std::make_shared<CoilyDiscBait>(Player2->GetComponent<PlayerComponent>()));
+	InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_LEFT, InputTriggerType::OnInputDown }, std::make_shared<CatchSlick>(Player2->GetComponent<PlayerComponent>()));
+	InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_UP, InputTriggerType::OnInputDown }, std::make_shared<CatchSam>(Player2->GetComponent<PlayerComponent>()));
 }
 
 void engine::Minigin::Cleanup()
