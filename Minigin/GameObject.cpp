@@ -5,6 +5,7 @@
 
 engine::GameObject::~GameObject()
 {
+	
 }
 
 void engine::GameObject::Update()
@@ -23,4 +24,9 @@ void engine::GameObject::Render() const
 void engine::GameObject::SetPosition(float x, float y)
 {
 	m_Transform.SetPosition(x, y, 0.0f);
+}
+
+const engine::Transform& engine::GameObject::GetTransform()
+{
+	return m_Transform;
 }

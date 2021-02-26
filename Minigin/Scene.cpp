@@ -11,7 +11,7 @@ Scene::Scene(const std::string& name) : m_Name(name) {}
 
 Scene::~Scene() = default;
 
-void Scene::Add(const std::shared_ptr<SceneObject>& object)
+void Scene::Add(const std::shared_ptr<GameObject>& object)
 {
 	m_Objects.push_back(object);
 }
@@ -19,14 +19,11 @@ void Scene::Add(const std::shared_ptr<SceneObject>& object)
 void Scene::Update()
 {
 	for(auto& object : m_Objects)
-	{
 		object->Update();
-	}
 
-	const auto temp = std::remove_if(m_Objects.begin(), m_Objects.end(), [](std::shared_ptr<SceneObject> object) { return object->NeedsDestruction(); });
+	const auto temp = std::remove_if(m_Objects.begin(), m_Objects.end(), [](std::shared_ptr<GameObject> object) { return object->NeedsDestruction(); });
 	if(temp != m_Objects.end())
 		m_Objects.erase(temp, m_Objects.end());
-	
 }
 
 void Scene::Render() const

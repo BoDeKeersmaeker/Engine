@@ -18,7 +18,7 @@ bool engine::InputManager::ProcessInput()
 		}
 	}
 
-	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
+	ZeroMemory(&m_CurrentState, sizeof(XINPUT_KEYSTROKE));
 
 	while(XInputGetKeystroke(0, 0, &m_CurrentState) == ERROR_SUCCESS)
 	{

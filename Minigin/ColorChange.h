@@ -3,16 +3,15 @@
 namespace engine
 {
 	class PlayerComponent;
-	
-	class Kill : public engine::BaseCommand
+
+	class ColorChange : public engine::BaseCommand
 	{
 	public:
-		Kill(std::weak_ptr<PlayerComponent> target);
-		virtual ~Kill() = default;
+		ColorChange(std::weak_ptr<PlayerComponent> target);
+		virtual ~ColorChange() = default;
 		void Execute() override;
 
 	private:
 		std::weak_ptr<PlayerComponent> m_pTarget;
 	};
 }
-

@@ -17,6 +17,9 @@
 #include "SubjectComponent.h"
 #include "PlayerDeathObserver.h"
 #include "LivesComponent.h"
+#include "ColorChange.h"
+#include "PlayerScoreObserver.h"
+#include "ScoreComponent.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -66,11 +69,11 @@ void engine::Minigin::LoadGame() const
 	logo->SetPosition(216, 180);
 	scene.Add(logo);
 
-	auto tekst = std::make_shared<GameObject>();
+	auto text = std::make_shared<GameObject>();
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	tekst->AddComponent<TextComponent>(std::make_shared<TextComponent>(tekst, "Programming 4 Assignment", font));
-	tekst->SetPosition(80, 20);
-	scene.Add(tekst);
+	text->AddComponent<TextComponent>(std::make_shared<TextComponent>(text, "Programming 4 Assignment", font));
+	text->SetPosition(80, 20);
+	scene.Add(text);
 
 	auto fpsCounter = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
@@ -78,24 +81,30 @@ void engine::Minigin::LoadGame() const
 	fpsCounter->SetPosition(10, 10);
 	scene.Add(fpsCounter);
 
-
 	auto livesCounter = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
 	livesCounter->AddComponent<LivesComponent>(std::make_shared<LivesComponent>(livesCounter, font));
-	livesCounter->SetPosition(100, 10);
+	livesCounter->SetPosition(540, 10);
 	scene.Add(livesCounter);
+
+	auto scoreCounter = std::make_shared<GameObject>();
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	scoreCounter->AddComponent<ScoreComponent>(std::make_shared<ScoreComponent>(scoreCounter, font));
+	scoreCounter->SetPosition(540, 380);
+	scene.Add(scoreCounter);
 	
 	auto qBert = std::make_shared<GameObject>();
-	qBert->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(qBert, 0, 5));
+	qBert->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(qBert, 0));
 	qBert->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(qBert));
-	qBert->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(livesCounter));
+	qBert->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(livesCounter->GetComponent<LivesComponent>()));
+	qBert->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerScoreObserver>(scoreCounter->GetComponent<ScoreComponent>()));
 	comp = qBert->GetComponent<RenderComponent>();
 	if (comp.lock() != nullptr)
 		comp.lock()->SetTexture("tempQbert.jpg");
-	qBert->SetPosition(100, 100);
 	scene.Add(qBert);
 	
-	InputManager::GetInstance().AddCommand({ VK_PAD_A, InputTriggerType::OnInputDown }, std::make_shared<Kill>(qBert));
+	InputManager::GetInstance().AddCommand({ VK_PAD_A, InputTriggerType::OnInputDown }, std::make_shared<Kill>(qBert->GetComponent<PlayerComponent>()));
+	InputManager::GetInstance().AddCommand({ VK_PAD_B, InputTriggerType::OnInputDown }, std::make_shared<ColorChange>(qBert->GetComponent<PlayerComponent>()));
 }
 
 void engine::Minigin::Cleanup()
@@ -129,7 +138,6 @@ void engine::Minigin::Run()
 
 			doContinue = input.ProcessInput();
 			sceneManager.Update();
-			//lateupdate?
 			renderer.Render();
 			
 			lastTime = currentTime;

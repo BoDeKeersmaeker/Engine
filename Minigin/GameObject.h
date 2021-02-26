@@ -1,6 +1,5 @@
 #pragma once
 #include "Transform.h"
-#include "SceneObject.h"
 #include "Component.h"
 #include <unordered_map>
 
@@ -8,7 +7,7 @@ namespace engine
 {
 	class Texture2D;
 
-	class GameObject final : public SceneObject
+	class GameObject final
 	{
 	public:
 		GameObject() = default;
@@ -18,13 +17,16 @@ namespace engine
 		GameObject& operator=(const GameObject & other) = delete;
 		GameObject& operator=(GameObject && other) = delete;
 		
-		void Update() override;
-		void Render() const override;
+		void Update();
+		void Render() const;
 
 		void SetPosition(float x, float y);
 		template <typename T>
 		void AddComponent(const std::weak_ptr<Component>& component);
 
+		void Destroy() { m_NeedsDestruction = true; };
+		bool NeedsDestruction() const { return m_NeedsDestruction; };
+		
 		template <typename T>
 		std::weak_ptr<T> GetComponent()
 		{
@@ -37,10 +39,12 @@ namespace engine
 			}
 			return temp;
 		}
+		const Transform& GetTransform();
 
 	private:
 		Transform m_Transform;
 		std::vector<std::shared_ptr<Component>> m_pComponents;
+		bool m_NeedsDestruction = false;
 	};
 
 	template <typename T>

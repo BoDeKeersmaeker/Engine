@@ -4,7 +4,7 @@
 #include "LivesComponent.h"
 #include "PlayerComponent.h"
 
-engine::PlayerDeathObserver::PlayerDeathObserver(std::weak_ptr<GameObject> target)
+engine::PlayerDeathObserver::PlayerDeathObserver(std::weak_ptr<LivesComponent> target)
 	:Observer()
 	,m_pTarget{ target }
 {
@@ -17,7 +17,7 @@ void engine::PlayerDeathObserver::OnNotify(std::weak_ptr<GameObject> gameObject,
 	{
 	case Event::PlayerDied:
 		std::cout << "Player Died.\n";
-		m_pTarget.lock()->GetComponent<LivesComponent>().lock()->SetLives(gameObject.lock()->GetComponent<PlayerComponent>().lock()->GetLives());
+		m_pTarget.lock()->SetLives(gameObject.lock()->GetComponent<PlayerComponent>().lock()->GetLives());
 		break;
 	}
 }

@@ -11,6 +11,7 @@ engine::PlayerComponent::PlayerComponent(std::shared_ptr<GameObject> owner, int 
 	,m_Lives{ lives }
 {
 	owner->AddComponent<SubjectComponent>(std::make_shared<SubjectComponent>(owner));
+	Respawn();
 }
 
 void engine::PlayerComponent::Update()
@@ -27,12 +28,33 @@ void engine::PlayerComponent::Die()
 {
 	m_Lives--;
 	m_pOwner.lock()->GetComponent<SubjectComponent>().lock()->Notify(m_pOwner, Event::PlayerDied);
+
+	Respawn();
 	
 	if (m_Lives  <= 0)
 		m_pOwner.lock()->Destroy();
 }
 
-int engine::PlayerComponent::GetLives()
+void engine::PlayerComponent::ChangeScore(int deltaScore)
+{
+	m_Score += deltaScore;
+	m_pOwner.lock()->GetComponent<SubjectComponent>().lock()->Notify(m_pOwner, Event::ScoreChanged);
+}
+
+int engine::PlayerComponent::GetLives() const
 {
 	return m_Lives;
+}
+
+int engine::PlayerComponent::GetScore() const
+{
+	return m_Score;
+}
+
+void engine::PlayerComponent::Respawn() const
+{
+	//temp code for fun
+	const auto x = static_cast<float>(rand() % 641);
+	const auto y = static_cast<float>(rand() % 480);
+	m_pOwner.lock()->SetPosition(x, y);
 }

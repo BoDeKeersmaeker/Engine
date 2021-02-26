@@ -6,7 +6,8 @@ namespace engine
 	
 	enum class Event
 	{
-		PlayerDied
+		PlayerDied,
+		ScoreChanged
 	};
 	
 	class Observer
