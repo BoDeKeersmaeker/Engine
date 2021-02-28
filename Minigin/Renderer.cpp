@@ -99,11 +99,41 @@ void engine::Renderer::RenderGameModeWindow()
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplSDL2_NewFrame(m_pWindow);
 	ImGui::NewFrame();
+	
+	ImGui::Begin("Qbert");
+	
+	if(m_ShowHowToPlay)
+	{
+		ImGui::Text("How to play.");
+		ImGui::Text("Player 1: ");
+		ImGui::Text("Right shoulder to die.");
+		ImGui::Text("A to change color.");
+		ImGui::Text("B to bait coily of the edge.");
+		ImGui::Text("X to Catch Slick.");
+		ImGui::Text("Y to Catch Sam.");
 
-	ImGui::Begin("GameModes");
-	ImGui::Button("SinglePlayer");
-	ImGui::Button("Co-op");
-	ImGui::Button("Versus");
+		ImGui::Spacing();
+		
+		ImGui::Text("Player 2: ");
+		ImGui::Text("Left shoulder to die.");
+		ImGui::Text("DPAD down to change color.");
+		ImGui::Text("DPAD right to bait coily of the edge.");
+		ImGui::Text("DPAD left to Catch Slick.");
+		ImGui::Text("DPAD up to Catch Sam.");
+
+		ImGui::Spacing();
+		
+		if (ImGui::Button("Understood."))
+			m_ShowHowToPlay = !m_ShowHowToPlay;
+	}
+	else
+	{
+		ImGui::Text("GameModes");
+		ImGui::Button("SinglePlayer");
+		ImGui::Button("Co-op");
+		ImGui::Button("Versus");
+	}
+
 	ImGui::End();
 	
 	ImGui::Render();

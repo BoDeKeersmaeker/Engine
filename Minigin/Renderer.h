@@ -30,6 +30,7 @@ namespace engine
 		SDL_Renderer* m_Renderer{};
 		SDL_Window* m_pWindow = nullptr;
 		bool m_ShowDemo = false;
+		bool m_ShowHowToPlay = true;
 	};
 }
 

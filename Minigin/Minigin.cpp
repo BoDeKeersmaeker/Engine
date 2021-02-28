@@ -25,6 +25,7 @@
 #include "FPSComponent.h"
 #include "ScoreComponent.h"
 #include "LivesComponent.h"
+#include "CounterComponent.h"
 #pragma endregion 
 
 #pragma region Commands
@@ -96,40 +97,40 @@ void engine::Minigin::LoadGame() const
 
 	auto lifeCounter1 = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	lifeCounter1->AddComponent<LivesComponent>(std::make_shared<LivesComponent>(lifeCounter1, font));
-	lifeCounter1->SetPosition(540, 10);
+	lifeCounter1->AddComponent<LivesComponent>(std::make_shared<CounterComponent>(lifeCounter1, font, 5, "Player 1: ", " Lives left", "Game over"));
+	lifeCounter1->SetPosition(440, 60);
 	scene.Add(lifeCounter1);
 
 	auto lifeCounter2 = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	lifeCounter2->AddComponent<LivesComponent>(std::make_shared<LivesComponent>(lifeCounter2, font));
-	lifeCounter2->SetPosition(340, 10);
+	lifeCounter2->AddComponent<LivesComponent>(std::make_shared<CounterComponent>(lifeCounter2, font, 5, "Player 2: ", " Lives left", "Game over"));
+	lifeCounter2->SetPosition(240, 60);
 	scene.Add(lifeCounter2);
 
 	auto scoreCounter1 = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	scoreCounter1->AddComponent<ScoreComponent>(std::make_shared<ScoreComponent>(scoreCounter1, font));
-	scoreCounter1->SetPosition(540, 380);
+	scoreCounter1->AddComponent<ScoreComponent>(std::make_shared<CounterComponent>(scoreCounter1, font, 0, "Player 1 score: "));
+	scoreCounter1->SetPosition(440, 430);
 	scene.Add(scoreCounter1);
 
 	auto scoreCounter2 = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	scoreCounter2->AddComponent<ScoreComponent>(std::make_shared<ScoreComponent>(scoreCounter2, font));
-	scoreCounter2->SetPosition(340, 380);
+	scoreCounter2->AddComponent<ScoreComponent>(std::make_shared<CounterComponent>(scoreCounter2, font, 0, "Player 2 score: "));
+	scoreCounter2->SetPosition(240, 430);
 	scene.Add(scoreCounter2);
 	
 	auto Player1 = std::make_shared<GameObject>();
 	Player1->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(Player1));
 	Player1->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(Player1, "tempQbert2.jpg"));
-	Player1->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(lifeCounter1->GetComponent<LivesComponent>()));
-	Player1->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerScoreObserver>(scoreCounter1->GetComponent<ScoreComponent>()));
+	Player1->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(lifeCounter1->GetComponent<CounterComponent>()));
+	Player1->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerScoreObserver>(scoreCounter1->GetComponent<CounterComponent>()));
 	scene.Add(Player1);
 
 	auto Player2 = std::make_shared<GameObject>();
 	Player2->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(Player2));
 	Player2->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(Player2, "tempQbert2.jpg"));
-	Player2->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(lifeCounter2->GetComponent<LivesComponent>()));
-	Player2->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerScoreObserver>(scoreCounter2->GetComponent<ScoreComponent>()));
+	Player2->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(lifeCounter2->GetComponent<CounterComponent>()));
+	Player2->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerScoreObserver>(scoreCounter2->GetComponent<CounterComponent>()));
 	scene.Add(Player2);
 	
 	InputManager::GetInstance().AddCommand({ VK_PAD_RSHOULDER, InputTriggerType::OnInputDown }, std::make_shared<Kill>(Player1->GetComponent<PlayerComponent>()));
