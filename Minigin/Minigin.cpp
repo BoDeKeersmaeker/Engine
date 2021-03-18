@@ -97,25 +97,25 @@ void engine::Minigin::LoadGame() const
 
 	auto lifeCounter1 = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	lifeCounter1->AddComponent<LivesComponent>(std::make_shared<CounterComponent>(lifeCounter1, font, 5, "Player 1: ", " Lives left", "Game over"));
+	lifeCounter1->AddComponent<CounterComponent>(std::make_shared<CounterComponent>(lifeCounter1, font, 5, "Player 1: ", " Lives left", "Game over"));
 	lifeCounter1->SetPosition(440, 60);
 	scene.Add(lifeCounter1);
 
 	auto lifeCounter2 = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	lifeCounter2->AddComponent<LivesComponent>(std::make_shared<CounterComponent>(lifeCounter2, font, 5, "Player 2: ", " Lives left", "Game over"));
+	lifeCounter2->AddComponent<CounterComponent>(std::make_shared<CounterComponent>(lifeCounter2, font, 5, "Player 2: ", " Lives left", "Game over"));
 	lifeCounter2->SetPosition(240, 60);
 	scene.Add(lifeCounter2);
 
 	auto scoreCounter1 = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	scoreCounter1->AddComponent<ScoreComponent>(std::make_shared<CounterComponent>(scoreCounter1, font, 0, "Player 1 score: "));
+	scoreCounter1->AddComponent<CounterComponent>(std::make_shared<CounterComponent>(scoreCounter1, font, 0, "Player 1 score: "));
 	scoreCounter1->SetPosition(440, 430);
 	scene.Add(scoreCounter1);
 
 	auto scoreCounter2 = std::make_shared<GameObject>();
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	scoreCounter2->AddComponent<ScoreComponent>(std::make_shared<CounterComponent>(scoreCounter2, font, 0, "Player 2 score: "));
+	scoreCounter2->AddComponent<CounterComponent>(std::make_shared<CounterComponent>(scoreCounter2, font, 0, "Player 2 score: "));
 	scoreCounter2->SetPosition(240, 430);
 	scene.Add(scoreCounter2);
 	
