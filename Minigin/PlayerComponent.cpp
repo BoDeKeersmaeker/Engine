@@ -1,9 +1,10 @@
 #include "MiniginPCH.h"
 #include "PlayerComponent.h"
-
 #include "GameObject.h"
 #include "Observer.h"
 #include "SubjectComponent.h"
+#include "AudioLocator.h"
+#include "Audio.h"
 
 engine::PlayerComponent::PlayerComponent(std::shared_ptr<GameObject> owner, int lives)
 	:Component(owner)
@@ -28,6 +29,9 @@ void engine::PlayerComponent::Die()
 	m_Lives--;
 	m_pOwner.lock()->GetComponent<SubjectComponent>().lock()->Notify(m_pOwner, Event::PlayerDied);
 
+	auto audio = AudioLocator::getAudioSystem();
+	audio->playSound(-1);
+	
 	Respawn();
 	
 	if (m_Lives  <= 0)

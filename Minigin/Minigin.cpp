@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "Minigin.h"
 
+#include <vld.h>
 #include <SDL.h>
 #include <chrono>
 
@@ -39,17 +40,32 @@
 #pragma region Observers
 #include "PlayerDeathObserver.h"
 #include "PlayerScoreObserver.h"
-#pragma endregion 
+#pragma endregion
+
+#pragma region Audio
+#include "AudioLocator.h"
+#include "Audio.h"
+#include "AudioEffect.h"
+#include "AudioLogger.h"
+#pragma endregion
 
 using namespace std;
 using namespace std::chrono;
 
 void engine::Minigin::Initialize()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
-	{
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) 
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		std::cerr << "Core::Initialize( ), error when calling Mix_OpenAudio: " << Mix_GetError() << std::endl;
+		return;
 	}
+
+	const int mixerFlags{ MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG };
+	if ((Mix_Init(mixerFlags) & mixerFlags) != mixerFlags)
+		std::cerr << "SDL Mixer failed to initialize! Cause of the error: " << Mix_GetError();
 
 	m_Window = SDL_CreateWindow(
 		"Programming 4 assignment",
@@ -65,6 +81,8 @@ void engine::Minigin::Initialize()
 	}
 
 	Renderer::GetInstance().Init(m_Window);
+
+	AudioLocator::registerAudio(new AudioLogger{new AudioEffect{"Data/QbertDead.wav"} });
 }
 
 /**
@@ -151,7 +169,10 @@ void engine::Minigin::Cleanup()
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
+	Mix_Quit();
 	SDL_Quit();
+
+	delete AudioLocator::getAudioSystem();
 }
 
 void engine::Minigin::Run()

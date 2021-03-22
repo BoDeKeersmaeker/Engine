@@ -26,6 +26,9 @@
     <Filter Include="Core">
       <UniqueIdentifier>{f2b8826a-d8b5-440f-8911-76ce24d774e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{67b025fb-b700-4564-b916-f4df6563dfc6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -155,6 +158,21 @@
     <ClInclude Include="CounterComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioEffect.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioLocator.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="NullAudio.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioLogger.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component.cpp">
@@ -273,6 +291,21 @@
     </ClCompile>
     <ClCompile Include="CounterComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioEffect.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioLocator.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="NullAudio.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioLogger.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
