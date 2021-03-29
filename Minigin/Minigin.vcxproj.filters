@@ -161,7 +161,7 @@
     <ClInclude Include="Audio.h">
       <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="AudioEffect.h">
+    <ClInclude Include="AudioService.h">
       <Filter>Audio</Filter>
     </ClInclude>
     <ClInclude Include="AudioLocator.h">
@@ -295,7 +295,7 @@
     <ClCompile Include="Audio.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="AudioEffect.cpp">
+    <ClCompile Include="AudioService.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
     <ClCompile Include="AudioLocator.cpp">

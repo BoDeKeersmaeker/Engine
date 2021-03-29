@@ -238,7 +238,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="..\3rdParty\imgui-1.81\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imgui-1.81\imstb_truetype.h" />
     <ClInclude Include="Audio.h" />
-    <ClInclude Include="AudioEffect.h" />
+    <ClInclude Include="AudioService.h" />
     <ClInclude Include="AudioLocator.h" />
     <ClInclude Include="AudioLogger.h" />
     <ClInclude Include="BaseCommand.h" />
@@ -348,7 +348,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Audio.cpp" />
-    <ClCompile Include="AudioEffect.cpp" />
+    <ClCompile Include="AudioService.cpp" />
     <ClCompile Include="AudioLocator.cpp" />
     <ClCompile Include="AudioLogger.cpp" />
     <ClCompile Include="BaseCommand.cpp" />

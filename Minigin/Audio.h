@@ -6,8 +6,9 @@ namespace engine
 	{
 	public:
 		virtual ~Audio() = default;
-		virtual void playSound(int soundID) = 0;
-		virtual void stopSound(int soundID) = 0;
-		virtual void stopAllSounds() = 0;
+		virtual void AddEffect(int soundID, const std::string& path) = 0;
+		virtual void AddMusic(int soundID, const std::string& path) = 0;
+		virtual void play(int soundID) = 0;
+		virtual void stopAll() = 0;
 	};
 }

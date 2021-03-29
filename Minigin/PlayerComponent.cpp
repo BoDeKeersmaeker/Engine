@@ -29,8 +29,7 @@ void engine::PlayerComponent::Die()
 	m_Lives--;
 	m_pOwner.lock()->GetComponent<SubjectComponent>().lock()->Notify(m_pOwner, Event::PlayerDied);
 
-	auto audio = AudioLocator::getAudioSystem();
-	audio->playSound(-1);
+	AudioLocator::getAudioSystem()->play(0);
 	
 	Respawn();
 	

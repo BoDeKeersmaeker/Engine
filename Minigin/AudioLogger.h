@@ -6,13 +6,15 @@ namespace engine
 	class AudioLogger : public Audio
 	{
 	public:
-		AudioLogger(Audio* audio );
+		AudioLogger(Audio* audio, bool isMuted = false);
 		virtual ~AudioLogger();
-		virtual void playSound(int soundID);
-		virtual void stopSound(int soundID);
-		virtual void stopAllSounds();
+		virtual void AddEffect(int soundID, const std::string& path) override;
+		virtual void AddMusic(int soundID, const std::string& path) override;
+		virtual void play(int soundID) override;
+		virtual void stopAll() override;
 
 	private:
-		Audio* m_pAudioEffect;
+		Audio* m_pAudioService;
+		bool m_IsMuted;
 	};
 }

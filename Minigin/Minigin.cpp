@@ -45,7 +45,7 @@
 #pragma region Audio
 #include "AudioLocator.h"
 #include "Audio.h"
-#include "AudioEffect.h"
+#include "AudioService.h"
 #include "AudioLogger.h"
 #pragma endregion
 
@@ -54,7 +54,11 @@ using namespace std::chrono;
 
 void engine::Minigin::Initialize()
 {
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) 
+	_putenv("SDL_AUDIODRIVER=DirectSound");
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) 
+		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
+
+	if(SDL_Init(SDL_INIT_AUDIO) !=0)
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -82,7 +86,7 @@ void engine::Minigin::Initialize()
 
 	Renderer::GetInstance().Init(m_Window);
 
-	AudioLocator::registerAudio(new AudioLogger{new AudioEffect{"Data/QbertDead.wav"} });
+	AudioLocator::registerAudio(new AudioLogger{ new AudioService{} });
 }
 
 /**
@@ -90,6 +94,8 @@ void engine::Minigin::Initialize()
  */
 void engine::Minigin::LoadGame() const
 {
+	AudioLocator::getAudioSystem()->AddEffect(0, "./../Data/QbertDead.wav");
+	
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
 	auto background = std::make_shared<GameObject>();
