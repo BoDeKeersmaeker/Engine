@@ -9,7 +9,6 @@
 #include "Renderer.h"
 #include "GameObject.h"
 #include "Scene.h"
-#include "Time.h"
 #pragma endregion
 
 #pragma region Managers
@@ -27,6 +26,7 @@
 #include "ScoreComponent.h"
 #include "LivesComponent.h"
 #include "CounterComponent.h"
+#include "GridComponent.h"
 #pragma endregion 
 
 #pragma region Commands
@@ -47,6 +47,7 @@
 #include "Audio.h"
 #include "AudioService.h"
 #include "AudioLogger.h"
+#include "EngineTime.h"
 #pragma endregion
 
 using namespace std;
@@ -89,85 +90,83 @@ void engine::Minigin::Initialize()
 	AudioLocator::registerAudio(new AudioLogger{ new AudioService{} });
 }
 
-/**
- * Code constructing the scene world starts here
- */
 void engine::Minigin::LoadGame() const
 {
-	AudioLocator::getAudioSystem()->AddEffect(0, "./../Data/QbertDead.wav");
-	
-	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
+	engine::AudioLocator::getAudioSystem()->AddMusic(0, "./../Data/QbertDead.wav");
 
-	auto background = std::make_shared<GameObject>();
-	background->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(background, "background.jpg"));
-	scene.Add(background);
+	auto& scene = engine::SceneManager::GetInstance().CreateScene("Demo");
 
-	auto logo = std::make_shared<GameObject>();
-	logo->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(logo, "logo.png"));
-	logo->SetPosition(216, 180);
-	scene.Add(logo);
+	auto obj = make_shared<engine::GameObject>();
+	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "background.jpg"));
+	scene.Add(obj);
 
-	auto text = std::make_shared<GameObject>();
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	text->AddComponent<TextComponent>(std::make_shared<TextComponent>(text, "Programming 4 Assignment", font));
-	text->SetPosition(80, 20);
-	scene.Add(text);
+	obj = make_shared<engine::GameObject>();
+	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "logo.png"));
+	obj->SetPosition(216.f, 180.f);
+	scene.Add(obj);
 
-	auto fpsCounter = std::make_shared<GameObject>();
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	fpsCounter->AddComponent<FPSComponent>(std::make_shared<FPSComponent>(fpsCounter, font));
-	fpsCounter->SetPosition(10, 10);
-	scene.Add(fpsCounter);
+	obj = make_shared<engine::GameObject>();
+	auto font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+	obj->AddComponent<engine::TextComponent>(make_shared<engine::TextComponent>(obj, "Programming 4 Assignment", font));
+	obj->SetPosition(80.f, 20.f);
+	scene.Add(obj);
 
-	auto lifeCounter1 = std::make_shared<GameObject>();
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	lifeCounter1->AddComponent<CounterComponent>(std::make_shared<CounterComponent>(lifeCounter1, font, 5, "Player 1: ", " Lives left", "Game over"));
-	lifeCounter1->SetPosition(440, 60);
+	obj = make_shared<engine::GameObject>();
+	font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	obj->AddComponent<engine::FPSComponent>(make_shared<engine::FPSComponent>(obj, font));
+	obj->SetPosition(10.f, 10.f);
+	scene.Add(obj);
+
+	auto lifeCounter1 = make_shared<engine::GameObject>();
+	font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	lifeCounter1->AddComponent<engine::CounterComponent>(make_shared<engine::CounterComponent>(lifeCounter1, font, 5, "Player 1: ", " Lives left", "Game over"));
+	lifeCounter1->SetPosition(440.f, 60.f);
 	scene.Add(lifeCounter1);
 
-	auto lifeCounter2 = std::make_shared<GameObject>();
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	lifeCounter2->AddComponent<CounterComponent>(std::make_shared<CounterComponent>(lifeCounter2, font, 5, "Player 2: ", " Lives left", "Game over"));
-	lifeCounter2->SetPosition(240, 60);
+	auto lifeCounter2 = make_shared<engine::GameObject>();
+	font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	lifeCounter2->AddComponent<engine::CounterComponent>(make_shared<engine::CounterComponent>(lifeCounter2, font, 5, "Player 2: ", " Lives left", "Game over"));
+	lifeCounter2->SetPosition(240.f, 60.f);
 	scene.Add(lifeCounter2);
 
-	auto scoreCounter1 = std::make_shared<GameObject>();
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	scoreCounter1->AddComponent<CounterComponent>(std::make_shared<CounterComponent>(scoreCounter1, font, 0, "Player 1 score: "));
-	scoreCounter1->SetPosition(440, 430);
+	auto scoreCounter1 = make_shared<engine::GameObject>();
+	font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	scoreCounter1->AddComponent<engine::CounterComponent>(make_shared<engine::CounterComponent>(scoreCounter1, font, 0, "Player 1 score: "));
+	scoreCounter1->SetPosition(440.f, 430.f);
 	scene.Add(scoreCounter1);
 
-	auto scoreCounter2 = std::make_shared<GameObject>();
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	scoreCounter2->AddComponent<CounterComponent>(std::make_shared<CounterComponent>(scoreCounter2, font, 0, "Player 2 score: "));
-	scoreCounter2->SetPosition(240, 430);
+	auto scoreCounter2 = make_shared<engine::GameObject>();
+	font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	scoreCounter2->AddComponent<engine::CounterComponent>(make_shared<engine::CounterComponent>(scoreCounter2, font, 0, "Player 2 score: "));
+	scoreCounter2->SetPosition(240.f, 430.f);
 	scene.Add(scoreCounter2);
-	
-	auto Player1 = std::make_shared<GameObject>();
-	Player1->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(Player1));
-	Player1->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(Player1, "tempQbert2.jpg"));
-	Player1->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(lifeCounter1->GetComponent<CounterComponent>()));
-	Player1->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerScoreObserver>(scoreCounter1->GetComponent<CounterComponent>()));
+
+	auto Player1 = make_shared<engine::GameObject>();
+	Player1->AddComponent<engine::PlayerComponent>(make_shared<engine::PlayerComponent>(Player1));
+	Player1->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(Player1, "tempQbert2.jpg"));
+	Player1->GetComponent<engine::SubjectComponent>().lock()->AddObserver(make_shared<engine::PlayerDeathObserver>(lifeCounter1->GetComponent<engine::CounterComponent>()));
+	Player1->GetComponent<engine::SubjectComponent>().lock()->AddObserver(make_shared<engine::PlayerScoreObserver>(scoreCounter1->GetComponent<engine::CounterComponent>()));
 	scene.Add(Player1);
 
-	auto Player2 = std::make_shared<GameObject>();
-	Player2->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(Player2));
-	Player2->AddComponent<RenderComponent>(std::make_shared<RenderComponent>(Player2, "tempQbert2.jpg"));
-	Player2->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerDeathObserver>(lifeCounter2->GetComponent<CounterComponent>()));
-	Player2->GetComponent<SubjectComponent>().lock()->AddObserver(std::make_shared<PlayerScoreObserver>(scoreCounter2->GetComponent<CounterComponent>()));
+	auto Player2 = make_shared<engine::GameObject>();
+	Player2->AddComponent<engine::PlayerComponent>(make_shared<engine::PlayerComponent>(Player2));
+	Player2->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(Player2, "tempQbert2.jpg"));
+	Player2->GetComponent<engine::SubjectComponent>().lock()->AddObserver(make_shared<engine::PlayerDeathObserver>(lifeCounter2->GetComponent<engine::CounterComponent>()));
+	Player2->GetComponent<engine::SubjectComponent>().lock()->AddObserver(make_shared<engine::PlayerScoreObserver>(scoreCounter2->GetComponent<engine::CounterComponent>()));
 	scene.Add(Player2);
 	
-	InputManager::GetInstance().AddCommand({ VK_PAD_RSHOULDER, InputTriggerType::OnInputDown }, std::make_shared<Kill>(Player1->GetComponent<PlayerComponent>()));
-	InputManager::GetInstance().AddCommand({ VK_PAD_A, InputTriggerType::OnInputDown }, std::make_shared<ColorChange>(Player1->GetComponent<PlayerComponent>()));
-	InputManager::GetInstance().AddCommand({ VK_PAD_B, InputTriggerType::OnInputDown }, std::make_shared<CoilyDiscBait>(Player1->GetComponent<PlayerComponent>()));
-	InputManager::GetInstance().AddCommand({ VK_PAD_X, InputTriggerType::OnInputDown }, std::make_shared<CatchSlick>(Player1->GetComponent<PlayerComponent>()));
-	InputManager::GetInstance().AddCommand({ VK_PAD_Y, InputTriggerType::OnInputDown }, std::make_shared<CatchSam>(Player1->GetComponent<PlayerComponent>()));
-	
-	InputManager::GetInstance().AddCommand({ VK_PAD_LSHOULDER, InputTriggerType::OnInputDown }, std::make_shared<Kill>(Player2->GetComponent<PlayerComponent>()));
-	InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_DOWN, InputTriggerType::OnInputDown }, std::make_shared<ColorChange>(Player2->GetComponent<PlayerComponent>()));
-	InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_RIGHT, InputTriggerType::OnInputDown }, std::make_shared<CoilyDiscBait>(Player2->GetComponent<PlayerComponent>()));
-	InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_LEFT, InputTriggerType::OnInputDown }, std::make_shared<CatchSlick>(Player2->GetComponent<PlayerComponent>()));
-	InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_UP, InputTriggerType::OnInputDown }, std::make_shared<CatchSam>(Player2->GetComponent<PlayerComponent>()));
+	LoadInput({ Player1, Player2 });
+
+	obj = make_shared<engine::GameObject>();
+	obj->SetPosition(100.f, 200.f);
+	auto comp = make_shared<engine::GridComponent>(obj, std::vector<std::string>{ "Block_Pink.png", "Block_Blue.png" });
+	obj->AddComponent<engine::GridComponent>(comp);
+	DebugManager::GetInstance().SetChannelActivated(false, NODE_DEBUG);
+	DebugManager::GetInstance().SetChannelActivated(true, GRID_DEBUG);
+	comp->GenerateGrid(&scene, 7, 24.f);
+	scene.Add(obj);
+
+
 }
 
 void engine::Minigin::Cleanup()
@@ -200,7 +199,7 @@ void engine::Minigin::Run()
 		while (doContinue)
 		{
 			const auto currentTime = high_resolution_clock::now();
-			Time::GetInstance().UpdateElapsedSec(duration_cast<duration<float>>(currentTime - lastTime).count());
+			EngineTime::GetInstance().UpdateElapsedSec(duration_cast<duration<float>>(currentTime - lastTime).count());
 
 			doContinue = input.ProcessInput();
 			sceneManager.Update();
@@ -211,4 +210,23 @@ void engine::Minigin::Run()
 	}
 
 	Cleanup();
+}
+
+void engine::Minigin::LoadInput(const vector<shared_ptr<GameObject>>& pPlayers) const
+{
+	if (pPlayers.size() < 1)
+		return;
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_RSHOULDER, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::Kill>(pPlayers[0]->GetComponent<engine::PlayerComponent>()));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_A, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::ColorChange>(pPlayers[0]->GetComponent<engine::PlayerComponent>()));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_B, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::CoilyDiscBait>(pPlayers[0]->GetComponent<engine::PlayerComponent>()));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_X, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::CatchSlick>(pPlayers[0]->GetComponent<engine::PlayerComponent>()));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_Y, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::CatchSam>(pPlayers[0]->GetComponent<engine::PlayerComponent>()));
+
+	if (pPlayers.size() < 2)
+		return;
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_LSHOULDER, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::Kill>(pPlayers[1]->GetComponent<engine::PlayerComponent>()));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_DOWN, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::ColorChange>(pPlayers[1]->GetComponent<engine::PlayerComponent>()));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_RIGHT, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::CoilyDiscBait>(pPlayers[1]->GetComponent<engine::PlayerComponent>()));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_LEFT, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::CatchSlick>(pPlayers[1]->GetComponent<engine::PlayerComponent>()));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_DPAD_UP, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::CatchSam>(pPlayers[1]->GetComponent<engine::PlayerComponent>()));
 }

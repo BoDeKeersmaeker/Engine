@@ -113,7 +113,7 @@
     <ClInclude Include="Kill.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
+    <ClInclude Include="EngineTime.h">
       <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Observer.h">
@@ -172,6 +172,18 @@
     </ClInclude>
     <ClInclude Include="AudioLogger.h">
       <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="TileComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GridComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GridNodeComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugManager.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -247,7 +259,7 @@
     <ClCompile Include="Kill.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp">
+    <ClCompile Include="EngineTime.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Observer.cpp">
@@ -306,6 +318,18 @@
     </ClCompile>
     <ClCompile Include="AudioLogger.cpp">
       <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="TileComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GridComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GridNodeComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugManager.cpp">
+      <Filter>Helpers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

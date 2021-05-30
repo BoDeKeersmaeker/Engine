@@ -248,9 +248,12 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="ColorChange.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="CounterComponent.h" />
+    <ClInclude Include="DebugManager.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GridComponent.h" />
+    <ClInclude Include="GridNodeComponent.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Kill.h" />
     <ClInclude Include="LivesComponent.h" />
@@ -273,7 +276,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="SubjectComponent.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="Texture2D.h" />
-    <ClInclude Include="Time.h" />
+    <ClInclude Include="TileComponent.h" />
+    <ClInclude Include="EngineTime.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
@@ -358,9 +362,12 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="ColorChange.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="CounterComponent.cpp" />
+    <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GridComponent.cpp" />
+    <ClCompile Include="GridNodeComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Kill.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
@@ -388,7 +395,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="SubjectComponent.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
-    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="TileComponent.cpp" />
+    <ClCompile Include="EngineTime.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

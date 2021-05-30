@@ -3,7 +3,7 @@
 
 namespace engine
 {
-	class Time final : public Singleton<Time>
+	class EngineTime final : public Singleton<EngineTime>
 	{
 	public:
 		inline void UpdateElapsedSec(float elapsedSec) { m_ElapsedSec = elapsedSec; };
@@ -13,8 +13,8 @@ namespace engine
 		//static float ChronoStop();
 
 	private:
-		friend class Singleton<Time>;
-		Time() = default;
+		friend class Singleton<EngineTime>;
+		EngineTime() = default;
 
 		float m_ElapsedSec{};
 	};

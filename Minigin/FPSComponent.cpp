@@ -2,7 +2,7 @@
 #include "FPSComponent.h"
 #include "GameObject.h"
 #include "TextComponent.h"
-#include "Time.h"
+#include "EngineTime.h"
 
 engine::FPSComponent::FPSComponent(std::shared_ptr<GameObject> owner, const std::shared_ptr<Font>& font)
 	: Component(owner)
@@ -16,7 +16,7 @@ engine::FPSComponent::FPSComponent(std::shared_ptr<GameObject> owner, const std:
 void engine::FPSComponent::Update()
 {
 	m_FrameCount++;
-	m_ElapsedTime += Time::GetInstance().GetElapsedSec();
+	m_ElapsedTime += EngineTime::GetInstance().GetElapsedSec();
 
 	if (m_ElapsedTime >= 1.f)
 	{

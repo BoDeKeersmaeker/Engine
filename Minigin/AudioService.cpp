@@ -42,12 +42,12 @@ void engine::AudioService::Update()
 
 		if(!m_Queue.empty())
 		{
-			AudioInfo temp = m_Infos[m_Queue.back()];
+			AudioInfo temp = m_Infos[m_Queue.front()];
 			m_Queue.pop();
 			if (temp.isMusic) 
-				Mix_PlayMusic(m_pMixMusic[temp.location], true);
+				Mix_PlayMusic(m_pMixMusic[temp.location], 1);
 			else
-				Mix_PlayChannel(-1, m_pMixChunks[temp.location], 1);
+				Mix_PlayChannel(-1, m_pMixChunks[temp.location], 0);
 		}
 
 		tempLock.unlock();

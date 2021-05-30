@@ -2,6 +2,8 @@
 #include "Transform.h"
 #include "Component.h"
 #include <unordered_map>
+#include <iostream>
+#include "Structs.h"
 
 namespace engine
 {
@@ -20,7 +22,9 @@ namespace engine
 		void Update();
 		void Render() const;
 
+		Float2 GetPosition();
 		void SetPosition(float x, float y);
+		void SetPosition(Float2 pox);
 		template <typename T>
 		void AddComponent(const std::weak_ptr<Component>& component);
 

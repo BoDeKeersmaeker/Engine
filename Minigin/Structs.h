@@ -5,3 +5,9 @@ struct Color
 	float G{ 255.f };
 	float B{ 255.f };
 };
+
+struct Float2
+{
+	float x{ 0 };
+	float y{ 0 };
+};

@@ -1,3 +1,4 @@
+#include <memory>
 #include <Minigin.h>
 
 int main(int, char* [])

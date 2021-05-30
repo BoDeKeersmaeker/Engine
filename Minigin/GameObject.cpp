@@ -21,9 +21,19 @@ void engine::GameObject::Render() const
 		component->Render(m_Transform);
 }
 
+Float2 engine::GameObject::GetPosition()
+{
+	return { m_Transform.GetPosition().x, m_Transform.GetPosition().y };
+}
+
 void engine::GameObject::SetPosition(float x, float y)
 {
 	m_Transform.SetPosition(x, y, 0.0f);
+}
+
+void engine::GameObject::SetPosition(Float2 pox)
+{
+	m_Transform.SetPosition(pox.x, pox.y, 0.0f);
 }
 
 const engine::Transform& engine::GameObject::GetTransform()
