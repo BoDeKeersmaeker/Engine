@@ -1,5 +1,7 @@
 #pragma once
+#include <vector>
 #include "Component.h"
+
 namespace engine
 {
 	class Observer;

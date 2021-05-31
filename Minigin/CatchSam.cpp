@@ -1,4 +1,5 @@
 #include "MiniginPCH.h"
+#include <iostream>
 #include "CatchSam.h"
 #include "PlayerComponent.h"
 

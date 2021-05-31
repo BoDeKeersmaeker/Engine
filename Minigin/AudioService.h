@@ -3,6 +3,8 @@
 #include <thread>
 #include <mutex>
 #include "Audio.h"
+#include <SDL_mixer.h>
+
 namespace engine
 {
 	struct AudioInfo

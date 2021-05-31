@@ -1,5 +1,7 @@
 #pragma once
+#include <memory>
 #include "BaseCommand.h"
+
 namespace engine
 {
 	class PlayerComponent;

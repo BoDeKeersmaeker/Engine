@@ -1,4 +1,5 @@
 #include "MiniginPCH.h"
+#include <iostream>
 #include "DebugManager.h"
 
 engine::DebugManager::DebugManager()

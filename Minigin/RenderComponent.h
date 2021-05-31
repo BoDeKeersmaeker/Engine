@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "Component.h"
 
 namespace engine

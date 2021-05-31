@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 struct _TTF_Font;
 namespace engine

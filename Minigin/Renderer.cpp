@@ -1,6 +1,8 @@
 #include "MiniginPCH.h"
 #include "Renderer.h"
 #include <SDL.h>
+#include <stdexcept>
+
 #include "SceneManager.h"
 #include "Texture2D.h"
 #include "imgui.h"

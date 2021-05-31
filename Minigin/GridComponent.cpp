@@ -1,5 +1,7 @@
 #include "MiniginPCH.h"
 #include "GridComponent.h"
+
+#include "DebugManager.h"
 #include "GameObject.h"
 #include "GridNodeComponent.h"
 #include "Scene.h"
@@ -21,13 +23,14 @@ void engine::GridComponent::Render(const Transform&)
 
 }
 
-void engine::GridComponent::GenerateGrid(Scene* scene, UINT amountOfLayers, float size)
+void engine::GridComponent::GenerateGrid(Scene* scene, size_t amountOfLayers, float width, float height)
 {
+	DebugManager::GetInstance().print("creating top node", GRID_DEBUG);
 	auto tempNode = AddNode(scene, m_pOwner.lock()->GetPosition(), std::shared_ptr<GridNodeComponent>(nullptr), std::shared_ptr<GridNodeComponent>(nullptr));
-	GenerateLayer(scene, --amountOfLayers, size, { tempNode });
+	GenerateLayer(scene, --amountOfLayers, width, height, { tempNode });
 }
 
-void engine::GridComponent::GenerateLayer(Scene* scene, UINT amountOfLayers, float size, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer)
+void engine::GridComponent::GenerateLayer(Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer)
 {
 	if(amountOfLayers < 1)
 		return;
@@ -38,29 +41,29 @@ void engine::GridComponent::GenerateLayer(Scene* scene, UINT amountOfLayers, flo
 		if (j == 0)
 		{
 			auto tempPos = pPreviousLayer[j].lock()->GetOwner().lock()->GetPosition();
-			tempPos.x -= (size / 2.f) + 3.f;
-			tempPos.y += size;
+			tempPos.x -= (width / 2.f);
+			tempPos.y += height;
+			DebugManager::GetInstance().print("creating front node", GRID_DEBUG);
 			pThisLayer.push_back(AddNode(scene, tempPos, std::shared_ptr<GridNodeComponent>(nullptr), pPreviousLayer[j]));
-			DebugManager::GetInstance().print("creating front node", 2);
 		}
 
 		auto tempPos = pPreviousLayer[j].lock()->GetOwner().lock()->GetPosition();
-		tempPos.x += (size / 2.f) + 3.f;
-		tempPos.y -= size;
+		tempPos.x += (width / 2.f);
+		tempPos.y += height;
 
 		if (j < pPreviousLayer.size() - 1)
 		{
+			DebugManager::GetInstance().print("creating mid node", GRID_DEBUG);
 			pThisLayer.push_back(AddNode(scene, tempPos, pPreviousLayer[j], pPreviousLayer[j + 1]));
-			DebugManager::GetInstance().print("creating mid node", 2);
 		}
 		else
 		{
-			DebugManager::GetInstance().print("creating end node", 2);
+			DebugManager::GetInstance().print("creating end node", GRID_DEBUG);
 			pThisLayer.push_back(AddNode(scene, tempPos, pPreviousLayer[j], std::shared_ptr<GridNodeComponent>(nullptr)));
 		}
 	}
 
-	GenerateLayer(scene, --amountOfLayers, size, pThisLayer);
+	GenerateLayer(scene, --amountOfLayers, width, height, pThisLayer);
 }
 
 std::weak_ptr<engine::GridNodeComponent> engine::GridComponent::AddNode(Scene* scene, Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection)

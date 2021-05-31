@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <vector>
 #include "Component.h"
 #include "Structs.h"
@@ -16,10 +17,10 @@ namespace engine
 		virtual void Update() override;
 		virtual void Render(const Transform& transform) override;
 
-		void GenerateGrid(Scene* scene, UINT amountOfLayers, float size);
+		void GenerateGrid(Scene* scene, size_t amountOfLayers, float width, float height);
 		
 	private:
-		void GenerateLayer(Scene* scene, UINT amountOfLayers, float size, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer);
+		void GenerateLayer(Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer);
 		std::weak_ptr<GridNodeComponent> AddNode(Scene* scene, Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection);
 		
 		std::vector<std::weak_ptr<GridNodeComponent>> m_pGrid;

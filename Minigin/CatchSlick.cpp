@@ -1,4 +1,5 @@
 #include "MiniginPCH.h"
+#include <iostream>
 #include "CatchSlick.h"
 #include "PlayerComponent.h"
 

@@ -2,6 +2,8 @@
 #include <SDL_ttf.h>
 #include "Font.h"
 
+#include <stdexcept>
+
 TTF_Font* engine::Font::GetFont() const {
 	return m_Font;
 }

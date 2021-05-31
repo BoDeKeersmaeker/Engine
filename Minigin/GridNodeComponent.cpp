@@ -1,5 +1,7 @@
 #include "MiniginPCH.h"
 #include "GridNodeComponent.h"
+
+#include "DebugManager.h"
 #include "GameObject.h"
 #include "RenderComponent.h"
 

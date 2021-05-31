@@ -8,7 +8,6 @@
 constexpr auto NODE_DEBUG = 1;
 constexpr auto GRID_DEBUG = 2;
 
-
 namespace engine
 {
 	class DebugManager final : public Singleton<DebugManager>

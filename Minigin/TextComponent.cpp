@@ -6,6 +6,7 @@
 #include "Texture2D.h"
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <stdexcept>
 
 engine::TextComponent::TextComponent(std::shared_ptr<GameObject> owner, const std::string& text, const std::shared_ptr<Font>& font)
 	:Component(owner)

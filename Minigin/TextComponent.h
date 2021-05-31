@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 #include "Component.h"
 #include "Structs.h"
 

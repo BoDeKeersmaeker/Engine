@@ -1,4 +1,5 @@
 #include "MiniginPCH.h"
+#include <iostream>
 #include "AudioLogger.h"
 
 engine::AudioLogger::AudioLogger(Audio* audio, bool isMuted)

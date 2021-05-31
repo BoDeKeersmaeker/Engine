@@ -1,4 +1,5 @@
 #include "MiniginPCH.h"
+#include <iostream>
 #include "RemainingDisc.h"
 #include "PlayerComponent.h"
 

@@ -1,9 +1,13 @@
 #include <memory>
-#include <Minigin.h>
+#include "Game.h"
 
 int main(int, char* [])
 {
-    engine::Minigin engine;
-    engine.Run();
+    Game game;
+    game.Run();
     return 0;
+	
+    /*engine::Minigin engine;
+    engine.Run();
+    return 0;*/
 }
