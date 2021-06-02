@@ -21,7 +21,7 @@ void engine::GreenEnemyComponent::Update()
 		m_CurrentMoveCooldown -= EngineTime::GetInstance().GetElapsedSec();
 
 	if(m_CurrentMoveCooldown <= 0)
-		Move(static_cast<MoveDirection>(rand() % 2 + 2));
+		Move(static_cast<Direction>(rand() % 2 + 2));
 }
 
 void engine::GreenEnemyComponent::Render(const Transform&)
@@ -29,14 +29,14 @@ void engine::GreenEnemyComponent::Render(const Transform&)
 
 }
 
-void engine::GreenEnemyComponent::Move(MoveDirection direction)
+void engine::GreenEnemyComponent::Move(Direction direction)
 {
+	m_CurrentMoveCooldown = m_MoveCooldown;
+	
 	if (m_pCurrentNode.expired())
 		return;
 
-	m_CurrentMoveCooldown = m_MoveCooldown;
-
-	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<ConnectionDirection>(static_cast<size_t>(direction)));
+	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<Direction>(static_cast<size_t>(direction)));
 	if (!temp.expired())
 	{
 		DebugManager::GetInstance().print("Green enemy moved: " + std::to_string(static_cast<size_t>(direction)), ENEMY_DEBUG);

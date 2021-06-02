@@ -14,11 +14,12 @@ namespace engine
 		virtual void Render(const Transform& transform) override;
 
 	private:
-		void Move(bool moveLeft);
-		void Die();
+		void Move(Direction direction);
+		void Die() const;
 
 		std::weak_ptr<GridNodeComponent> m_pCurrentNode;
 		float m_MoveCooldown;
 		float m_CurrentMoveCooldown;
+		bool m_MoveLeft;
 	};
 }

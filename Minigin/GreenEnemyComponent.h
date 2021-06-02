@@ -14,7 +14,7 @@ namespace engine
 		virtual void Render(const Transform& transform) override;
 		
 	private:
-		void Move(MoveDirection direction);
+		void Move(Direction direction);
 		void Die();
 		
 		std::weak_ptr<GridNodeComponent> m_pCurrentNode;

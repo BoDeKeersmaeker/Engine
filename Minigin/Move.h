@@ -4,18 +4,18 @@
 
 namespace engine
 {
-	enum class MoveDirection;
+	enum class Direction;
 	class PlayerComponent;
 
 	class Move final : public engine::BaseCommand
 	{
 	public:
-		Move(std::weak_ptr<PlayerComponent> target, MoveDirection direction);
+		Move(std::weak_ptr<PlayerComponent> target, Direction direction);
 		virtual ~Move()  override = default;
 		void Execute() override;
 
 	private:
 		std::weak_ptr<PlayerComponent> m_pTarget;
-		MoveDirection m_Direction;
+		Direction m_Direction;
 	};
 };

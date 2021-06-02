@@ -13,7 +13,7 @@ namespace engine
 		virtual void Update() override;
 		virtual void Render(const Transform& transform) override;
 
-		void Move(MoveDirection direction);
+		void Move(Direction direction);
 		void Die();
 		void ChangeScore(int deltaScore);
 		int GetLives() const;

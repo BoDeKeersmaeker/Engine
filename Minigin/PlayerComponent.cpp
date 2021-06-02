@@ -37,14 +37,14 @@ void engine::PlayerComponent::Render(const Transform&)
 	
 }
 
-void engine::PlayerComponent::Move(MoveDirection direction)
+void engine::PlayerComponent::Move(Direction direction)
 {
 	if (m_CurrentMoveCooldown > 0 || m_pCurrentNode.expired())
 		return;
 
 	m_CurrentMoveCooldown = m_MoveCooldown;
 	
-	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<ConnectionDirection>(static_cast<size_t>(direction)));
+	auto temp = m_pCurrentNode.lock()->GetConnection(direction);
 	if (!temp.expired())
 	{
 		DebugManager::GetInstance().print("Qbert moved: " + std::to_string(static_cast<size_t>(direction)), PLAYER_DEBUG);

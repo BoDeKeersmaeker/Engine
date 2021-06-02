@@ -3,7 +3,7 @@
 #include "PlayerComponent.h"
 #include "DebugManager.h"
 
-engine::Move::Move(std::weak_ptr<PlayerComponent> target, MoveDirection direction)
+engine::Move::Move(std::weak_ptr<PlayerComponent> target, Direction direction)
 	:BaseCommand()
 	, m_pTarget{ target }
 	, m_Direction{ direction }

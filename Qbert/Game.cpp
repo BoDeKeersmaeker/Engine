@@ -15,6 +15,7 @@
 #include "CounterComponent.h"
 #include "GridComponent.h"
 #include "GreenEnemyComponent.h"
+#include "PurpleEnemyComponent.h"
 #pragma endregion 
 
 #pragma region Commands
@@ -138,6 +139,7 @@ void Game::LoadDemo() const
 void Game::LoadQbert() const
 {
 	engine::DebugManager::GetInstance().SetChannelDeactivated(true);
+	engine::DebugManager::GetInstance().SetChannelDeactivated(false, NODE_DEBUG);
 	
 	engine::AudioLocator::getAudioSystem()->AddMusic(0, "./../Data/QbertDead.wav");
 	engine::AudioLocator::getAudioSystem()->SetVolume(1);
@@ -167,21 +169,21 @@ void Game::LoadQbert() const
 
 	obj = make_shared<engine::GameObject>();
 	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "WrongWay.png", engine::Float2{ -24.f, 15.f }));
-	obj->AddComponent<engine::GreenEnemyComponent>(make_shared<engine::GreenEnemyComponent>(obj, GridComp->GetSoloStartNode()));
+	obj->AddComponent<engine::PurpleEnemyComponent>(make_shared<engine::PurpleEnemyComponent>(obj, false,GridComp->GetCoopStartNodes().first));
 	scene.Add(obj);
 
 	obj = make_shared<engine::GameObject>();
 	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "Ugg.png", engine::Float2{ 24.f, 15.f }));
-	obj->AddComponent<engine::GreenEnemyComponent>(make_shared<engine::GreenEnemyComponent>(obj, GridComp->GetSoloStartNode()));
+	obj->AddComponent<engine::PurpleEnemyComponent>(make_shared<engine::PurpleEnemyComponent>(obj, true,GridComp->GetCoopStartNodes().second));
 	scene.Add(obj);
 	
-	engine::InputManager::GetInstance().AddCommand({ VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold }, std::make_shared<engine::Move>(PlayerComp, engine::MoveDirection::TOPLEFT));
-	engine::InputManager::GetInstance().AddCommand({ VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold }, std::make_shared<engine::Move>(PlayerComp, engine::MoveDirection::TOPRIGHT));
-	engine::InputManager::GetInstance().AddCommand({ VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold }, std::make_shared<engine::Move>(PlayerComp, engine::MoveDirection::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddCommand({ VK_PAD_LTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold }, std::make_shared<engine::Move>(PlayerComp, engine::MoveDirection::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold }, std::make_shared<engine::Move>(PlayerComp, engine::Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold }, std::make_shared<engine::Move>(PlayerComp, engine::Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold }, std::make_shared<engine::Move>(PlayerComp, engine::Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_LTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold }, std::make_shared<engine::Move>(PlayerComp, engine::Direction::BOTTOMLEFT));
 
-	engine::InputManager::GetInstance().AddCommand({ VK_PAD_A, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::Move>(PlayerComp, engine::MoveDirection::TOPLEFT));
-	engine::InputManager::GetInstance().AddCommand({ VK_PAD_B, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::Move>(PlayerComp, engine::MoveDirection::TOPRIGHT));
-	engine::InputManager::GetInstance().AddCommand({ VK_PAD_X, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::Move>(PlayerComp, engine::MoveDirection::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddCommand({ VK_PAD_Y, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::Move>(PlayerComp, engine::MoveDirection::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_A, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::Move>(PlayerComp, engine::Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_B, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::Move>(PlayerComp, engine::Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_X, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::Move>(PlayerComp, engine::Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddCommand({ VK_PAD_Y, engine::InputTriggerType::OnInputDown }, std::make_shared<engine::Move>(PlayerComp, engine::Direction::BOTTOMLEFT));
 }

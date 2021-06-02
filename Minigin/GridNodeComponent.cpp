@@ -11,6 +11,8 @@ engine::GridNodeComponent::GridNodeComponent(std::shared_ptr<GameObject> owner, 
 		std::shared_ptr<GridNodeComponent>(nullptr),
 		std::shared_ptr<GridNodeComponent>(nullptr),
 		std::shared_ptr<GridNodeComponent>(nullptr),
+		std::shared_ptr<GridNodeComponent>(nullptr),
+		std::shared_ptr<GridNodeComponent>(nullptr),
 		std::shared_ptr<GridNodeComponent>(nullptr) }
 	, m_BlockPaths{ blockPaths }
 	, m_RevertOverIncrement{ revertOverIncrement }
@@ -30,26 +32,42 @@ void engine::GridNodeComponent::Render(const Transform&)
 
 }
 
-std::weak_ptr<engine::GridNodeComponent> engine::GridNodeComponent::GetConnection(ConnectionDirection connectionDirection)
+std::weak_ptr<engine::GridNodeComponent> engine::GridNodeComponent::GetConnection(Direction connectionDirection)
 {
 	return m_pConnections[static_cast<size_t>(connectionDirection)];
 }
 
-void engine::GridNodeComponent::SetConnection(ConnectionDirection connectionDirection, std::weak_ptr<GridNodeComponent> pThisNode, std::weak_ptr<GridNodeComponent> pOtherNode)
+void engine::GridNodeComponent::SetConnection(Direction connectionDirection, std::weak_ptr<GridNodeComponent> pThisNode, std::weak_ptr<GridNodeComponent> pOtherNode)
 {
 	m_pConnections[static_cast<size_t>(connectionDirection)] = pOtherNode;
 	
 	auto tempNode = pOtherNode.lock();
 
 	size_t tempDir = static_cast<size_t>(connectionDirection) + 2;
+	if (connectionDirection != Direction::LEFT && connectionDirection != Direction::RIGHT)
+	{
+		if (tempDir >= 4)
+			tempDir -= 4;
+	}
+	else
+	{
+		switch (connectionDirection)
+		{
+			case Direction::LEFT:
+				tempDir = static_cast<size_t>(Direction::RIGHT);
+				break;
+			case Direction::RIGHT:
+				tempDir = static_cast<size_t>(Direction::LEFT);
+				break;
+			default:
+				return;
+		}
+	}
 	
-	if (tempDir >= 4)
-		tempDir -= 4;
-	
-	if (tempNode->GetConnection(static_cast<ConnectionDirection>(tempDir)).expired())
+	if (tempNode->GetConnection(static_cast<Direction>(tempDir)).expired())
 	{
 		DebugManager::GetInstance().print("Making return connection", NODE_DEBUG);
-		tempNode->SetConnection(static_cast<ConnectionDirection>(tempDir), pOtherNode, pThisNode);
+		tempNode->SetConnection(static_cast<Direction>(tempDir), pOtherNode, pThisNode);
 	}
 
 	DebugManager::GetInstance().print("Node: " + std::to_string(static_cast<int>(connectionDirection)) + " connected.", NODE_DEBUG);

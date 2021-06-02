@@ -40,6 +40,7 @@ namespace engine
 	{
 	public:
 		bool ProcessInput();
+		
 		void AddCommand(Input input, const std::shared_ptr<BaseCommand>& command);
 	
 	private:

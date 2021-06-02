@@ -28,10 +28,10 @@ namespace engine
 		void GenerateLayer(Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer);
 		std::weak_ptr<GridNodeComponent> AddNode(Scene* scene, Float2 pos, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection);
 
-		size_t ReadSize_t(const std::string& input);
-		float ReadFloat(const std::string& input);
-		std::string ReadTexturePath(const std::string& input);
-		bool ReadBool(const std::string& input);
+		size_t ReadSize_t(const std::string& input) const;
+		float ReadFloat(const std::string& input) const;
+		std::string ReadTexturePath(const std::string& input) const;
+		bool ReadBool(const std::string& input) const;
 	
 		std::vector<std::weak_ptr<GridNodeComponent>> m_pGrid;
 		std::regex m_GridRegex{ "(\\w+:)\\s(.+)" };

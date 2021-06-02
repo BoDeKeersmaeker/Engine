@@ -10,6 +10,7 @@
 
 engine::GridComponent::GridComponent(std::shared_ptr<GameObject> owner, Scene* scene, const std::string& filePath)
 	:Component(owner)
+	, m_pGrid{}
 {
 	ReadLevelFile(scene, filePath);
 }
@@ -44,7 +45,6 @@ void engine::GridComponent::ReadLevelFile(Scene* scene, const std::string& fileP
 	std::smatch matches{};
 	while (in)
 	{
-
 		std::getline(in, line);
 		if (std::regex_match(line, m_GridRegex) && in)
 		{
@@ -95,14 +95,14 @@ void engine::GridComponent::GenerateLevel(Scene* scene, size_t amountOfLayers, f
 
 void engine::GridComponent::GenerateLayer(Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer)
 {
+	m_pCoopStartNodes.first = pPreviousLayer[0];
+	m_pCoopStartNodes.second = pPreviousLayer[pPreviousLayer.size() - 1];
+	
 	if(amountOfLayers < 1)
 		return;
 
-	m_pCoopStartNodes.first = pPreviousLayer[0];
-	m_pCoopStartNodes.second = pPreviousLayer[pPreviousLayer.size()-1];
-	
 	std::vector<std::weak_ptr<GridNodeComponent>> pThisLayer;
-	for (size_t j{}; j < pPreviousLayer.size(); ++j)
+	for (size_t j{ 0 }; j < pPreviousLayer.size(); ++j)
 	{
 		if (j == 0)
 		{
@@ -127,8 +127,11 @@ void engine::GridComponent::GenerateLayer(Scene* scene, size_t amountOfLayers, f
 			DebugManager::GetInstance().print("creating end node", GRID_DEBUG);
 			pThisLayer.push_back(AddNode(scene, tempPos, blockTexturePaths, revertOverIncrement, pPreviousLayer[j], std::shared_ptr<GridNodeComponent>(nullptr)));
 		}
+		
+		if (j > 0)
+			pPreviousLayer[j].lock()->SetConnection(Direction::LEFT, pPreviousLayer[j], pPreviousLayer[j - 1]);
 	}
-
+	
 	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, pThisLayer);
 }
 
@@ -142,17 +145,17 @@ std::weak_ptr<engine::GridNodeComponent> engine::GridComponent::AddNode(Scene* s
 	obj->SetPosition(pos);
 	
 	if(!m_pTopLeftConnection.expired())
-		pGnc->SetConnection(ConnectionDirection::TOPLEFT, pGnc, m_pTopLeftConnection);
+		pGnc->SetConnection(Direction::TOPLEFT, pGnc, m_pTopLeftConnection);
 
 	if (!m_pTopRightConnection.expired())
-		pGnc->SetConnection(ConnectionDirection::TOPRIGHT, pGnc, m_pTopRightConnection);
+		pGnc->SetConnection(Direction::TOPRIGHT, pGnc, m_pTopRightConnection);
 	
 	DebugManager::GetInstance().print("Node Created with pos: " + std::to_string(pos.x) + "," + std::to_string(pos.y), NODE_DEBUG);
 	
 	return obj->GetComponent<engine::GridNodeComponent>().lock();
 }
 
-size_t engine::GridComponent::ReadSize_t(const std::string& input)
+size_t engine::GridComponent::ReadSize_t(const std::string& input) const
 {
 	std::smatch matches{};
 	if (regex_match(input, m_Size_tRegex))
@@ -163,7 +166,7 @@ size_t engine::GridComponent::ReadSize_t(const std::string& input)
 	return 0;
 }
 
-float engine::GridComponent::ReadFloat(const std::string& input)
+float engine::GridComponent::ReadFloat(const std::string& input) const
 {
 	std::smatch matches{};
 	if (regex_match(input, m_FloatRegex))
@@ -174,7 +177,7 @@ float engine::GridComponent::ReadFloat(const std::string& input)
 	return 0;
 }
 
-std::string engine::GridComponent::ReadTexturePath(const std::string& input)
+std::string engine::GridComponent::ReadTexturePath(const std::string& input) const
 {
 	std::smatch matches{};
 	if (regex_match(input, m_TexturePathRegex))
@@ -185,7 +188,7 @@ std::string engine::GridComponent::ReadTexturePath(const std::string& input)
 	return "";
 }
 
-bool engine::GridComponent::ReadBool(const std::string& input)
+bool engine::GridComponent::ReadBool(const std::string& input) const
 {
 	std::smatch matches{};
 	if (regex_match(input, m_BoolRegex))

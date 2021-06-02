@@ -3,17 +3,11 @@
 #include <string>
 #include <vector>
 
+#include "Structs.h"
+
 namespace engine
 {
 	class RenderComponent;
-
-	enum class ConnectionDirection
-	{
-		TOPLEFT = 0,
-		TOPRIGHT = 1,
-		BOTTOMRIGHT = 2,
-		BOTTOMLEFT= 3,
-	};
 	
 	class GridNodeComponent : public Component
 	{
@@ -22,8 +16,8 @@ namespace engine
 		virtual void Update() override;
 		virtual void Render(const Transform& transform) override;
 
-		std::weak_ptr<GridNodeComponent> GetConnection(ConnectionDirection connectionDirection);
-		void SetConnection(ConnectionDirection connectionDirection, std::weak_ptr<GridNodeComponent> pThisNode, std::weak_ptr<GridNodeComponent> pOtherNode);
+		std::weak_ptr<GridNodeComponent> GetConnection(Direction connectionDirection);
+		void SetConnection(Direction connectionDirection, std::weak_ptr<GridNodeComponent> pThisNode, std::weak_ptr<GridNodeComponent> pOtherNode);
 		void Increment();
 		void Decrement();
 		bool IsCompleted() const;
