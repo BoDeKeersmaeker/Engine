@@ -189,7 +189,10 @@
       <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="GreenEnemyComponent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PurpleEnemyComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,7 +344,10 @@
       <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="GreenEnemyComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PurpleEnemyComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

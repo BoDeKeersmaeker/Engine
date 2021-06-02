@@ -75,7 +75,7 @@ void engine::GridNodeComponent::Decrement()
 {
 	size_t oldIndex = m_CurrentBlockIndex;
 	
-	if (m_CurrentBlockIndex - 1 >= 0)
+	if (m_CurrentBlockIndex != 0)
 	{
 		--m_CurrentBlockIndex;
 		DebugManager::GetInstance().print("Node decremented", NODE_DEBUG);

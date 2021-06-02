@@ -14,6 +14,7 @@
 #include "FPSComponent.h"
 #include "CounterComponent.h"
 #include "GridComponent.h"
+#include "GreenEnemyComponent.h"
 #pragma endregion 
 
 #pragma region Commands
@@ -39,7 +40,8 @@
 #include "DebugManager.h"
 #include "InputManager.h"
 #include "ResourceManager.h"
-#include <DebugManager.cpp>
+#include "Structs.h"
+#include "DebugManager.h"
 #pragma endregion
 
 using namespace std;
@@ -135,6 +137,8 @@ void Game::LoadDemo() const
 
 void Game::LoadQbert() const
 {
+	engine::DebugManager::GetInstance().SetChannelDeactivated(true);
+	
 	engine::AudioLocator::getAudioSystem()->AddMusic(0, "./../Data/QbertDead.wav");
 	engine::AudioLocator::getAudioSystem()->SetVolume(1);
 	auto& scene = engine::SceneManager::GetInstance().CreateScene("Qbert");
@@ -146,9 +150,29 @@ void Game::LoadQbert() const
 	scene.Add(obj);
 
 	obj = make_shared<engine::GameObject>();
-	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "Qbert.png", Float2{ 0.f, -32.f }));
+	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "Qbert.png", engine::Float2{ 0.f, -32.f }));
 	auto PlayerComp = make_shared<engine::PlayerComponent>(obj, GridComp->GetSoloStartNode());
 	obj->AddComponent<engine::PlayerComponent>(PlayerComp); 
+	scene.Add(obj);
+
+	obj = make_shared<engine::GameObject>();
+	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "Slick.png", engine::Float2{ 0.f, -32.f }));
+	obj->AddComponent<engine::GreenEnemyComponent>(make_shared<engine::GreenEnemyComponent>(obj, GridComp->GetSoloStartNode()));
+	scene.Add(obj);
+
+	obj = make_shared<engine::GameObject>();
+	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "Sam.png", engine::Float2{ 0.f, -32.f }));
+	obj->AddComponent<engine::GreenEnemyComponent>(make_shared<engine::GreenEnemyComponent>(obj, GridComp->GetSoloStartNode()));
+	scene.Add(obj);
+
+	obj = make_shared<engine::GameObject>();
+	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "WrongWay.png", engine::Float2{ -24.f, 15.f }));
+	obj->AddComponent<engine::GreenEnemyComponent>(make_shared<engine::GreenEnemyComponent>(obj, GridComp->GetSoloStartNode()));
+	scene.Add(obj);
+
+	obj = make_shared<engine::GameObject>();
+	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "Ugg.png", engine::Float2{ 24.f, 15.f }));
+	obj->AddComponent<engine::GreenEnemyComponent>(make_shared<engine::GreenEnemyComponent>(obj, GridComp->GetSoloStartNode()));
 	scene.Add(obj);
 	
 	engine::InputManager::GetInstance().AddCommand({ VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold }, std::make_shared<engine::Move>(PlayerComp, engine::MoveDirection::TOPLEFT));

@@ -19,8 +19,18 @@ engine::DebugManager::~DebugManager()
 void engine::DebugManager::SetChannelDeactivated(bool isDisabled, size_t debugChannel)
 {
 	if (debugChannel == -1)
-		for (size_t i{ 0 }; i < m_Channels.size(); i++)
-			m_Channels[i] = isDisabled;
+	{
+		if (m_Channels.size() > 0)
+		{
+			for (size_t i{ 0 }; i < m_Channels.size(); i++)
+				m_Channels[i] = isDisabled;
+		}
+		else
+		{
+			for (size_t i{ 0 }; i < DEBUG_CHANNEL_SIZE; i++)
+				m_Channels[i] = isDisabled;
+		}
+	}
 	else
 		m_Channels[debugChannel] = isDisabled;
 }

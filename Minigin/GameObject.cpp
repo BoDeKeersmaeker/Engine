@@ -21,7 +21,7 @@ void engine::GameObject::Render() const
 		component->Render(m_Transform);
 }
 
-Float2 engine::GameObject::GetPosition()
+engine::Float2 engine::GameObject::GetPosition()
 {
 	return { m_Transform.GetPosition().x, m_Transform.GetPosition().y };
 }

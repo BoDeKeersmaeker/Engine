@@ -266,6 +266,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerDeathObserver.h" />
     <ClInclude Include="PlayerScoreObserver.h" />
+    <ClInclude Include="PurpleEnemyComponent.h" />
     <ClInclude Include="RemainingDisc.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Renderer.h" />
@@ -389,6 +390,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerDeathObserver.cpp" />
     <ClCompile Include="PlayerScoreObserver.cpp" />
+    <ClCompile Include="PurpleEnemyComponent.cpp" />
     <ClCompile Include="RemainingDisc.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
