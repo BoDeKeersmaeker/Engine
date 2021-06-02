@@ -12,6 +12,7 @@ namespace engine
 		virtual void AddMusic(int soundID, const std::string& path) override;
 		virtual void play(int soundID) override;
 		virtual void stopAll() override;
+		virtual void SetVolume(int volume) override;
 
 	private:
 		Audio* m_pAudioService;

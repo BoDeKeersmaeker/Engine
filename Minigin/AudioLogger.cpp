@@ -15,6 +15,7 @@ engine::AudioLogger::~AudioLogger()
 
 void engine::AudioLogger::AddEffect(int soundID, const std::string& path)
 {
+	
 	std::cout << "Added effect with ID: " + std::to_string(soundID) << "\n";
 	if (!m_IsMuted)
 		m_pAudioService->AddEffect(soundID, path);
@@ -39,4 +40,11 @@ void engine::AudioLogger::stopAll()
 	std::cout << "Stopped all sounds\n";
 	if(!m_IsMuted)
 		m_pAudioService->stopAll();
+}
+
+void engine::AudioLogger::SetVolume(int volume)
+{
+	std::cout << "Set volume to " + std::to_string(volume) + "\n";
+	if (!m_IsMuted)
+		m_pAudioService->SetVolume(volume);
 }

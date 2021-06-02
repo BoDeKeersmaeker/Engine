@@ -11,5 +11,6 @@ namespace engine
 		virtual void AddMusic(int, const std::string&) override {};
 		virtual void play(int) override {};
 		virtual void stopAll() override {};
+		virtual void SetVolume(int) override {};
 	};
 }

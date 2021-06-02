@@ -1,16 +1,17 @@
 #include "MiniginPCH.h"
 #include "GridComponent.h"
 
+#include <fstream>
+
 #include "DebugManager.h"
 #include "GameObject.h"
 #include "GridNodeComponent.h"
 #include "Scene.h"
 
-engine::GridComponent::GridComponent(std::shared_ptr<GameObject> owner, const std::vector<std::string>& blockPaths)
+engine::GridComponent::GridComponent(std::shared_ptr<GameObject> owner, Scene* scene, const std::string& filePath)
 	:Component(owner)
-	, m_BlockPaths{ blockPaths }
 {
-	
+	ReadLevelFile(scene, filePath);
 }
 
 void engine::GridComponent::Update()
@@ -23,17 +24,82 @@ void engine::GridComponent::Render(const Transform&)
 
 }
 
-void engine::GridComponent::GenerateGrid(Scene* scene, size_t amountOfLayers, float width, float height)
+void engine::GridComponent::ReadLevelFile(Scene* scene, const std::string& filePath)
 {
-	DebugManager::GetInstance().print("creating top node", GRID_DEBUG);
-	auto tempNode = AddNode(scene, m_pOwner.lock()->GetPosition(), std::shared_ptr<GridNodeComponent>(nullptr), std::shared_ptr<GridNodeComponent>(nullptr));
-	GenerateLayer(scene, --amountOfLayers, width, height, { tempNode });
+	std::ifstream in{ filePath };
+	if (!in)
+	{
+		DebugManager::GetInstance().print("Level file not opened for reading.", GRID_DEBUG);
+		return;
+	}
+
+	float amountOfLayers = 0;
+	float width = 0;
+	float height = 0;
+	std::vector<std::string> blockTexturePaths;
+	bool revertOverIncrement = false;
+	
+	DebugManager::GetInstance().print("reading from Level file: ", GRID_DEBUG);
+	std::string line;
+	std::smatch matches{};
+	while (in)
+	{
+
+		std::getline(in, line);
+		if (std::regex_match(line, m_GridRegex) && in)
+		{
+			std::regex_search(line, matches, m_GridRegex);
+			if (matches[1] == "AmountOfLayers:")
+				amountOfLayers = ReadFloat(matches[2]);
+			if (matches[1] == "Width:")
+				width = ReadFloat(matches[2]);
+			if (matches[1] == "Height:")
+				height = ReadFloat(matches[2]);
+			if (matches[1] == "BlockTexturePath:")
+				blockTexturePaths.push_back(ReadTexturePath(matches[2]));
+			if (matches[1] == "revertOverIncrement:")
+				revertOverIncrement = ReadBool(matches[2]);
+		}
+	}
+
+	if(amountOfLayers <= 0)
+		DebugManager::GetInstance().print("No AmountOfLayers: given or AmountOfLayers: equal to 0!", GRID_DEBUG);
+	else if(width <= 0.f)
+		DebugManager::GetInstance().print("No Width: given or Width: smaller or equal to 0!", GRID_DEBUG);
+	else if(height <= 0.f)
+		DebugManager::GetInstance().print("No Height: given or Height: smaller or equal to 0!", GRID_DEBUG);
+	else if(blockTexturePaths.size() == 0 && !IsBlockTexturePathsValid(blockTexturePaths))
+		DebugManager::GetInstance().print("No BlockTexturePath: given!", GRID_DEBUG);
+	else
+	{
+		DebugManager::GetInstance().print("done", GRID_DEBUG);
+		GenerateLevel(scene, static_cast<size_t>(amountOfLayers), width, height, blockTexturePaths, revertOverIncrement);
+	}
 }
 
-void engine::GridComponent::GenerateLayer(Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer)
+bool engine::GridComponent::IsBlockTexturePathsValid(const std::vector<std::string>& blockTexturePaths)
+{
+	for(auto blockTexture : blockTexturePaths)
+		if (blockTexture == "")
+			return false;
+	return true;
+}
+
+void engine::GridComponent::GenerateLevel(Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement)
+{
+	DebugManager::GetInstance().print("creating top node", GRID_DEBUG);
+	const auto tempNode = AddNode(scene, m_pOwner.lock()->GetPosition(), blockTexturePaths, revertOverIncrement, std::shared_ptr<GridNodeComponent>(nullptr), std::shared_ptr<GridNodeComponent>(nullptr));
+	m_pSoloStartNode = tempNode;
+	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, { tempNode });
+}
+
+void engine::GridComponent::GenerateLayer(Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer)
 {
 	if(amountOfLayers < 1)
 		return;
+
+	m_pCoopStartNodes.first = pPreviousLayer[0];
+	m_pCoopStartNodes.second = pPreviousLayer[pPreviousLayer.size()-1];
 	
 	std::vector<std::weak_ptr<GridNodeComponent>> pThisLayer;
 	for (size_t j{}; j < pPreviousLayer.size(); ++j)
@@ -44,7 +110,7 @@ void engine::GridComponent::GenerateLayer(Scene* scene, size_t amountOfLayers, f
 			tempPos.x -= (width / 2.f);
 			tempPos.y += height;
 			DebugManager::GetInstance().print("creating front node", GRID_DEBUG);
-			pThisLayer.push_back(AddNode(scene, tempPos, std::shared_ptr<GridNodeComponent>(nullptr), pPreviousLayer[j]));
+			pThisLayer.push_back(AddNode(scene, tempPos, blockTexturePaths, revertOverIncrement,std::shared_ptr<GridNodeComponent>(nullptr),  pPreviousLayer[j]));
 		}
 
 		auto tempPos = pPreviousLayer[j].lock()->GetOwner().lock()->GetPosition();
@@ -54,33 +120,78 @@ void engine::GridComponent::GenerateLayer(Scene* scene, size_t amountOfLayers, f
 		if (j < pPreviousLayer.size() - 1)
 		{
 			DebugManager::GetInstance().print("creating mid node", GRID_DEBUG);
-			pThisLayer.push_back(AddNode(scene, tempPos, pPreviousLayer[j], pPreviousLayer[j + 1]));
+			pThisLayer.push_back(AddNode(scene, tempPos, blockTexturePaths, revertOverIncrement, pPreviousLayer[j], pPreviousLayer[j + 1]));
 		}
 		else
 		{
 			DebugManager::GetInstance().print("creating end node", GRID_DEBUG);
-			pThisLayer.push_back(AddNode(scene, tempPos, pPreviousLayer[j], std::shared_ptr<GridNodeComponent>(nullptr)));
+			pThisLayer.push_back(AddNode(scene, tempPos, blockTexturePaths, revertOverIncrement, pPreviousLayer[j], std::shared_ptr<GridNodeComponent>(nullptr)));
 		}
 	}
 
-	GenerateLayer(scene, --amountOfLayers, width, height, pThisLayer);
+	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, pThisLayer);
 }
 
-std::weak_ptr<engine::GridNodeComponent> engine::GridComponent::AddNode(Scene* scene, Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection)
+std::weak_ptr<engine::GridNodeComponent> engine::GridComponent::AddNode(Scene* scene, Float2 pos, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection)
 {
 	auto obj = std::make_shared<engine::GameObject>();
-	auto pGnc = std::make_shared<engine::GridNodeComponent>(obj, m_BlockPaths);
-	
-	if(m_pTopLeftConnection.lock() != std::shared_ptr<GridNodeComponent>( nullptr))
-		pGnc->SetConnection(ConnectionDirection::TOPLEFT, m_pTopLeftConnection);
-
-	if (m_pTopRightConnection.lock() != std::shared_ptr<GridNodeComponent>(nullptr))
-		pGnc->SetConnection(ConnectionDirection::TOPRIGHT, m_pTopRightConnection);
-	
-	m_pGrid.push_back(pGnc);
-	obj->AddComponent<GridNodeComponent>(pGnc);
-	obj->SetPosition(pos);
 	scene->Add(obj);
+	auto pGnc = std::make_shared<engine::GridNodeComponent>(obj, revertOverIncrement, blockTexturePaths);
+	obj->AddComponent<GridNodeComponent>(pGnc);
+	m_pGrid.push_back(pGnc);
+	obj->SetPosition(pos);
+	
+	if(!m_pTopLeftConnection.expired())
+		pGnc->SetConnection(ConnectionDirection::TOPLEFT, pGnc, m_pTopLeftConnection);
+
+	if (!m_pTopRightConnection.expired())
+		pGnc->SetConnection(ConnectionDirection::TOPRIGHT, pGnc, m_pTopRightConnection);
+	
 	DebugManager::GetInstance().print("Node Created with pos: " + std::to_string(pos.x) + "," + std::to_string(pos.y), NODE_DEBUG);
-	return pGnc;
+	
+	return obj->GetComponent<engine::GridNodeComponent>().lock();
+}
+
+size_t engine::GridComponent::ReadSize_t(const std::string& input)
+{
+	std::smatch matches{};
+	if (regex_match(input, m_Size_tRegex))
+	{
+		std::regex_search(input, matches, m_Size_tRegex);
+		return std::stoi(matches[1]);
+	}
+	return 0;
+}
+
+float engine::GridComponent::ReadFloat(const std::string& input)
+{
+	std::smatch matches{};
+	if (regex_match(input, m_FloatRegex))
+	{
+		std::regex_search(input, matches, m_FloatRegex);
+		return std::stof(matches[1]);
+	}
+	return 0;
+}
+
+std::string engine::GridComponent::ReadTexturePath(const std::string& input)
+{
+	std::smatch matches{};
+	if (regex_match(input, m_TexturePathRegex))
+	{
+		std::regex_search(input, matches, m_TexturePathRegex);
+		return matches[1];
+	}
+	return "";
+}
+
+bool engine::GridComponent::ReadBool(const std::string& input)
+{
+	std::smatch matches{};
+	if (regex_match(input, m_BoolRegex))
+	{
+		std::regex_search(input, matches, m_BoolRegex);
+		return (matches[1] == "true");
+	}
+	return false;
 }

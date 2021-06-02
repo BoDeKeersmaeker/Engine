@@ -5,8 +5,12 @@
 #include <thread>
 #include "Singleton.h"
 
-constexpr auto NODE_DEBUG = 1;
-constexpr auto GRID_DEBUG = 2;
+constexpr auto DEFAULT_DEBUG = 0;
+constexpr auto ERROR_DEBUG = 1;
+constexpr auto AUDIO_DEBUG = 2;
+constexpr auto NODE_DEBUG = 3;
+constexpr auto GRID_DEBUG = 4;
+constexpr auto INPUT_DEBUG = 5;
 
 namespace engine
 {
@@ -16,7 +20,7 @@ namespace engine
 		virtual ~DebugManager() override;
 		
 		//Use -1 to set all channels
-		void SetChannelActivated(bool isEnabled, size_t debugChannel = -1);
+		void SetChannelDeactivated(bool isDisabled, size_t debugChannel = -1);
 		void print(std::string text, size_t debugChannel = 0);
 	
 	private:

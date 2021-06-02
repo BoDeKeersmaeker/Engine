@@ -18,11 +18,12 @@ namespace engine
 	{
 	public:
 		AudioService();
-		virtual ~AudioService();
-		virtual void AddEffect(int soundID, const std::string& path);
-		virtual void AddMusic(int soundID, const std::string& path);
-		virtual void play(int soundID);
-		virtual void stopAll();
+		virtual ~AudioService() override;
+		virtual void AddEffect(int soundID, const std::string& path) override;
+		virtual void AddMusic(int soundID, const std::string& path) override;
+		virtual void play(int soundID) override;
+		virtual void stopAll() override;
+		virtual void SetVolume(int volume) override;
 
 	private:
 		void Update();

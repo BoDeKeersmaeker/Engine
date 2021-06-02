@@ -7,5 +7,6 @@ protected:
 	virtual void LoadGame() const override;
 
 private:
-	void LoadDemo();
+	void LoadDemo() const;
+	void LoadQbert() const;
 };

@@ -3,6 +3,7 @@
 #include <vector>
 #include "Component.h"
 #include "Structs.h"
+#include <regex>
 
 namespace engine
 {
@@ -12,18 +13,33 @@ namespace engine
 	class GridComponent : public Component
 	{
 	public:
-		GridComponent(std::shared_ptr<GameObject> owner, const std::vector<std::string>& blockPaths);
+		GridComponent(std::shared_ptr<GameObject> owner, Scene* scene, const std::string& filePath);
 		
 		virtual void Update() override;
 		virtual void Render(const Transform& transform) override;
 
-		void GenerateGrid(Scene* scene, size_t amountOfLayers, float width, float height);
-		
+		std::weak_ptr<GridNodeComponent> GetSoloStartNode() const { return m_pSoloStartNode; };
+		const std::pair<std::weak_ptr<GridNodeComponent>, std::weak_ptr<GridNodeComponent>>& GetCoopStartNodes() const { return m_pCoopStartNodes; };
+	
 	private:
-		void GenerateLayer(Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer);
-		std::weak_ptr<GridNodeComponent> AddNode(Scene* scene, Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection);
-		
+		void ReadLevelFile(Scene* scene, const std::string& filePath);
+		bool IsBlockTexturePathsValid(const std::vector<std::string>& blockTexturePaths);
+		void GenerateLevel(Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement);
+		void GenerateLayer(Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer);
+		std::weak_ptr<GridNodeComponent> AddNode(Scene* scene, Float2 pos, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection);
+
+		size_t ReadSize_t(const std::string& input);
+		float ReadFloat(const std::string& input);
+		std::string ReadTexturePath(const std::string& input);
+		bool ReadBool(const std::string& input);
+	
 		std::vector<std::weak_ptr<GridNodeComponent>> m_pGrid;
-		std::vector<std::string> m_BlockPaths;
+		std::regex m_GridRegex{ "(\\w+:)\\s(.+)" };
+		std::regex m_Size_tRegex{ "(\\d+)$" };
+		std::regex m_FloatRegex{ "(-?\\d+[\\.|\\,]?\\d?)" };
+		std::regex m_TexturePathRegex{ "(\\w+.png)" };
+		std::regex m_BoolRegex{ "(true|false)" };
+		std::weak_ptr<GridNodeComponent> m_pSoloStartNode = std::shared_ptr<GridNodeComponent>(nullptr);
+		std::pair<std::weak_ptr<GridNodeComponent>, std::weak_ptr<GridNodeComponent>> m_pCoopStartNodes = { std::shared_ptr<GridNodeComponent>(nullptr), std::shared_ptr<GridNodeComponent>(nullptr) };
 	};
 }

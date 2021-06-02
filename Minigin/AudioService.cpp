@@ -1,11 +1,12 @@
 #include "MiniginPCH.h"
 #include "AudioService.h"
 #include <mutex>
+#include "DebugManager.h"
 
 engine::AudioService::AudioService()
 	: m_Thread{ &engine::AudioService::Update, this }
 {
-		
+	
 }
 
 engine::AudioService::~AudioService()
@@ -23,12 +24,14 @@ engine::AudioService::~AudioService()
 
 void engine::AudioService::AddEffect(int soundID, const std::string& path)
 {
+	DebugManager::GetInstance().print("Added effect with ID: " + std::to_string(soundID), AUDIO_DEBUG);
 	m_Infos.push_back(AudioInfo{ false, m_pMixChunks.size(), soundID });
 	m_pMixChunks.push_back(Mix_LoadWAV(path.c_str()));
 }
 
 void engine::AudioService::AddMusic(int soundID, const std::string& path)
 {
+	DebugManager::GetInstance().print("Added Music with ID: " + std::to_string(soundID), AUDIO_DEBUG);
 	m_Infos.push_back(AudioInfo{ true, m_pMixMusic.size(), soundID });
 	m_pMixMusic.push_back(Mix_LoadMUS(path.c_str()));
 }
@@ -56,6 +59,7 @@ void engine::AudioService::Update()
 
 void engine::AudioService::play(int soundID)
 {
+	DebugManager::GetInstance().print("Playing sound with ID: " + std::to_string(soundID), AUDIO_DEBUG);
 	for(size_t i{ 0 } ; i < m_Infos.size(); i++)
 		if (m_Infos[i].ID == soundID)
 			m_Queue.push(i);
@@ -65,5 +69,12 @@ void engine::AudioService::play(int soundID)
 
 void engine::AudioService::stopAll()
 {
+	DebugManager::GetInstance().print("Stopped all sounds", AUDIO_DEBUG);
 	Mix_HaltChannel(-1);
+}
+
+void engine::AudioService::SetVolume(int volume)
+{
+	DebugManager::GetInstance().print("Set volume to " + std::to_string(volume), AUDIO_DEBUG);
+	Mix_VolumeMusic(volume);
 }
