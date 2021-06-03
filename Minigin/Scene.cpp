@@ -29,7 +29,5 @@ void Scene::Update()
 void Scene::Render() const
 {
 	for (const auto& object : m_Objects)
-	{
 		object->Render();
-	}
 }

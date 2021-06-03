@@ -1,11 +1,11 @@
 #pragma once
 #include <memory>
-
 #include "BaseCommand.h"
+
+class PlayerComponent;
+
 namespace engine
 {
-	class PlayerComponent;
-
 	class ColorChange : public engine::BaseCommand
 	{
 	public:

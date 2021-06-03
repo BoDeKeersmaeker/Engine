@@ -18,7 +18,8 @@ namespace engine
 	struct Input
 	{
 		int input;
-		InputTriggerType triggertype;
+		InputTriggerType triggerType;
+		bool IsKeyboard;
 
 		bool operator< (const Input& temp) const
 		{
@@ -32,7 +33,7 @@ namespace engine
 
 		bool operator== (const Input& temp) const
 		{
-			return input == temp.input && triggertype == temp.triggertype;
+			return input == temp.input && triggerType == temp.triggerType && IsKeyboard == temp.IsKeyboard;
 		}
 	};
 
@@ -41,10 +42,11 @@ namespace engine
 	public:
 		bool ProcessInput();
 		
-		void AddCommand(Input input, const std::shared_ptr<BaseCommand>& command);
+		void AddCommand(int input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command);
+		void AddCommand(char input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command);
 	
 	private:
 		XINPUT_KEYSTROKE m_CurrentState{};
-		std::map <Input, std::vector<std::shared_ptr<BaseCommand>>> m_Commands;
+		std::map <Input, std::vector<std::shared_ptr<BaseCommand>>> m_ControllerCommands;
 	};
 }

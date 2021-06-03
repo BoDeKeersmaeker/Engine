@@ -1,21 +1,20 @@
 #pragma once
 #include <memory>
 #include "BaseCommand.h"
+#include "Structs.h"
 
-namespace engine
+
+enum class Direction;
+class PlayerComponent;
+
+class Move final : public engine::BaseCommand
 {
-	enum class Direction;
-	class PlayerComponent;
+public:
+	Move(std::weak_ptr<PlayerComponent> target, engine::Direction direction);
+	virtual ~Move()  override = default;
+	void Execute() override;
 
-	class Move final : public engine::BaseCommand
-	{
-	public:
-		Move(std::weak_ptr<PlayerComponent> target, Direction direction);
-		virtual ~Move()  override = default;
-		void Execute() override;
-
-	private:
-		std::weak_ptr<PlayerComponent> m_pTarget;
-		Direction m_Direction;
-	};
+private:
+	std::weak_ptr<PlayerComponent> m_pTarget;
+	engine::Direction m_Direction;
 };

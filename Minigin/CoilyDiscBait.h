@@ -2,10 +2,10 @@
 #include <memory>
 #include "BaseCommand.h"
 
+class PlayerComponent;
+
 namespace engine
 {
-	class PlayerComponent;
-
 	class CoilyDiscBait : public engine::BaseCommand
 	{
 	public:

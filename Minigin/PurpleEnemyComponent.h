@@ -2,24 +2,21 @@
 #include "Component.h"
 #include "Structs.h"
 
-namespace engine
+class GridNodeComponent;
+
+class PurpleEnemyComponent : public engine::Component
 {
-	class GridNodeComponent;
+public:
+	PurpleEnemyComponent(std::shared_ptr<engine::GameObject> owner, bool moveLeft, std::weak_ptr<GridNodeComponent> pStartNode = std::shared_ptr<GridNodeComponent>(nullptr), float moveCooldown = 1.f);
+	virtual void Update() override;
+	virtual void Render(const engine::Transform& transform) override;
 
-	class PurpleEnemyComponent : public Component
-	{
-	public:
-		PurpleEnemyComponent(std::shared_ptr<GameObject> owner, bool moveLeft, std::weak_ptr<GridNodeComponent> pStartNode = std::shared_ptr<GridNodeComponent>(nullptr), float moveCooldown = 1.f);
-		virtual void Update() override;
-		virtual void Render(const Transform& transform) override;
+private:
+	void Move(engine::Direction direction);
+	void Die() const;
 
-	private:
-		void Move(Direction direction);
-		void Die() const;
-
-		std::weak_ptr<GridNodeComponent> m_pCurrentNode;
-		float m_MoveCooldown;
-		float m_CurrentMoveCooldown;
-		bool m_MoveLeft;
-	};
-}
+	std::weak_ptr<GridNodeComponent> m_pCurrentNode;
+	float m_MoveCooldown;
+	float m_CurrentMoveCooldown;
+	bool m_MoveLeft;
+};

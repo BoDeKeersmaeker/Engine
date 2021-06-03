@@ -3,9 +3,10 @@
 
 #include "BaseCommand.h"
 
+class PlayerComponent;
+
 namespace engine
 {
-	class PlayerComponent;
 
 	class CatchSam : public engine::BaseCommand
 	{

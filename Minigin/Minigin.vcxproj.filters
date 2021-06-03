@@ -110,9 +110,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Kill.h">
-      <Filter>Input</Filter>
-    </ClInclude>
     <ClInclude Include="EngineTime.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -121,9 +118,6 @@
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerComponent.h">
-      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="SubjectComponent.h">
       <Filter>Components</Filter>
@@ -139,21 +133,6 @@
     </ClInclude>
     <ClInclude Include="PlayerScoreObserver.h">
       <Filter>Observers</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorChange.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="RemainingDisc.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="CatchSlick.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="CoilyDiscBait.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="CatchSam.h">
-      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="CounterComponent.h">
       <Filter>Components</Filter>
@@ -173,26 +152,26 @@
     <ClInclude Include="AudioLogger.h">
       <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="TileComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="GridComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="GridNodeComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="DebugManager.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Move.h">
+    <ClInclude Include="RemainingDisc.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="GreenEnemyComponent.h">
-      <Filter>Components</Filter>
+    <ClInclude Include="ColorChange.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="PurpleEnemyComponent.h">
-      <Filter>Components</Filter>
+    <ClInclude Include="Kill.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CoilyDiscBait.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CatchSlick.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CatchSam.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -265,9 +244,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Kill.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
     <ClCompile Include="EngineTime.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
@@ -276,9 +252,6 @@
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerComponent.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="SubjectComponent.cpp">
       <Filter>Components</Filter>
@@ -294,21 +267,6 @@
     </ClCompile>
     <ClCompile Include="PlayerScoreObserver.cpp">
       <Filter>Observers</Filter>
-    </ClCompile>
-    <ClCompile Include="ColorChange.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="RemainingDisc.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="CatchSlick.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="CoilyDiscBait.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="CatchSam.cpp">
-      <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="CounterComponent.cpp">
       <Filter>Components</Filter>
@@ -328,26 +286,26 @@
     <ClCompile Include="AudioLogger.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="TileComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="GridComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="GridNodeComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="DebugManager.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="Move.cpp">
+    <ClCompile Include="RemainingDisc.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="GreenEnemyComponent.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="Kill.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="PurpleEnemyComponent.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="ColorChange.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="CoilyDiscBait.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="CatchSlick.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="CatchSam.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,12 +1,11 @@
 #pragma once
 #include <memory>
-
 #include "BaseCommand.h"
+
+class PlayerComponent;
 
 namespace engine
 {
-	class PlayerComponent;
-
 	class CatchSlick : public engine::BaseCommand
 	{
 	public:

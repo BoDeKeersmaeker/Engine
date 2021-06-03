@@ -7,9 +7,10 @@
 #include "Audio.h"
 #include "GridNodeComponent.h"
 #include "DebugManager.h"
+#include "DiscComponent.h"
 #include "EngineTime.h"
 
-engine::PlayerComponent::PlayerComponent(std::shared_ptr<GameObject> owner, std::weak_ptr<GridNodeComponent> pStartNode, float moveCooldown, int lives)
+PlayerComponent::PlayerComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<GridNodeComponent> pStartNode, float moveCooldown, int lives)
 	:Component(owner)
 	, m_pStartNode{ pStartNode }
 	, m_pCurrentNode{ pStartNode }
@@ -17,7 +18,7 @@ engine::PlayerComponent::PlayerComponent(std::shared_ptr<GameObject> owner, std:
 	, m_MoveCooldown{ moveCooldown }
 	, m_CurrentMoveCooldown{ 0.f }
 {
-	owner->AddComponent<SubjectComponent>(std::make_shared<SubjectComponent>(owner));
+	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
 	
 	if (!pStartNode.expired())
 		m_pOwner.lock()->SetPosition(pStartNode.lock()->GetOwner().lock()->GetPosition());
@@ -26,20 +27,20 @@ engine::PlayerComponent::PlayerComponent(std::shared_ptr<GameObject> owner, std:
 		Respawn();
 }
 
-void engine::PlayerComponent::Update()
+void PlayerComponent::Update()
 {
 	if(m_CurrentMoveCooldown >= 0.f)
-		m_CurrentMoveCooldown -= EngineTime::GetInstance().GetElapsedSec();
+		m_CurrentMoveCooldown -= engine::EngineTime::GetInstance().GetElapsedSec();
 }
 
-void engine::PlayerComponent::Render(const Transform&)
+void PlayerComponent::Render(const engine::Transform&)
 {
 	
 }
 
-void engine::PlayerComponent::Move(Direction direction)
+void PlayerComponent::Move(engine::Direction direction)
 {
-	if (m_CurrentMoveCooldown > 0 || m_pCurrentNode.expired())
+	if (m_IsOnDisk || m_CurrentMoveCooldown > 0 || m_pCurrentNode.expired())
 		return;
 
 	m_CurrentMoveCooldown = m_MoveCooldown;
@@ -47,21 +48,43 @@ void engine::PlayerComponent::Move(Direction direction)
 	auto temp = m_pCurrentNode.lock()->GetConnection(direction);
 	if (!temp.expired())
 	{
-		DebugManager::GetInstance().print("Qbert moved: " + std::to_string(static_cast<size_t>(direction)), PLAYER_DEBUG);
+		engine::DebugManager::GetInstance().print("Qbert moved: " + std::to_string(static_cast<size_t>(direction)), PLAYER_DEBUG);
 		m_pOwner.lock()->SetPosition(temp.lock()->GetOwner().lock()->GetPosition());
 		m_pCurrentNode = temp;
 		m_pCurrentNode.lock()->Increment();
 	}
 	else
-		Die();
+	{
+		std::weak_ptr<DiscComponent> disc;
+		switch (direction)
+		{
+		case engine::Direction::TOPLEFT:
+			disc = m_pCurrentNode.lock()->GetDiscs().first;
+			if(!disc.expired())
+				disc.lock()->Activate(m_pOwner.lock()->GetComponent<PlayerComponent>());
+			else
+				Die();
+			break;
+		case engine::Direction::TOPRIGHT:
+			disc = m_pCurrentNode.lock()->GetDiscs().first;
+			if (!disc.expired())
+				disc.lock()->Activate(m_pOwner.lock()->GetComponent<PlayerComponent>());
+			else
+				Die();
+			break;
+		default:
+			Die();
+			break;
+		}
+	}
 }
 
-void engine::PlayerComponent::Die()
+void PlayerComponent::Die()
 {
 	m_Lives--;
-	m_pOwner.lock()->GetComponent<SubjectComponent>().lock()->Notify(m_pOwner, Event::PlayerDied);
+	m_pOwner.lock()->GetComponent<engine::SubjectComponent>().lock()->Notify(m_pOwner, engine::Event::PlayerDied);
 
-	AudioLocator::getAudioSystem()->play(0);
+	engine::AudioLocator::getAudioSystem()->play(0);
 	
 	Respawn();
 	
@@ -69,23 +92,33 @@ void engine::PlayerComponent::Die()
 		m_pOwner.lock()->Destroy();
 }
 
-void engine::PlayerComponent::ChangeScore(int deltaScore)
+void PlayerComponent::SetCurrentNode(std::weak_ptr<GridNodeComponent> pNode)
 {
-	m_Score += deltaScore;
-	m_pOwner.lock()->GetComponent<SubjectComponent>().lock()->Notify(m_pOwner, Event::ScoreChanged);
+	m_pCurrentNode = pNode;
 }
 
-int engine::PlayerComponent::GetLives() const
+void PlayerComponent::SetIsOnDisk(bool isOnDisk)
+{
+	m_IsOnDisk = isOnDisk;
+}
+
+void PlayerComponent::ChangeScore(int deltaScore)
+{
+	m_Score += deltaScore;
+	m_pOwner.lock()->GetComponent<engine::SubjectComponent>().lock()->Notify(m_pOwner, engine::Event::ScoreChanged);
+}
+
+int PlayerComponent::GetLives() const
 {
 	return m_Lives;
 }
 
-int engine::PlayerComponent::GetScore() const
+int PlayerComponent::GetScore() const
 {
 	return m_Score;
 }
 
-void engine::PlayerComponent::Respawn()
+void PlayerComponent::Respawn()
 {
 	if (!m_pStartNode.expired())
 	{

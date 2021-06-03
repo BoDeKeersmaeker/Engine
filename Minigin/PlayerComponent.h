@@ -2,31 +2,32 @@
 #include "Component.h"
 #include "Structs.h"
 
-namespace engine
+
+class GridNodeComponent;
+
+class PlayerComponent : public engine::Component
 {
-	class GridNodeComponent;
+public:
+	PlayerComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<GridNodeComponent> pStartNode = std::shared_ptr<GridNodeComponent>(nullptr), float moveCooldown = 0.35f, int lives = 3);
+	virtual void Update() override;
+	virtual void Render(const engine::Transform& transform) override;
 
-	class PlayerComponent : public Component
-	{
-	public:
-		PlayerComponent(std::shared_ptr<GameObject> owner, std::weak_ptr<GridNodeComponent> pStartNode = std::shared_ptr<GridNodeComponent>(nullptr), float moveCooldown = 0.35f, int lives = 3);
-		virtual void Update() override;
-		virtual void Render(const Transform& transform) override;
+	void Move(engine::Direction direction);
+	void Die();
+	void SetCurrentNode(std::weak_ptr<GridNodeComponent> pNode);
+	void SetIsOnDisk(bool isOnDisk);
+	void ChangeScore(int deltaScore);
+	int GetLives() const;
+	int GetScore() const;
 
-		void Move(Direction direction);
-		void Die();
-		void ChangeScore(int deltaScore);
-		int GetLives() const;
-		int GetScore() const;
+private:
+	void Respawn();
 	
-	private:
-		void Respawn();
-		
-		std::weak_ptr<GridNodeComponent> m_pStartNode;
-		std::weak_ptr<GridNodeComponent> m_pCurrentNode;
-		float m_MoveCooldown;
-		float m_CurrentMoveCooldown;
-		int m_Lives;
-		int m_Score = 0;
-	};
-}
+	std::weak_ptr<GridNodeComponent> m_pStartNode;
+	std::weak_ptr<GridNodeComponent> m_pCurrentNode;
+	float m_MoveCooldown;
+	float m_CurrentMoveCooldown;
+	int m_Lives;
+	int m_Score = 0;
+	bool m_IsOnDisk = false;
+};

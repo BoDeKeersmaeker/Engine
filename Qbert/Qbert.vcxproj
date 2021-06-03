@@ -179,10 +179,24 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Minigin\DiscComponent.cpp" />
+    <ClCompile Include="..\Minigin\GreenEnemyComponent.cpp" />
+    <ClCompile Include="..\Minigin\GridComponent.cpp" />
+    <ClCompile Include="..\Minigin\GridNodeComponent.cpp" />
+    <ClCompile Include="..\Minigin\Move.cpp" />
+    <ClCompile Include="..\Minigin\PlayerComponent.cpp" />
+    <ClCompile Include="..\Minigin\PurpleEnemyComponent.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Qbert.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Minigin\DiscComponent.h" />
+    <ClInclude Include="..\Minigin\GreenEnemyComponent.h" />
+    <ClInclude Include="..\Minigin\GridComponent.h" />
+    <ClInclude Include="..\Minigin\GridNodeComponent.h" />
+    <ClInclude Include="..\Minigin\Move.h" />
+    <ClInclude Include="..\Minigin\PlayerComponent.h" />
+    <ClInclude Include="..\Minigin\PurpleEnemyComponent.h" />
     <ClInclude Include="Game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
