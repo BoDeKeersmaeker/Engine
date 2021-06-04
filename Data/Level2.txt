@@ -4,4 +4,8 @@ Height: 47
 BlockTexturePath: Block_Blue.png
 BlockTexturePath: Block_Pink.png
 BlockTexturePath: Block_Yellow.png
-revertOverIncrement: false
+RevertOverIncrement: false
+Disk: 3, left
+Disk: 3, right
+Disk: 4, left
+Disk: 5, right

@@ -33,11 +33,13 @@ void GridComponent::ReadLevelFile(engine::Scene* scene, const std::string& fileP
 		return;
 	}
 
-	float amountOfLayers = 0;
+	size_t amountOfLayers = 0;
 	float width = 0;
 	float height = 0;
 	std::vector<std::string> blockTexturePaths;
 	bool revertOverIncrement = false;
+	std::vector<std::pair<int, bool>> diskPositions;
+
 
 	engine::DebugManager::GetInstance().print("reading from Level file: ", GRID_DEBUG);
 	std::string line;
@@ -49,34 +51,39 @@ void GridComponent::ReadLevelFile(engine::Scene* scene, const std::string& fileP
 		{
 			std::regex_search(line, matches, m_GridRegex);
 			if (matches[1] == "AmountOfLayers:")
-				amountOfLayers = ReadFloat(matches[2]);
+				amountOfLayers = ReadSize_t(matches[2]);
 			if (matches[1] == "Width:")
 				width = ReadFloat(matches[2]);
 			if (matches[1] == "Height:")
 				height = ReadFloat(matches[2]);
 			if (matches[1] == "BlockTexturePath:")
 				blockTexturePaths.push_back(ReadTexturePath(matches[2]));
-			if (matches[1] == "revertOverIncrement:")
+			if (matches[1] == "RevertOverIncrement:")
 				revertOverIncrement = ReadBool(matches[2]);
+			if (matches[1] == "Disk:")
+				diskPositions.push_back(ReadDisk(matches[2]));
 		}
 	}
 
 	if(amountOfLayers <= 0)
-		engine::DebugManager::GetInstance().print("No AmountOfLayers: given or AmountOfLayers: equal to 0!", GRID_DEBUG);
+		engine::DebugManager::GetInstance().print("AmountOfLayers: none given or amountOfLayers equal to 0!", GRID_DEBUG);
 	else if(width <= 0.f)
-		engine::DebugManager::GetInstance().print("No Width: given or Width: smaller or equal to 0!", GRID_DEBUG);
+		engine::DebugManager::GetInstance().print("Width: none given or width smaller or equal to 0!", GRID_DEBUG);
 	else if(height <= 0.f)
-		engine::DebugManager::GetInstance().print("No Height: given or Height: smaller or equal to 0!", GRID_DEBUG);
-	else if(blockTexturePaths.size() == 0 && !IsBlockTexturePathsValid(blockTexturePaths))
-		engine::DebugManager::GetInstance().print("No BlockTexturePath: given!", GRID_DEBUG);
+		engine::DebugManager::GetInstance().print("Height: none given or height smaller or equal to 0!", GRID_DEBUG);
+	else if(blockTexturePaths.size() == 0 || !AreBlockTexturePathsValid(blockTexturePaths))
+		engine::DebugManager::GetInstance().print("BlockTexturePath: no or invalid path given!", GRID_DEBUG);
+	else if(diskPositions.size() == 0 || !AreDiskPositionsValid(diskPositions))
+		engine::DebugManager::GetInstance().print("diskPositions: no or invalid date given!", GRID_DEBUG);
 	else
 	{
 		engine::DebugManager::GetInstance().print("done", GRID_DEBUG);
-		GenerateLevel(scene, static_cast<size_t>(amountOfLayers), width, height, blockTexturePaths, revertOverIncrement);
+		m_MaxLayers = amountOfLayers;
+		GenerateLevel(scene, static_cast<size_t>(amountOfLayers), width, height, blockTexturePaths, revertOverIncrement, diskPositions);
 	}
 }
 
-bool GridComponent::IsBlockTexturePathsValid(const std::vector<std::string>& blockTexturePaths)
+bool GridComponent::AreBlockTexturePathsValid(const std::vector<std::string>& blockTexturePaths)
 {
 	for(auto blockTexture : blockTexturePaths)
 		if (blockTexture == "")
@@ -84,15 +91,28 @@ bool GridComponent::IsBlockTexturePathsValid(const std::vector<std::string>& blo
 	return true;
 }
 
-void GridComponent::GenerateLevel(engine::Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement)
+bool GridComponent::AreDiskPositionsValid(const std::vector<std::pair<int, bool>>& diskPositions)
 {
-	engine::DebugManager::GetInstance().print("creating top node", GRID_DEBUG);
-	const auto tempNode = AddNode(scene, m_pOwner.lock()->GetPosition(), blockTexturePaths, revertOverIncrement, std::shared_ptr<GridNodeComponent>(nullptr), std::shared_ptr<GridNodeComponent>(nullptr));
-	m_pSoloStartNode = tempNode;
-	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, { tempNode });
+	for (const auto diskPosition : diskPositions)
+		if (diskPosition.first < 0)
+			return false;
+	return true;
 }
 
-void GridComponent::GenerateLayer(engine::Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer)
+void GridComponent::GenerateLevel(engine::Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions)
+{
+	engine::DebugManager::GetInstance().print("creating top node", GRID_DEBUG);
+	const auto tempPos = m_pOwner.lock()->GetPosition();
+	const auto tempNode = AddNode(scene, tempPos, blockTexturePaths, revertOverIncrement, std::shared_ptr<GridNodeComponent>(nullptr), std::shared_ptr<GridNodeComponent>(nullptr));
+	m_pSoloStartNode = tempNode;
+	if (IsDiscNeeded(discPositions, m_MaxLayers - amountOfLayers, true))
+		tempNode.lock()->SetDiscs({ AddDisc(scene, {tempPos.x - (width / 2.f), tempPos.y - height }, m_pSoloStartNode), std::shared_ptr<DiscComponent>(nullptr) });
+	if (IsDiscNeeded(discPositions, m_MaxLayers - amountOfLayers, false))
+		tempNode.lock()->SetDiscs({ AddDisc(scene, {tempPos.x + (width / 2.f), tempPos.y - height }, m_pSoloStartNode), std::shared_ptr<DiscComponent>(nullptr) });
+	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, discPositions, { tempNode });
+}
+
+void GridComponent::GenerateLayer(engine::Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer)
 {
 	m_pCoopStartNodes.first = pPreviousLayer[0];
 	m_pCoopStartNodes.second = pPreviousLayer[pPreviousLayer.size() - 1];
@@ -110,7 +130,8 @@ void GridComponent::GenerateLayer(engine::Scene* scene, size_t amountOfLayers, f
 			tempPos.y += height;
 			engine::DebugManager::GetInstance().print("creating front node", GRID_DEBUG);
 			auto node = AddNode(scene, tempPos, blockTexturePaths, revertOverIncrement, std::shared_ptr<GridNodeComponent>(nullptr), pPreviousLayer[j]);
-			node.lock()->SetDiscs({ AddDisc(scene, {tempPos.x - (width / 2.f), tempPos.y - height }, m_pSoloStartNode), std::shared_ptr<DiscComponent>(nullptr) });
+			if (IsDiscNeeded(discPositions, m_MaxLayers - amountOfLayers, true))
+				node.lock()->SetDiscs({ AddDisc(scene, {tempPos.x - (width / 2.f), tempPos.y - height }, m_pSoloStartNode), std::shared_ptr<DiscComponent>(nullptr) });
 			pThisLayer.push_back(node);
 		}
 
@@ -127,7 +148,8 @@ void GridComponent::GenerateLayer(engine::Scene* scene, size_t amountOfLayers, f
 		{
 			engine::DebugManager::GetInstance().print("creating end node", GRID_DEBUG);
 			auto node = AddNode(scene, tempPos, blockTexturePaths, revertOverIncrement, pPreviousLayer[j], std::shared_ptr<GridNodeComponent>(nullptr));
-			node.lock()->SetDiscs({ AddDisc(scene, {tempPos.x + (width / 2.f), tempPos.y - height }, m_pSoloStartNode), std::shared_ptr<DiscComponent>(nullptr) });
+			if (IsDiscNeeded(discPositions, m_MaxLayers - amountOfLayers, false))
+				node.lock()->SetDiscs({ AddDisc(scene, {tempPos.x + (width / 2.f), tempPos.y - height }, m_pSoloStartNode), std::shared_ptr<DiscComponent>(nullptr) });
 			pThisLayer.push_back(node);
 		}
 		
@@ -135,7 +157,7 @@ void GridComponent::GenerateLayer(engine::Scene* scene, size_t amountOfLayers, f
 			pPreviousLayer[j].lock()->SetConnection(engine::Direction::LEFT, pPreviousLayer[j], pPreviousLayer[j - 1]);
 	}
 	
-	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, pThisLayer);
+	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, discPositions, pThisLayer);
 }
 
 std::weak_ptr<GridNodeComponent> GridComponent::AddNode(engine::Scene* scene, engine::Float2 pos, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection)
@@ -158,7 +180,7 @@ std::weak_ptr<GridNodeComponent> GridComponent::AddNode(engine::Scene* scene, en
 	return pGnc;
 }
 
-std::weak_ptr<DiscComponent> GridComponent::AddDisc(engine::Scene* scene, engine::Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopNode)
+std::weak_ptr<DiscComponent> GridComponent::AddDisc(engine::Scene* scene, engine::Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopNode) const
 {
 	auto obj = std::make_shared<engine::GameObject>();
 	scene->Add(obj);
@@ -169,6 +191,14 @@ std::weak_ptr<DiscComponent> GridComponent::AddDisc(engine::Scene* scene, engine
 	engine::DebugManager::GetInstance().print("Disc Created with pos: " + std::to_string(pos.x) + "," + std::to_string(pos.y), NODE_DEBUG);
 
 	return pDisc;
+}
+
+bool GridComponent::IsDiscNeeded(const std::vector<std::pair<int, bool>>& diskPositions, size_t layer, bool needsLeft)
+{
+	for(auto diskPos : diskPositions)
+		if(layer == diskPos.first && diskPos.second == needsLeft)
+			return true;
+	return false;
 }
 
 size_t GridComponent::ReadSize_t(const std::string& input) const
@@ -213,4 +243,19 @@ bool GridComponent::ReadBool(const std::string& input) const
 		return (matches[1] == "true");
 	}
 	return false;
+}
+
+std::pair<int, bool> GridComponent::ReadDisk(const std::string& input) const
+{
+	std::smatch matches{};
+	if (regex_match(input, m_DiskRegex))
+	{
+		std::regex_search(input, matches, m_DiskRegex);
+		auto tempIndex = std::stoi(matches[1]);
+		if (tempIndex >= 0 && (matches[2] == "left"))
+			return std::pair<int, bool>{tempIndex, true};
+		if (tempIndex >= 0 && (matches[2] == "right"))
+			return std::pair<int, bool>{tempIndex, false};
+	}
+	return std::pair<int,bool>{-1, false};
 }

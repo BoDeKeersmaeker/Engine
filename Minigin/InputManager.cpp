@@ -18,17 +18,17 @@ bool engine::InputManager::ProcessInput()
 				switch (command.first.triggerType)
 				{
 				case InputTriggerType::OnInputUp:
-					if (e.type == SDL_KEYUP)
+					if (e.type & SDL_KEYUP)
 						for (size_t i{ 0 }; i < command.second.size(); i++)
 							command.second[i]->Execute();
 					break;
 				case InputTriggerType::OnInputDown:
-					if (e.type == SDL_KEYDOWN)
+					if (e.type & SDL_KEYDOWN)
 						for (size_t i{ 0 }; i < command.second.size(); i++)
 							command.second[i]->Execute();
 					break;
 				case InputTriggerType::OnInputHold:
-					if (e.type == SDL_KEYDOWN)
+					if (e.type & SDL_KEYDOWN)
 						for (size_t i{ 0 }; i < command.second.size(); i++)
 							command.second[i]->Execute();
 					break;

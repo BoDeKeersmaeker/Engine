@@ -23,16 +23,20 @@ public:
 
 private:
 	void ReadLevelFile(engine::Scene* scene, const std::string& filePath);
-	bool IsBlockTexturePathsValid(const std::vector<std::string>& blockTexturePaths);
-	void GenerateLevel(engine::Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement);
-	void GenerateLayer(engine::Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer);
-	std::weak_ptr<GridNodeComponent> AddNode(engine::Scene* scene, engine::Float2 pos, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection);
-	std::weak_ptr<DiscComponent> AddDisc(engine::Scene* scene, engine::Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopNode);
-
 	size_t ReadSize_t(const std::string& input) const;
 	float ReadFloat(const std::string& input) const;
 	std::string ReadTexturePath(const std::string& input) const;
 	bool ReadBool(const std::string& input) const;
+	//int = layer. bool = isLeft
+	std::pair<int, bool> ReadDisk(const std::string& input) const;
+	static bool AreBlockTexturePathsValid(const std::vector<std::string>& blockTexturePaths);
+	static bool AreDiskPositionsValid(const std::vector<std::pair<int, bool>>& diskPositions);
+
+	void GenerateLevel(engine::Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions);
+	void GenerateLayer(engine::Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer);
+	std::weak_ptr<GridNodeComponent> AddNode(engine::Scene* scene, engine::Float2 pos, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection);
+	std::weak_ptr<DiscComponent> AddDisc(engine::Scene* scene, engine::Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopNode) const;
+	static bool IsDiscNeeded(const std::vector<std::pair<int, bool>>& diskPositions, size_t layer, bool needsLeft);
 
 	std::vector<std::weak_ptr<GridNodeComponent>> m_pGrid;
 	std::regex m_GridRegex{ "(\\w+:)\\s(.+)" };
@@ -40,6 +44,8 @@ private:
 	std::regex m_FloatRegex{ "(-?\\d+[\\.|\\,]?\\d?)" };
 	std::regex m_TexturePathRegex{ "(\\w+.png)" };
 	std::regex m_BoolRegex{ "(true|false)" };
-	std::weak_ptr<GridNodeComponent> m_pSoloStartNode = std::shared_ptr<GridNodeComponent>(nullptr);
+	std::regex m_DiskRegex{ "(\\d+),\\s(\\w+)" };
 	std::pair<std::weak_ptr<GridNodeComponent>, std::weak_ptr<GridNodeComponent>> m_pCoopStartNodes = { std::shared_ptr<GridNodeComponent>(nullptr), std::shared_ptr<GridNodeComponent>(nullptr) };
+	std::weak_ptr<GridNodeComponent> m_pSoloStartNode = std::shared_ptr<GridNodeComponent>(nullptr);
+	size_t m_MaxLayers = 0;
 };

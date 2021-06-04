@@ -37,6 +37,9 @@ void CoilyComponent::Render(const engine::Transform&)
 
 engine::Direction CoilyComponent::Chase()
 {
+	if (m_pTarget.expired())
+		return engine::Direction(0);
+	
 	auto ownerPos = m_pOwner.lock()->GetPosition();
 	auto TargetPos = m_pTarget.lock()->GetCurrentNode().lock()->GetOwner().lock()->GetPosition();
 	if(ownerPos.y < TargetPos.y)
@@ -57,6 +60,9 @@ engine::Direction CoilyComponent::Chase()
 
 void CoilyComponent::Move(engine::Direction direction)
 {
+	if(m_pTarget.expired())
+		return;
+	
 	auto tempTargetNode = m_pTarget.lock()->GetCurrentNode();
 	if (!tempTargetNode.expired() && m_pCurrentNode.lock() == tempTargetNode.lock() && m_pTarget.lock()->GetIsOnDisk())
 		Die();

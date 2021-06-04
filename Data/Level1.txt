@@ -3,4 +3,6 @@ AmountOfLayers: 7
 Height: 47
 BlockTexturePath: Block_Pink.png
 BlockTexturePath: Block_Blue.png
-revertOverIncrement: false
+RevertOverIncrement: false
+Disk: 3, right
+Disk: 4, left

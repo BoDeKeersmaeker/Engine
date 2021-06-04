@@ -43,7 +43,6 @@
 #include "InputManager.h"
 #include "ResourceManager.h"
 #include "Structs.h"
-#include "DebugManager.h"
 #pragma endregion
 
 using namespace std;
@@ -181,16 +180,16 @@ void Game::LoadQbert() const
 	obj = make_shared<engine::GameObject>();
 	obj->AddComponent<CoilyComponent>(make_shared<CoilyComponent>(obj, std::pair<std::string, std::string>{ "Egg.png", "Coily.png" }, GridComp->GetSoloStartNode(), PlayerComp));
 	scene.Add(obj);
-	
+
 	engine::InputManager::GetInstance().AddCommand(VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<Move>(PlayerComp, engine::Direction::TOPLEFT));
 	engine::InputManager::GetInstance().AddCommand(VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<Move>(PlayerComp, engine::Direction::TOPRIGHT));
 	engine::InputManager::GetInstance().AddCommand(VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<Move>(PlayerComp, engine::Direction::BOTTOMRIGHT));
 	engine::InputManager::GetInstance().AddCommand(VK_PAD_LTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<Move>(PlayerComp, engine::Direction::BOTTOMLEFT));
 
-	engine::InputManager::GetInstance().AddCommand(VK_PAD_A, engine::InputTriggerType::OnInputDown, std::make_shared<Move>(PlayerComp, engine::Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddCommand(VK_PAD_Y, engine::InputTriggerType::OnInputDown, std::make_shared<Move>(PlayerComp, engine::Direction::TOPLEFT));
 	engine::InputManager::GetInstance().AddCommand(VK_PAD_B, engine::InputTriggerType::OnInputDown, std::make_shared<Move>(PlayerComp, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddCommand(VK_PAD_X, engine::InputTriggerType::OnInputDown, std::make_shared<Move>(PlayerComp, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddCommand(VK_PAD_Y, engine::InputTriggerType::OnInputDown, std::make_shared<Move>(PlayerComp, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddCommand(VK_PAD_A, engine::InputTriggerType::OnInputDown, std::make_shared<Move>(PlayerComp, engine::Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddCommand(VK_PAD_X, engine::InputTriggerType::OnInputDown, std::make_shared<Move>(PlayerComp, engine::Direction::BOTTOMLEFT));
 
 	engine::InputManager::GetInstance().AddCommand('A', engine::InputTriggerType::OnInputHold, std::make_shared<Move>(PlayerComp, engine::Direction::TOPLEFT));
 	engine::InputManager::GetInstance().AddCommand('Z', engine::InputTriggerType::OnInputHold, std::make_shared<Move>(PlayerComp, engine::Direction::TOPRIGHT));

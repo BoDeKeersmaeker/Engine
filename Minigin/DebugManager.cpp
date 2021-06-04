@@ -53,10 +53,14 @@ void engine::DebugManager::Update()
 
 		if (!m_Queue.empty())
 		{
+			if(!std::cout)
+				continue;
+			
 			std::cout << m_Queue.front() << std::endl;
 			m_Queue.pop();
 		}
-
-		tempLock.unlock();
+		
+		if(tempLock.owns_lock())
+			tempLock.unlock();
 	}
 }
