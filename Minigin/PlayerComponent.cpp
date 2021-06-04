@@ -107,7 +107,7 @@ std::weak_ptr<GridNodeComponent> PlayerComponent::GetCurrentNode()
 	return m_pCurrentNode;
 }
 
-bool PlayerComponent::GetIsOnDisk()
+bool PlayerComponent::GetIsOnDisk() const
 {
 	return m_IsOnDisk;
 }

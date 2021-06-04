@@ -37,7 +37,22 @@ void CoilyComponent::Render(const engine::Transform&)
 
 engine::Direction CoilyComponent::Chase()
 {
-	return engine::Direction(0);
+	auto ownerPos = m_pOwner.lock()->GetPosition();
+	auto TargetPos = m_pTarget.lock()->GetCurrentNode().lock()->GetOwner().lock()->GetPosition();
+	if(ownerPos.y < TargetPos.y)
+	{
+		if (ownerPos.x < TargetPos.x)
+			return engine::Direction::BOTTOMRIGHT;
+		else
+			return engine::Direction::BOTTOMLEFT;
+	}
+	else
+	{
+		if (ownerPos.x < TargetPos.x)
+			return engine::Direction::TOPRIGHT;
+		else
+			return engine::Direction::TOPLEFT;
+	}
 }
 
 void CoilyComponent::Move(engine::Direction direction)

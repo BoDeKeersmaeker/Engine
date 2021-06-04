@@ -8,7 +8,7 @@ class GridNodeComponent;
 class DiscComponent : public engine::Component
 {
 public:
-	DiscComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<GridNodeComponent> pDestination, float moveTime = 3.f);
+	DiscComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<GridNodeComponent> pDestination, float moveTime = 2.f);
 
 	virtual void Update() override;
 	virtual void Render(const engine::Transform& transform) override;

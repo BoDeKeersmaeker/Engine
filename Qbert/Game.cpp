@@ -50,7 +50,7 @@ using namespace std;
 
 void Game::LoadGame() const
 {
-	//LoadDemo();
+	LoadDemo();
 	LoadQbert();
 }
 
