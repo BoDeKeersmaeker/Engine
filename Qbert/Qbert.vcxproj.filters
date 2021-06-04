@@ -21,63 +21,63 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Qbert.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="CoilyComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DiscComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Minigin\CoilyComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Minigin\DiscComponent.cpp">
+    <ClCompile Include="GreenEnemyComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Minigin\GreenEnemyComponent.cpp">
+    <ClCompile Include="GridComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Minigin\GridComponent.cpp">
+    <ClCompile Include="GridNodeComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Minigin\GridNodeComponent.cpp">
+    <ClCompile Include="PlayerComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Minigin\PurpleEnemyComponent.cpp">
+    <ClCompile Include="PurpleEnemyComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Minigin\PlayerComponent.cpp">
+    <ClCompile Include="Qbert.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\Minigin\Move.cpp">
+    <ClCompile Include="Move.cpp">
       <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CoilyComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DiscComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Minigin\CoilyComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\Minigin\DiscComponent.h">
+    <ClInclude Include="GreenEnemyComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\Minigin\GreenEnemyComponent.h">
+    <ClInclude Include="GridComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\Minigin\GridComponent.h">
+    <ClInclude Include="GridNodeComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\Minigin\GridNodeComponent.h">
+    <ClInclude Include="PlayerComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\Minigin\PurpleEnemyComponent.h">
+    <ClInclude Include="PurpleEnemyComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\Minigin\PlayerComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Minigin\Move.h">
+    <ClInclude Include="Move.h">
       <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>

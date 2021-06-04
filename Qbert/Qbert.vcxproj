@@ -179,27 +179,27 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Minigin\CoilyComponent.cpp" />
-    <ClCompile Include="..\Minigin\DiscComponent.cpp" />
-    <ClCompile Include="..\Minigin\GreenEnemyComponent.cpp" />
-    <ClCompile Include="..\Minigin\GridComponent.cpp" />
-    <ClCompile Include="..\Minigin\GridNodeComponent.cpp" />
-    <ClCompile Include="..\Minigin\Move.cpp" />
-    <ClCompile Include="..\Minigin\PlayerComponent.cpp" />
-    <ClCompile Include="..\Minigin\PurpleEnemyComponent.cpp" />
+    <ClCompile Include="CoilyComponent.cpp" />
+    <ClCompile Include="DiscComponent.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GreenEnemyComponent.cpp" />
+    <ClCompile Include="GridComponent.cpp" />
+    <ClCompile Include="GridNodeComponent.cpp" />
+    <ClCompile Include="Move.cpp" />
+    <ClCompile Include="PlayerComponent.cpp" />
+    <ClCompile Include="PurpleEnemyComponent.cpp" />
     <ClCompile Include="Qbert.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Minigin\CoilyComponent.h" />
-    <ClInclude Include="..\Minigin\DiscComponent.h" />
-    <ClInclude Include="..\Minigin\GreenEnemyComponent.h" />
-    <ClInclude Include="..\Minigin\GridComponent.h" />
-    <ClInclude Include="..\Minigin\GridNodeComponent.h" />
-    <ClInclude Include="..\Minigin\Move.h" />
-    <ClInclude Include="..\Minigin\PlayerComponent.h" />
-    <ClInclude Include="..\Minigin\PurpleEnemyComponent.h" />
+    <ClInclude Include="CoilyComponent.h" />
+    <ClInclude Include="DiscComponent.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GreenEnemyComponent.h" />
+    <ClInclude Include="GridComponent.h" />
+    <ClInclude Include="GridNodeComponent.h" />
+    <ClInclude Include="Move.h" />
+    <ClInclude Include="PlayerComponent.h" />
+    <ClInclude Include="PurpleEnemyComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
