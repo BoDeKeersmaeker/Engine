@@ -179,6 +179,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Minigin\CoilyComponent.cpp" />
     <ClCompile Include="..\Minigin\DiscComponent.cpp" />
     <ClCompile Include="..\Minigin\GreenEnemyComponent.cpp" />
     <ClCompile Include="..\Minigin\GridComponent.cpp" />
@@ -190,6 +191,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="Qbert.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Minigin\CoilyComponent.h" />
     <ClInclude Include="..\Minigin\DiscComponent.h" />
     <ClInclude Include="..\Minigin\GreenEnemyComponent.h" />
     <ClInclude Include="..\Minigin\GridComponent.h" />

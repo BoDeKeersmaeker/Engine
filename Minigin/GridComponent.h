@@ -5,7 +5,7 @@
 #include "Structs.h"
 #include <regex>
 
-namespace engine {class Scene;}
+namespace engine { class Scene; }
 
 class GridNodeComponent;
 class DiscComponent;

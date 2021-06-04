@@ -16,6 +16,8 @@ public:
 	void Die();
 	void SetCurrentNode(std::weak_ptr<GridNodeComponent> pNode);
 	void SetIsOnDisk(bool isOnDisk);
+	std::weak_ptr<GridNodeComponent> GetCurrentNode();
+	bool GetIsOnDisk();
 	void ChangeScore(int deltaScore);
 	int GetLives() const;
 	int GetScore() const;

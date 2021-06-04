@@ -24,6 +24,7 @@ void DiscComponent::Update()
 		m_CurrentMoveTime -= engine::EngineTime::GetInstance().GetElapsedSec();
 		if(m_CurrentMoveTime <= 0)
 		{
+			engine::DebugManager::GetInstance().print("Disc completed.", DISC_DEBUG);
 			auto tempPlayer = m_pPlayer.lock();
 			tempPlayer->GetOwner().lock()->SetPosition(m_pDestination.lock()->GetOwner().lock()->GetPosition());
 			tempPlayer->SetCurrentNode(m_pDestination);
@@ -43,6 +44,7 @@ void DiscComponent::Activate(std::weak_ptr<PlayerComponent> pPlayer)
 {
 	if (!m_IsActivated && !pPlayer.expired())
 	{
+		engine::DebugManager::GetInstance().print("Disc activated.", DISC_DEBUG);
 		m_pPlayer = pPlayer;
 		m_pPlayer.lock()->GetOwner().lock()->SetPosition(m_pOwner.lock()->GetPosition());
 		m_IsActivated = true;

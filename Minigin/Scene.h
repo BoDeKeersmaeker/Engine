@@ -6,7 +6,7 @@ namespace engine
 	class GameObject;
 	class Scene
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name);
+		friend std::weak_ptr<Scene> SceneManager::CreateScene(const std::string& name);
 	public:
 		void Add(const std::shared_ptr<GameObject>& object);
 		

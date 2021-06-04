@@ -16,6 +16,7 @@
 #include "GridComponent.h"
 #include "GreenEnemyComponent.h"
 #include "PurpleEnemyComponent.h"
+#include "CoilyComponent.h"
 #pragma endregion 
 
 #pragma region Commands
@@ -56,8 +57,8 @@ void Game::LoadGame() const
 void Game::LoadDemo() const
 {
 	engine::AudioLocator::getAudioSystem()->AddMusic(0, "./../Data/QbertDead.wav");
-
-	auto& scene = engine::SceneManager::GetInstance().CreateScene("Demo");
+	
+	auto& scene = *engine::SceneManager::GetInstance().CreateScene("Demo").lock();
 
 	auto obj = make_shared<engine::GameObject>();
 	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "background.jpg"));
@@ -142,7 +143,8 @@ void Game::LoadQbert() const
 	
 	engine::AudioLocator::getAudioSystem()->AddMusic(0, "./../Data/QbertDead.wav");
 	engine::AudioLocator::getAudioSystem()->SetVolume(1);
-	auto& scene = engine::SceneManager::GetInstance().CreateScene("Qbert");
+	auto& scene = *engine::SceneManager::GetInstance().CreateScene("Qbert").lock();
+	engine::SceneManager::GetInstance().SetActiveScene("Qbert");
 
 	auto obj = make_shared<engine::GameObject>();
 	obj->SetPosition(275.f, 100.f);
@@ -174,6 +176,10 @@ void Game::LoadQbert() const
 	obj = make_shared<engine::GameObject>();
 	obj->AddComponent<engine::RenderComponent>(make_shared<engine::RenderComponent>(obj, "Ugg.png", engine::Float2{ 24.f, 15.f }));
 	obj->AddComponent<PurpleEnemyComponent>(make_shared<PurpleEnemyComponent>(obj, true,GridComp->GetCoopStartNodes().second));
+	scene.Add(obj);
+
+	obj = make_shared<engine::GameObject>();
+	obj->AddComponent<CoilyComponent>(make_shared<CoilyComponent>(obj, std::pair<std::string, std::string>{ "Egg.png", "Coily.png" }, GridComp->GetSoloStartNode(), PlayerComp));
 	scene.Add(obj);
 	
 	engine::InputManager::GetInstance().AddCommand(VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<Move>(PlayerComp, engine::Direction::TOPLEFT));

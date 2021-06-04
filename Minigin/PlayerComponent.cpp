@@ -102,6 +102,16 @@ void PlayerComponent::SetIsOnDisk(bool isOnDisk)
 	m_IsOnDisk = isOnDisk;
 }
 
+std::weak_ptr<GridNodeComponent> PlayerComponent::GetCurrentNode()
+{
+	return m_pCurrentNode;
+}
+
+bool PlayerComponent::GetIsOnDisk()
+{
+	return m_IsOnDisk;
+}
+
 void PlayerComponent::ChangeScore(int deltaScore)
 {
 	m_Score += deltaScore;

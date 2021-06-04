@@ -48,6 +48,9 @@
     <ClCompile Include="..\Minigin\DiscComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="..\Minigin\CoilyComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -72,6 +75,9 @@
       <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="..\Minigin\DiscComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Minigin\CoilyComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
