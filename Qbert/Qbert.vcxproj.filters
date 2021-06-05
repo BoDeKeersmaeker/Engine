@@ -27,9 +27,6 @@
     <ClCompile Include="DiscComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="GreenEnemyComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -45,11 +42,17 @@
     <ClCompile Include="PurpleEnemyComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Qbert.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="Move.cpp">
       <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManagerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Qbert.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,9 +60,6 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="DiscComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="GreenEnemyComponent.h">
@@ -79,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="Move.h">
       <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManagerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,7 +1,8 @@
 #include "MiniginPCH.h"
 #include <iostream>
 #include "RemainingDisc.h"
-#include "PlayerComponent.h"
+#include "../Qbert/PlayerComponent.h"
+//#include "PlayerComponent.h"
 
 engine::RemainingDisc::RemainingDisc(std::weak_ptr<PlayerComponent> target)
 	:BaseCommand()

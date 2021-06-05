@@ -1,7 +1,8 @@
 #include "MiniginPCH.h"
 #include <iostream>
 #include "CoilyDiscBait.h"
-#include "PlayerComponent.h"
+#include "../Qbert/PlayerComponent.h"
+//#include "PlayerComponent.h"
 
 engine::CoilyDiscBait::CoilyDiscBait(std::weak_ptr<PlayerComponent> target)
 	:BaseCommand()

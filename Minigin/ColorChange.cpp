@@ -1,7 +1,8 @@
 #include "MiniginPCH.h"
 #include <iostream>
 #include "ColorChange.h"
-#include "PlayerComponent.h"
+#include "../Qbert/PlayerComponent.h"
+//#include "PlayerComponent.h"
 
 engine::ColorChange::ColorChange(std::weak_ptr<PlayerComponent> target)
 	:BaseCommand()

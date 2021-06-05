@@ -14,7 +14,8 @@ constexpr auto INPUT_DEBUG = 5;
 constexpr auto PLAYER_DEBUG = 6;
 constexpr auto ENEMY_DEBUG = 7;
 constexpr auto DISC_DEBUG = 8;
-constexpr auto DEBUG_CHANNEL_SIZE= 9;
+constexpr auto GAMEMANAGER_DEBUG = 9;
+constexpr auto DEBUG_CHANNEL_SIZE= 10;
 
 namespace engine
 {

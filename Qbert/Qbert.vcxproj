@@ -182,6 +182,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="CoilyComponent.cpp" />
     <ClCompile Include="DiscComponent.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameManagerComponent.cpp" />
     <ClCompile Include="GreenEnemyComponent.cpp" />
     <ClCompile Include="GridComponent.cpp" />
     <ClCompile Include="GridNodeComponent.cpp" />
@@ -194,6 +195,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="CoilyComponent.h" />
     <ClInclude Include="DiscComponent.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameManagerComponent.h" />
     <ClInclude Include="GreenEnemyComponent.h" />
     <ClInclude Include="GridComponent.h" />
     <ClInclude Include="GridNodeComponent.h" />

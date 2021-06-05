@@ -92,6 +92,11 @@ void PlayerComponent::Die()
 		m_pOwner.lock()->Destroy();
 }
 
+void PlayerComponent::SetSpawnNode(std::weak_ptr<GridNodeComponent> pNode)
+{
+	m_pStartNode = pNode;
+}
+
 void PlayerComponent::SetCurrentNode(std::weak_ptr<GridNodeComponent> pNode)
 {
 	m_pCurrentNode = pNode;

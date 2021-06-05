@@ -14,6 +14,7 @@ public:
 
 	void Move(engine::Direction direction);
 	void Die();
+	void SetSpawnNode(std::weak_ptr<GridNodeComponent> pNode);
 	void SetCurrentNode(std::weak_ptr<GridNodeComponent> pNode);
 	void SetIsOnDisk(bool isOnDisk);
 	std::weak_ptr<GridNodeComponent> GetCurrentNode();

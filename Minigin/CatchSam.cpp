@@ -1,7 +1,8 @@
 #include "MiniginPCH.h"
 #include <iostream>
 #include "CatchSam.h"
-#include "PlayerComponent.h"
+#include "../Qbert/PlayerComponent.h"
+//#include "PlayerComponent.h"
 
 engine::CatchSam::CatchSam(std::weak_ptr<PlayerComponent> target)
 	:BaseCommand()

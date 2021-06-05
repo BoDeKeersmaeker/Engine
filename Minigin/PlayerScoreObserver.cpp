@@ -2,7 +2,8 @@
 #include "PlayerScoreObserver.h"
 #include "GameObject.h"
 #include "CounterComponent.h"
-#include "PlayerComponent.h"
+//#include "PlayerComponent.h"
+#include "../Qbert/PlayerComponent.h"
 
 engine::PlayerScoreObserver::PlayerScoreObserver(std::weak_ptr<CounterComponent> target)
 	:Observer()

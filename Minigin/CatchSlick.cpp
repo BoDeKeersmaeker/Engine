@@ -1,7 +1,8 @@
 #include "MiniginPCH.h"
 #include <iostream>
 #include "CatchSlick.h"
-#include "PlayerComponent.h"
+#include "../Qbert/PlayerComponent.h"
+//#include "PlayerComponent.h"
 
 engine::CatchSlick::CatchSlick(std::weak_ptr<PlayerComponent> target)
 	:BaseCommand()

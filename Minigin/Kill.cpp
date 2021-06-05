@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "Kill.h"
-#include "PlayerComponent.h"
+#include "../Qbert/PlayerComponent.h"
+//#include "PlayerComponent.h"
 
 engine::Kill::Kill(std::weak_ptr<PlayerComponent> target)
 	:BaseCommand()
