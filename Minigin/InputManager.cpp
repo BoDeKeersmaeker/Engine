@@ -13,7 +13,7 @@ bool engine::InputManager::ProcessInput()
 			if (!command.first.IsKeyboard)
 				continue;
 			
-			if(command.first.input == int(SDL_GetKeyName(e.key.keysym.sym)[0]))
+			if(command.first.input == e.key.keysym.sym)
 			{
 				switch (command.first.triggerType)
 				{
@@ -75,13 +75,13 @@ bool engine::InputManager::ProcessInput()
 	return true;
 }
 
-void engine::InputManager::AddCommand(int input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command)
+void engine::InputManager::AddControllerCommand(int input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command)
 {
 	DebugManager::GetInstance().print("Controller input added.", INPUT_DEBUG);
 	m_ControllerCommands[{input, triggerType, false}].push_back(command);
 }
 
-void engine::InputManager::AddCommand(char input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command)
+void engine::InputManager::AddKeyBoardCommand(int input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command)
 {
 	DebugManager::GetInstance().print("Keyboard input added.", INPUT_DEBUG);
 	m_ControllerCommands[{input, triggerType, true}].push_back(command);

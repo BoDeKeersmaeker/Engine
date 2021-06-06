@@ -180,13 +180,15 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CoilyComponent.cpp" />
+    <ClCompile Include="CoilyMove.cpp" />
     <ClCompile Include="DiscComponent.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManagerComponent.cpp" />
     <ClCompile Include="GreenEnemyComponent.cpp" />
     <ClCompile Include="GridComponent.cpp" />
     <ClCompile Include="GridNodeComponent.cpp" />
-    <ClCompile Include="Move.cpp" />
+    <ClCompile Include="LifeObserver.cpp" />
+    <ClCompile Include="PlayerMove.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PurpleEnemyComponent.cpp" />
     <ClCompile Include="Qbert.cpp" />
@@ -194,13 +196,15 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoilyComponent.h" />
+    <ClInclude Include="CoilyMove.h" />
     <ClInclude Include="DiscComponent.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManagerComponent.h" />
     <ClInclude Include="GreenEnemyComponent.h" />
     <ClInclude Include="GridComponent.h" />
     <ClInclude Include="GridNodeComponent.h" />
-    <ClInclude Include="Move.h" />
+    <ClInclude Include="LifeObserver.h" />
+    <ClInclude Include="PlayerMove.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PurpleEnemyComponent.h" />
     <ClInclude Include="ScoreObserver.h" />

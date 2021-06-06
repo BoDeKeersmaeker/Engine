@@ -51,11 +51,13 @@ void engine::DebugManager::Update()
 		std::unique_lock<std::mutex> tempLock{ m_Mutex };
 		m_ConditionVariable.wait(tempLock, [this]() {return (!m_Queue.empty() || m_ServiceShutdown); });
 
-		if (!m_Queue.empty())
+#ifdef _DEBUG
+		while (!m_Queue.empty())
 		{
 			std::cout << m_Queue.front() << std::endl;
 			m_Queue.pop();
 		}
+#endif
 		
 		tempLock.unlock();
 	}

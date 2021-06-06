@@ -20,12 +20,9 @@ PlayerComponent::PlayerComponent(std::shared_ptr<engine::GameObject> owner, std:
 {
 	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
 	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
-	
+
 	if (!pStartNode.expired())
 		m_pOwner.lock()->SetPosition(pStartNode.lock()->GetOwner().lock()->GetPosition());
-	else
-		//temp code for demo
-		Respawn();
 }
 
 void PlayerComponent::Update()
@@ -84,7 +81,7 @@ void PlayerComponent::Die()
 {
 	m_Lives--;
 	if (!m_pSubject.expired())
-		m_pSubject.lock()->Notify(m_pOwner, engine::Event::PlayerDied);
+		m_pSubject.lock()->Notify(engine::Event::PlayerDied, m_pOwner);
 
 	engine::AudioLocator::getAudioSystem()->play(0);
 	
@@ -129,16 +126,6 @@ void PlayerComponent::Reset(std::weak_ptr<GridNodeComponent> newStartNode)
 
 void PlayerComponent::Respawn()
 {
-	if (!m_pStartNode.expired())
-	{
-		m_pOwner.lock()->SetPosition(m_pStartNode.lock()->GetOwner().lock()->GetPosition());
-		m_pCurrentNode = m_pStartNode;
-	}
-	else
-	{
-		//temp code for demo
-		const auto x = static_cast<float>(rand() % 641);
-		const auto y = static_cast<float>(rand() % 480);
-		m_pOwner.lock()->SetPosition(x, y);
-	}
+	m_pOwner.lock()->SetPosition(m_pStartNode.lock()->GetOwner().lock()->GetPosition());
+	m_pCurrentNode = m_pStartNode;
 }

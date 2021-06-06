@@ -42,8 +42,8 @@ namespace engine
 	public:
 		bool ProcessInput();
 		
-		void AddCommand(int input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command);
-		void AddCommand(char input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command);
+		void AddControllerCommand(int input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command);
+		void AddKeyBoardCommand(int input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command);
 	
 	private:
 		XINPUT_KEYSTROKE m_CurrentState{};

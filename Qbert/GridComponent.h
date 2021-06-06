@@ -6,6 +6,7 @@
 #include <regex>
 
 namespace engine {
+	class SubjectComponent;
 	class Scene; }
 
 class ScoreObserver;
@@ -45,6 +46,7 @@ private:
 	std::vector<std::weak_ptr<GridNodeComponent>> m_pGrid;
 	std::vector<std::weak_ptr<DiscComponent>> m_pDisks;
 	std::weak_ptr<ScoreObserver> m_pScoreObserver;
+	std::weak_ptr<engine::SubjectComponent> m_pSubject;
 	std::regex m_GridRegex{ "(\\w+:)\\s(.+)" };
 	std::regex m_Size_tRegex{ "(\\d+)$" };
 	std::regex m_FloatRegex{ "(-?\\d+[\\.|\\,]?\\d?)" };

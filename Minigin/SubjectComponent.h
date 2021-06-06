@@ -17,7 +17,7 @@ namespace engine
 		virtual void AddObserver(std::shared_ptr<Observer> observer);
 		virtual void RemoveObserver(std::shared_ptr<Observer> observer);
 		
-		void Notify(std::weak_ptr<GameObject> entity, Event event);
+		void Notify(Event event, std::weak_ptr<GameObject> entity);
 		void Notify(Event event, int number);
 	
 	private:

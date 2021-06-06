@@ -14,6 +14,9 @@ GridComponent::GridComponent(std::shared_ptr<engine::GameObject> owner, std::wea
 	, m_pGrid{}
 	, m_pScoreObserver{ pScoreObserver }
 {
+	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
+	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
+	
 	ReadLevelFile(scene, filePath, priority);
 }
 
@@ -48,6 +51,8 @@ void GridComponent::Clear()
 			return true;
 		}), m_pGrid.end());
 
+	m_pSubject.lock()->Notify(engine::Event::ScoreChanged, 50 * int(m_pDisks.size()));
+	
 	m_pDisks.erase(std::remove_if(m_pDisks.begin(), m_pDisks.end(), [](std::weak_ptr<DiscComponent> discComp)
 		{
 			if (!discComp.expired())

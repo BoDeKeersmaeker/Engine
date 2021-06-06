@@ -45,7 +45,7 @@
     <ClCompile Include="PurpleEnemyComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Move.cpp">
+    <ClCompile Include="PlayerMove.cpp">
       <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="GameManagerComponent.cpp">
@@ -59,6 +59,12 @@
     </ClCompile>
     <ClCompile Include="ScoreObserver.cpp">
       <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="LifeObserver.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="CoilyMove.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,7 +89,7 @@
     <ClInclude Include="PurpleEnemyComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Move.h">
+    <ClInclude Include="PlayerMove.h">
       <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="GameManagerComponent.h">
@@ -94,6 +100,12 @@
     </ClInclude>
     <ClInclude Include="ScoreObserver.h">
       <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="LifeObserver.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="CoilyMove.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

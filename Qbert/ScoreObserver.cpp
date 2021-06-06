@@ -2,7 +2,6 @@
 #include "ScoreObserver.h"
 #include "GameObject.h"
 #include "CounterComponent.h"
-#include "GameManagerComponent.h"
 
 ScoreObserver::ScoreObserver(std::weak_ptr<engine::CounterComponent> target)
 	:Observer()

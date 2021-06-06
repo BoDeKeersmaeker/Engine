@@ -7,11 +7,11 @@
 enum class Direction;
 class PlayerComponent;
 
-class Move final : public engine::BaseCommand
+class PlayerMove final : public engine::BaseCommand
 {
 public:
-	Move(std::weak_ptr<PlayerComponent> target, engine::Direction direction);
-	virtual ~Move()  override = default;
+	PlayerMove(std::weak_ptr<PlayerComponent> target, engine::Direction direction);
+	virtual ~PlayerMove()  override = default;
 	void Execute() override;
 
 private:

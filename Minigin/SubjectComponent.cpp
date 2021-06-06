@@ -29,7 +29,7 @@ void engine::SubjectComponent::RemoveObserver(std::shared_ptr<Observer>)
 	
 }
 
-void engine::SubjectComponent::Notify(std::weak_ptr<GameObject> entity, Event event)
+void engine::SubjectComponent::Notify(Event event, std::weak_ptr<GameObject> entity)
 {
 	for (size_t i{ 0 }; i < m_pObservers.size(); ++i)
 		m_pObservers[i]->OnNotify(event, entity);

@@ -9,12 +9,13 @@
 #include "RenderComponent.h"
 #include "SubjectComponent.h"
 
-CoilyComponent::CoilyComponent(std::shared_ptr<engine::GameObject> owner, const std::pair<std::string, std::string>& texturePaths, std::weak_ptr<GridNodeComponent> pStartNode, std::weak_ptr<PlayerComponent> pTarget, float moveCooldown)
+CoilyComponent::CoilyComponent(std::shared_ptr<engine::GameObject> owner, const std::pair<std::string, std::string>& texturePaths, bool IsAi, std::weak_ptr<GridNodeComponent> pStartNode, std::weak_ptr<PlayerComponent> pTarget, float moveCooldown)
 	:Component(owner)
 	, m_TexturePaths{ texturePaths }
 	, m_pCurrentNode{ pStartNode }
 	, m_pTarget{ pTarget }
 	, m_MoveCooldown{ moveCooldown }
+	, m_IsAi{ IsAi }
 {
 	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
 	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
@@ -29,9 +30,10 @@ void CoilyComponent::Update()
 	if (m_CurrentMoveCooldown >= 0.f)
 		m_CurrentMoveCooldown -= engine::EngineTime::GetInstance().GetElapsedSec();
 
-	if(m_Activated && m_CurrentMoveCooldown <= 0)
+	if(m_IsAi && m_Activated && m_CurrentMoveCooldown <= 0)
 		Move(Chase());
-	else if (m_CurrentMoveCooldown <= 0)
+
+	if(!m_Activated && m_CurrentMoveCooldown <= 0 )
 		Move(static_cast<engine::Direction>(rand() % 2 + 2));
 }
 
@@ -72,19 +74,22 @@ void CoilyComponent::Move(engine::Direction direction)
 {
 	if (m_pTarget.expired())
 	{
-		Die();
+		m_pOwner.lock()->Destroy();
 		return;
 	}
 	
+	if(m_CurrentMoveCooldown > 0)
+		return;
+
 	auto tempTargetNode = m_pTarget.lock()->GetCurrentNode();
-	if (!tempTargetNode.expired() && m_pCurrentNode.lock() == tempTargetNode.lock() && m_pTarget.lock()->IsOnDisk())
+	if (m_IsAi && !tempTargetNode.expired() && m_pCurrentNode.lock() == tempTargetNode.lock() && m_pTarget.lock()->IsOnDisk())
 		Die();
-	
+
 	m_CurrentMoveCooldown = m_MoveCooldown;
 
 	if (m_pCurrentNode.expired())
 	{
-		Die();
+		m_pOwner.lock()->Destroy();
 		return;
 	}
 
@@ -95,12 +100,13 @@ void CoilyComponent::Move(engine::Direction direction)
 		m_pOwner.lock()->SetPosition(temp.lock()->GetOwner().lock()->GetPosition());
 		m_pCurrentNode = temp;
 	}
-	else
+	else if(m_Activated && !m_IsAi)
+		Die();
+	else if(!m_Activated)
 	{
 		m_Activated = true;
 		m_pRenderComponent.lock()->SetTexture(m_TexturePaths.second);
 	}
-	
 }
 
 void CoilyComponent::Die()

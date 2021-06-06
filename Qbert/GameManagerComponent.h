@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 
+class CoilyMove;
 class ScoreObserver;
 class PurpleEnemyComponent;
 class GreenEnemyComponent;
@@ -26,10 +27,11 @@ public:
 	virtual void Update() override;
 	virtual void Render(const engine::Transform& transform) override;
 
-	void SetEnemyCooldown(float greenEnemyCooldown = 10.f, float purpleEnemyCooldown = 20.f, float coilyCooldown = 30.f);
 	void NextLevel();
 	bool isGameWon() const;
 	int GetScore() const;
+	void SetEnemyCooldown(float greenEnemyCooldown = 10.f, float purpleEnemyCooldown = 20.f, float coilyCooldown = 30.f);
+	void ClearEnemies();
 
 private:
 	void LoadLevel(size_t index);
@@ -39,12 +41,13 @@ private:
 	void SpawnGreenEnemy();
 	void SpawnPurpleEnemy();
 	void SpawnCoily();
-	void ClearEnemies();
 	void CleanUppEnemies();
-	void CheckCharacteOverlap();
+	void CheckCharacterOverlap();
+	void UpdateCoilyCommands(std::weak_ptr<CoilyComponent> pTarger);
 	
 	std::vector<std::string> m_LevelPaths;
 	std::pair<std::weak_ptr<PlayerComponent>, std::weak_ptr<PlayerComponent>> m_pPlayers;
+	std::vector<std::weak_ptr<CoilyMove>> m_pCoilyCommands;
 	std::vector<std::weak_ptr<GreenEnemyComponent>> m_pGreenEnemies;
 	std::vector<std::weak_ptr<PurpleEnemyComponent>> m_pPurpleEnemies;
 	std::weak_ptr<CoilyComponent> m_pCoily;
