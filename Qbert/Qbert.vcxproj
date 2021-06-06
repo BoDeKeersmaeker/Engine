@@ -179,6 +179,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Minigin\LivesComponent.cpp" />
+    <ClCompile Include="..\Minigin\ScoreComponent.cpp" />
     <ClCompile Include="CoilyComponent.cpp" />
     <ClCompile Include="CoilyMove.cpp" />
     <ClCompile Include="DiscComponent.cpp" />
@@ -195,6 +197,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="ScoreObserver.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Minigin\LivesComponent.h" />
+    <ClInclude Include="..\Minigin\ScoreComponent.h" />
     <ClInclude Include="CoilyComponent.h" />
     <ClInclude Include="CoilyMove.h" />
     <ClInclude Include="DiscComponent.h" />

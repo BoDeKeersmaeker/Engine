@@ -5,7 +5,7 @@ namespace engine
 	/**
 	 * Simple RAII wrapper for an SDL_Texture
 	 */
-	class Texture2D
+	class Texture2D final
 	{
 	public:
 		SDL_Texture* GetSDLTexture() const;

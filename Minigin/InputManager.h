@@ -49,6 +49,6 @@ namespace engine
 	
 	private:
 		XINPUT_KEYSTROKE m_CurrentState{};
-		std::map <Input, std::vector<std::shared_ptr<BaseCommand>>> m_ControllerCommands;
+		std::map <Input, std::vector<std::shared_ptr<BaseCommand>>> m_ControllerCommands{};
 	};
 }

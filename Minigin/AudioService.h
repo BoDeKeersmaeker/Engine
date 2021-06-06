@@ -14,17 +14,23 @@ namespace engine
 		int ID;
 	};
 	
-	class AudioService : public Audio
+	class AudioService final : public Audio
 	{
 	public:
 		AudioService();
-		virtual ~AudioService() override;
-		virtual void AddEffect(int soundID, const std::string& path) override;
-		virtual void AddMusic(int soundID, const std::string& path) override;
-		virtual void play(int soundID) override;
-		virtual void stopAll() override;
-		virtual void SetVolume(int volume) override;
-		virtual void Reset() override;
+		~AudioService() override;
+
+		AudioService(const AudioService& other) = delete;
+		AudioService(AudioService&& other) = delete;
+		AudioService& operator=(const AudioService& other) = delete;
+		AudioService& operator=(AudioService&& other) = delete;
+		
+		void AddEffect(int soundID, const std::string& path) override;
+		void AddMusic(int soundID, const std::string& path) override;
+		void play(int soundID) override;
+		void stopAll() override;
+		void SetVolume(int volume) override;
+		void Reset() override;
 	
 	private:
 		void Update();

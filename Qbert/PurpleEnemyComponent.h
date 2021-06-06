@@ -8,15 +8,16 @@ namespace engine {
 
 class GridNodeComponent;
 
-class PurpleEnemyComponent : public engine::Component
+class PurpleEnemyComponent final : public engine::Component
 {
 public:
-	PurpleEnemyComponent(std::shared_ptr<engine::GameObject> owner, bool moveLeft, std::weak_ptr<GridNodeComponent> pStartNode = std::shared_ptr<GridNodeComponent>(nullptr), float moveCooldown = 1.f);
-	virtual void Update() override;
-	virtual void Render(const engine::Transform& transform) override;
+	PurpleEnemyComponent(const std::shared_ptr<engine::GameObject>& owner, bool moveLeft, const std::weak_ptr<GridNodeComponent>& pStartNode = std::shared_ptr<GridNodeComponent>(nullptr), float moveCooldown = 1.f);
+
+	void Update() override;
+	void Render(const engine::Transform& transform) override;
 
 	std::weak_ptr<GridNodeComponent> GetCurrentNode() const;
-	bool CheckOverlap(std::weak_ptr<GridNodeComponent> node) const;
+	bool CheckOverlap(const std::weak_ptr<GridNodeComponent>& node) const;
 
 private:
 	void Move(Direction direction);

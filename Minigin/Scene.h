@@ -4,7 +4,7 @@
 
 namespace engine
 {
-	class Scene
+	class Scene final
 	{
 		friend std::weak_ptr<Scene> SceneManager::CreateScene(const std::string& name);
 	public:

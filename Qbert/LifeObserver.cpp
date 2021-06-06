@@ -5,7 +5,7 @@
 #include "GameManagerComponent.h"
 #include "PlayerComponent.h"
 
-LifeObserver::LifeObserver(std::weak_ptr<engine::CounterComponent> pTarget, std::weak_ptr<engine::GameObject> pManager)
+LifeObserver::LifeObserver(const std::weak_ptr<engine::CounterComponent>& pTarget, const std::weak_ptr<engine::GameObject>& pManager)
 	:Observer()
 	, m_pTarget{ pTarget }
 	, m_pManager{ pManager }
@@ -13,9 +13,9 @@ LifeObserver::LifeObserver(std::weak_ptr<engine::CounterComponent> pTarget, std:
 
 }
 
-void LifeObserver::OnNotify(engine::Event event, std::weak_ptr<engine::GameObject> object)
+void LifeObserver::OnNotify(engine::Event event, const std::weak_ptr<engine::GameObject>& object)
 {
-	auto comp = object.lock()->GetComponent<PlayerComponent>();
+	const auto comp = object.lock()->GetComponent<PlayerComponent>();
 	if (!m_pTarget.expired() && !comp.expired() && event == engine::Event::PlayerDied)
 	{
 		engine::DebugManager::GetInstance().print("Lives changed.", OBSERVER_DEBUG);
@@ -23,7 +23,7 @@ void LifeObserver::OnNotify(engine::Event event, std::weak_ptr<engine::GameObjec
 
 		if (!m_pManager.expired())
 		{
-			auto managerComp = m_pManager.lock()->GetComponent<GameManagerComponent>();
+			const auto managerComp = m_pManager.lock()->GetComponent<GameManagerComponent>();
 			if (!managerComp.expired())
 				managerComp.lock()->ClearEnemies();
 		}

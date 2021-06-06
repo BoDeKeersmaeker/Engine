@@ -7,10 +7,9 @@
 #include "GridNodeComponent.h"
 #include "DebugManager.h"
 #include "EngineTime.h"
-#include "Observer.h"
 #include "SubjectComponent.h"
 
-PurpleEnemyComponent::PurpleEnemyComponent(std::shared_ptr<engine::GameObject> owner, bool moveLeft, std::weak_ptr<GridNodeComponent> pStartNode, float moveCooldown)
+PurpleEnemyComponent::PurpleEnemyComponent(const std::shared_ptr<engine::GameObject>& owner, bool moveLeft, const std::weak_ptr<GridNodeComponent>& pStartNode, float moveCooldown)
 	:Component(owner)
 	, m_MoveCooldown{ moveCooldown }
 	, m_CurrentMoveCooldown{ moveCooldown }
@@ -41,7 +40,7 @@ void PurpleEnemyComponent::Update()
 
 	if (m_CurrentMoveCooldown <= 0)
 	{
-		int r = rand() % 2;
+		const int r = rand() % 2;
 		if(m_MoveLeft)
 		{
 			if (r == 0)
@@ -69,15 +68,15 @@ std::weak_ptr<GridNodeComponent> PurpleEnemyComponent::GetCurrentNode() const
 	return m_pCurrentNode;
 }
 
-bool PurpleEnemyComponent::CheckOverlap(std::weak_ptr<GridNodeComponent> node) const
+bool PurpleEnemyComponent::CheckOverlap(const std::weak_ptr<GridNodeComponent>& node) const
 {
 	if(m_MoveLeft)
 	{
-		auto temp = m_pCurrentNode.lock()->GetConnection(Direction::BOTTOMRIGHT);
+		const auto temp = m_pCurrentNode.lock()->GetConnection(Direction::BOTTOMRIGHT);
 		return (!temp.expired() && temp.lock() == node.lock());
 	}
-	
-	auto temp = m_pCurrentNode.lock()->GetConnection(Direction::BOTTOMLEFT);
+
+	const auto temp = m_pCurrentNode.lock()->GetConnection(Direction::BOTTOMLEFT);
 	return (!temp.expired() && temp.lock() == node.lock());
 }
 
@@ -93,7 +92,7 @@ void PurpleEnemyComponent::Move(Direction direction)
 		return;
 	}
 
-	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<Direction>(static_cast<size_t>(direction)));
+	const auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<Direction>(static_cast<size_t>(direction)));
 	if (!temp.expired())
 	{
 		engine::DebugManager::GetInstance().print("Purple enemy moved: " + std::to_string(static_cast<size_t>(direction)), ENEMY_DEBUG);

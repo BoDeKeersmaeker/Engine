@@ -3,7 +3,7 @@
 #include "TextComponent.h"
 #include "GameObject.h"
 
-engine::CounterComponent::CounterComponent(std::shared_ptr<GameObject> owner, const std::shared_ptr<Font>& font, int defaultValue, std::string prefix, std::string sufix, std::string subZero)
+engine::CounterComponent::CounterComponent(std::shared_ptr<GameObject> owner, std::shared_ptr<Font> font, int defaultValue, const std::string& prefix, const std::string& sufix, const std::string& subZero)
 	:Component(owner)
 	, m_Prefix{ prefix }
 	, m_Sufix{ sufix }

@@ -69,6 +69,12 @@
     <ClCompile Include="CoilyMove.cpp">
       <Filter>Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\Minigin\ScoreComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Minigin\LivesComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoilyComponent.h">
@@ -112,6 +118,12 @@
     </ClInclude>
     <ClInclude Include="Helpers.h">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Minigin\ScoreComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Minigin\LivesComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

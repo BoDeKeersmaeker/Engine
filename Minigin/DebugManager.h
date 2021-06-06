@@ -24,11 +24,16 @@ namespace engine
 	class DebugManager final : public Singleton<DebugManager>
 	{
 	public:
-		virtual ~DebugManager() override;
+		~DebugManager() override;
+
+		DebugManager(const DebugManager& other) = delete;
+		DebugManager(DebugManager&& other) = delete;
+		DebugManager& operator=(const DebugManager& other) = delete;
+		DebugManager& operator=(DebugManager&& other) = delete;
 		
 		//Use -1 to set all channels
 		void SetChannelDeactivated(bool isDisabled, size_t debugChannel = -1);
-		void print(std::string text, size_t debugChannel = 0);
+		void print(const std::string& text, size_t debugChannel = 0);
 	
 	private:
 		friend class Singleton<DebugManager>;

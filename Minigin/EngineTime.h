@@ -6,11 +6,8 @@ namespace engine
 	class EngineTime final : public Singleton<EngineTime>
 	{
 	public:
-		inline void UpdateElapsedSec(float elapsedSec) { m_ElapsedSec = elapsedSec; };
-		float GetElapsedSec() { return m_ElapsedSec; };
-
-		//static void ChronoStart();
-		//static float ChronoStop();
+		void UpdateElapsedSec(float elapsedSec) { m_ElapsedSec = elapsedSec; };
+		float GetElapsedSec() const { return m_ElapsedSec; };
 
 	private:
 		friend class Singleton<EngineTime>;

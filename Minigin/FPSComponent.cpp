@@ -4,7 +4,7 @@
 #include "TextComponent.h"
 #include "EngineTime.h"
 
-engine::FPSComponent::FPSComponent(std::shared_ptr<GameObject> owner, const std::shared_ptr<Font>& font)
+engine::FPSComponent::FPSComponent(const std::shared_ptr<GameObject>& owner, std::shared_ptr<Font> font)
 	: Component(owner)
 {
 	owner->AddComponent<TextComponent>(std::make_shared<TextComponent>(owner, "60 FPS", font));

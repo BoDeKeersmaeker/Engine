@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "Transform.h"
 
-engine::RenderComponent::RenderComponent(std::shared_ptr<GameObject> owner, std::string path, Float2 offset)
+engine::RenderComponent::RenderComponent(const std::shared_ptr<GameObject>& owner, const std::string& path, Float2 offset)
 	:Component(owner)
 	, m_Offset{ offset }
 {

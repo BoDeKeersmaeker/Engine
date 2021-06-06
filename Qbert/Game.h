@@ -3,8 +3,9 @@
 
 class Game final : public engine::Minigin
 {
-protected:
-	virtual void LoadGame() const override;
+public:
+	Game() = default;
 
 private:
+	void LoadGame() const override;
 };

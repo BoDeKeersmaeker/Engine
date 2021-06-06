@@ -7,7 +7,7 @@
 #include "PlayerComponent.h"
 #include "RenderComponent.h"
 
-DiscComponent::DiscComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<GridNodeComponent> pDestination, float moveTime)
+DiscComponent::DiscComponent(const std::shared_ptr<engine::GameObject>& owner, const std::weak_ptr<GridNodeComponent>& pDestination, float moveTime)
 	:Component(owner)
 	, m_pDestination{ pDestination }
 	, m_MoveTime{ moveTime }
@@ -40,7 +40,7 @@ void DiscComponent::Render(const engine::Transform&)
 
 }
 
-void DiscComponent::Activate(std::weak_ptr<PlayerComponent> pPlayer)
+void DiscComponent::Activate(const std::weak_ptr<PlayerComponent>& pPlayer)
 {
 	if (!m_IsActivated && !pPlayer.expired())
 	{

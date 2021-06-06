@@ -8,10 +8,10 @@ namespace engine
 	class FPSComponent final : public Component
 	{
 	public:
-		FPSComponent(std::shared_ptr<GameObject> owner, const std::shared_ptr<Font>& font);
+		FPSComponent(const std::shared_ptr<GameObject>& owner, std::shared_ptr<Font> font);
 
-		virtual void Update() override;
-		virtual void Render(const engine::Transform& transform) override;
+		void Update() override;
+		void Render(const engine::Transform& transform) override;
 
 	private:
 		std::weak_ptr<TextComponent> m_pTextComponent;

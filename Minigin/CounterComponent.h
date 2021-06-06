@@ -7,13 +7,13 @@ namespace engine
 	class Font;
 	class TextComponent;
 
-	class CounterComponent : public Component
+	class CounterComponent final : public Component
 	{
 	public:
-		CounterComponent(std::shared_ptr<GameObject> owner, const std::shared_ptr<Font>& font, int defaultValue = 0, std::string prefix = "", std::string sufix = "", std::string subZero = "");
+		CounterComponent(std::shared_ptr<GameObject> owner, std::shared_ptr<Font> font, int defaultValue = 0, const std::string& prefix = "", const std::string& sufix = "", const std::string& subZero = "");
 
-		virtual void Update() override;
-		virtual void Render(const engine::Transform& transform) override;
+		void Update() override;
+		void Render(const engine::Transform& transform) override;
 
 		void SetCounter(int counter);
 

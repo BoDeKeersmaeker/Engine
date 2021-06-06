@@ -9,10 +9,16 @@ class CoilyComponent;
 class CoilyMove final : public engine::BaseCommand
 {
 public:
-	CoilyMove(std::weak_ptr<CoilyComponent> target, Direction direction);
-	virtual ~CoilyMove()  override = default;
+	CoilyMove(const std::weak_ptr<CoilyComponent>& target, Direction direction);
+	~CoilyMove()  override = default;
+
+	CoilyMove(const CoilyMove& other) = delete;
+	CoilyMove(CoilyMove&& other) = delete;
+	CoilyMove& operator=(const CoilyMove& other) = delete;
+	CoilyMove& operator=(CoilyMove&& other) = delete;
+	
 	void Execute() override;
-	void ChangeTarget(std::weak_ptr<CoilyComponent> target);
+	void ChangeTarget(const std::weak_ptr<CoilyComponent>& target);
 
 private:
 	std::weak_ptr<CoilyComponent> m_pTarget;

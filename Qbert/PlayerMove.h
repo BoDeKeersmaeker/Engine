@@ -8,8 +8,14 @@ class PlayerComponent;
 class PlayerMove final : public engine::BaseCommand
 {
 public:
-	PlayerMove(std::weak_ptr<PlayerComponent> target, Direction direction);
-	virtual ~PlayerMove()  override = default;
+	PlayerMove(const std::weak_ptr<PlayerComponent>& target, Direction direction);
+	~PlayerMove()  override = default;
+
+	PlayerMove(const PlayerMove& other) = delete;
+	PlayerMove(PlayerMove&& other) = delete;
+	PlayerMove& operator=(const PlayerMove& other) = delete;
+	PlayerMove& operator=(PlayerMove&& other) = delete;
+	
 	void Execute() override;
 
 private:

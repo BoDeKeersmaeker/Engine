@@ -3,25 +3,25 @@
 #include "TextComponent.h"
 #include "GameObject.h"
 
-engine::LivesComponent::LivesComponent(std::shared_ptr<GameObject> owner, const std::shared_ptr<Font>& font)
+LivesComponent::LivesComponent(const std::shared_ptr<engine::GameObject>& owner, const std::shared_ptr<engine::Font>& font)
 	:Component(owner)
 {
-	owner->AddComponent<TextComponent>(std::make_shared<TextComponent>(owner, "5 Lives left", font));
-	m_pTextComponent = owner->GetComponent<TextComponent>();
-	m_pTextComponent.lock()->SetTextColor(Color{ 255.f, 255.f, 50.f });
+	owner->AddComponent<engine::TextComponent>(std::make_shared<engine::TextComponent>(owner, "5 Lives left", font));
+	m_pTextComponent = owner->GetComponent<engine::TextComponent>();
+	m_pTextComponent.lock()->SetTextColor(engine::Color{ 255.f, 255.f, 50.f });
 }
 
-void engine::LivesComponent::Update()
+void LivesComponent::Update()
 {
 	
 }
 
-void engine::LivesComponent::Render(const engine::Transform&)
+void LivesComponent::Render(const engine::Transform&)
 {
 	
 }
 
-void engine::LivesComponent::SetLives(int lives)
+void LivesComponent::SetLives(int lives) const
 {
 	if(lives > 0)
 		m_pTextComponent.lock()->SetText(std::to_string(lives) + " Lives left");

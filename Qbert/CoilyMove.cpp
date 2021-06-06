@@ -3,7 +3,7 @@
 #include "CoilyComponent.h"
 #include "DebugManager.h"
 
-CoilyMove::CoilyMove(std::weak_ptr<CoilyComponent> target, Direction direction)
+CoilyMove::CoilyMove(const std::weak_ptr<CoilyComponent>& target, Direction direction)
 	:BaseCommand()
 	, m_pTarget{ target }
 	, m_Direction{ direction }
@@ -18,7 +18,7 @@ void CoilyMove::Execute()
 		m_pTarget.lock()->Move(m_Direction);
 }
 
-void CoilyMove::ChangeTarget(std::weak_ptr<CoilyComponent> target)
+void CoilyMove::ChangeTarget(const std::weak_ptr<CoilyComponent>& target)
 {
 	m_pTarget = target;
 }

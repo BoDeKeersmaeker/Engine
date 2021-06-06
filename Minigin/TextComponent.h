@@ -12,12 +12,12 @@ namespace engine
 	class TextComponent final : public Component
 	{
 	public:
-		explicit TextComponent(std::shared_ptr<GameObject> owner, const std::string& text, const std::shared_ptr<Font>& font);
+		explicit TextComponent(const std::shared_ptr<GameObject>& owner, const std::string& text, const std::shared_ptr<Font>& font);
 		void SetText(const std::string& text);
-		inline void SetTextColor(Color color) { m_TextColor = color; };
+		void SetTextColor(Color color) { m_TextColor = color; };
 
-		virtual void Update() override;
-		virtual void Render(const engine::Transform& transform) override;
+		void Update() override;
+		void Render(const engine::Transform& transform) override;
 
 	private:
 		bool m_NeedsUpdate;

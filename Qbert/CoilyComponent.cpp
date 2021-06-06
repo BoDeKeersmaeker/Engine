@@ -12,7 +12,7 @@
 #include "RenderComponent.h"
 #include "SubjectComponent.h"
 
-CoilyComponent::CoilyComponent(std::shared_ptr<engine::GameObject> owner, const std::pair<std::string, std::string>& texturePaths, bool IsAi, std::weak_ptr<GridNodeComponent> pStartNode, std::weak_ptr<PlayerComponent> pTarget, float moveCooldown)
+CoilyComponent::CoilyComponent(const std::shared_ptr<engine::GameObject>& owner, const std::pair<std::string, std::string>& texturePaths, bool IsAi, const std::weak_ptr<GridNodeComponent>& pStartNode, const std::weak_ptr<PlayerComponent>& pTarget, float moveCooldown)
 	:Component(owner)
 	, m_TexturePaths{ texturePaths }
 	, m_pCurrentNode{ pStartNode }
@@ -54,13 +54,13 @@ std::weak_ptr<GridNodeComponent> CoilyComponent::GetCurrentNode() const
 	return m_pCurrentNode;
 }
 
-Direction CoilyComponent::Chase()
+Direction CoilyComponent::Chase() const
 {
 	if (m_pTarget.expired())
-		return Direction(0);
-	
-	auto ownerPos = m_pOwner.lock()->GetPosition();
-	auto TargetPos = m_pTarget.lock()->GetCurrentNode().lock()->GetOwner().lock()->GetPosition();
+		return static_cast<Direction>(0);
+
+	const auto ownerPos = m_pOwner.lock()->GetPosition();
+	const auto TargetPos = m_pTarget.lock()->GetCurrentNode().lock()->GetOwner().lock()->GetPosition();
 	if(ownerPos.y < TargetPos.y)
 	{
 		if (ownerPos.x < TargetPos.x)
@@ -88,7 +88,7 @@ void CoilyComponent::Move(Direction direction)
 	if(m_CurrentMoveCooldown > 0)
 		return;
 
-	auto tempTargetNode = m_pTarget.lock()->GetCurrentNode();
+	const auto tempTargetNode = m_pTarget.lock()->GetCurrentNode();
 	if (m_IsAi && !tempTargetNode.expired() && m_pCurrentNode.lock() == tempTargetNode.lock() && m_pTarget.lock()->IsOnDisk())
 		Die();
 
@@ -102,7 +102,7 @@ void CoilyComponent::Move(Direction direction)
 		return;
 	}
 
-	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<Direction>(static_cast<size_t>(direction)));
+	const auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<Direction>(static_cast<size_t>(direction)));
 	if (!temp.expired())
 	{
 		engine::DebugManager::GetInstance().print("Coily enemy moved: " + std::to_string(static_cast<size_t>(direction)), ENEMY_DEBUG);
@@ -118,7 +118,7 @@ void CoilyComponent::Move(Direction direction)
 	}
 }
 
-void CoilyComponent::Die()
+void CoilyComponent::Die() const
 {
 	engine::DebugManager::GetInstance().print("Coily was baited ", ENEMY_DEBUG);
 	m_pSubject.lock()->Notify(engine::Event::ScoreChanged, 500);

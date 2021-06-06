@@ -3,17 +3,23 @@
 
 namespace engine
 {
-	class AudioLogger : public Audio
+	class AudioLogger final : public Audio
 	{
 	public:
 		AudioLogger(Audio* audio, bool isMuted = false);
-		virtual ~AudioLogger();
-		virtual void AddEffect(int soundID, const std::string& path) override;
-		virtual void AddMusic(int soundID, const std::string& path) override;
-		virtual void play(int soundID) override;
-		virtual void stopAll() override;
-		virtual void SetVolume(int volume) override;
-		virtual void Reset() override;
+		~AudioLogger() override;
+		
+		AudioLogger(const AudioLogger& other) = delete;
+		AudioLogger(AudioLogger&& other) = delete;
+		AudioLogger& operator=(const AudioLogger& other) = delete;
+		AudioLogger& operator=(AudioLogger&& other) = delete;
+		
+		void AddEffect(int soundID, const std::string& path) override;
+		void AddMusic(int soundID, const std::string& path) override;
+		void play(int soundID) override;
+		void stopAll() override;
+		void SetVolume(int volume) override;
+		void Reset() override;
 	
 	private:
 		Audio* m_pAudioService;

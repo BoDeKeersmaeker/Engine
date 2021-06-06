@@ -35,7 +35,7 @@ void engine::DebugManager::SetChannelDeactivated(bool isDisabled, size_t debugCh
 		m_Channels[debugChannel] = isDisabled;
 }
 
-void engine::DebugManager::print(std::string text, size_t debugChannel)
+void engine::DebugManager::print(const std::string& text, size_t debugChannel)
 {
 	if(m_Channels[debugChannel])
 		return;

@@ -5,15 +5,15 @@ namespace engine { class RenderComponent; }
 class PlayerComponent;
 class GridNodeComponent;
 
-class DiscComponent : public engine::Component
+class DiscComponent final : public engine::Component
 {
 public:
-	DiscComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<GridNodeComponent> pDestination, float moveTime = 2.f);
+	DiscComponent(const std::shared_ptr<engine::GameObject>& owner, const std::weak_ptr<GridNodeComponent>& pDestination, float moveTime = 2.f);
 
-	virtual void Update() override;
-	virtual void Render(const engine::Transform& transform) override;
+	void Update() override;
+	void Render(const engine::Transform& transform) override;
 	
-	void Activate(std::weak_ptr<PlayerComponent> pPlayer);
+	void Activate(const std::weak_ptr<PlayerComponent>& pPlayer);
 
 private:
 	std::weak_ptr<engine::RenderComponent>  m_pRenderComponent;

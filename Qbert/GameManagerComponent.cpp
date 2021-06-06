@@ -42,7 +42,7 @@
 #include "EngineTime.h"
 #pragma endregion
 
-GameManagerComponent::GameManagerComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<engine::Scene> scene, GameMode gameMode, const std::vector<std::string>& levelPaths)
+GameManagerComponent::GameManagerComponent(const std::shared_ptr<engine::GameObject>& owner, const std::weak_ptr<engine::Scene>& scene, GameMode gameMode, const std::vector<std::string>& levelPaths)
 	:Component(owner)
 	, m_LevelPaths( levelPaths )
 	, m_pScene( scene )
@@ -65,8 +65,8 @@ void GameManagerComponent::Update()
 		Reset();
 	else if(IsGameOver())
 		Reset();
-	
-	auto elapsedSec = engine::EngineTime::GetInstance().GetElapsedSec();
+
+	const auto elapsedSec = engine::EngineTime::GetInstance().GetElapsedSec();
 	
 	if(m_CurrentGreenEnemyCooldown >= 0.f)
 		m_CurrentGreenEnemyCooldown -= elapsedSec;

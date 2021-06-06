@@ -1,12 +1,6 @@
 #include "MiniginPCH.h"
 #include "GameObject.h"
 #include "Component.h"
-#include "Observer.h"
-
-engine::GameObject::~GameObject()
-{
-	
-}
 
 void engine::GameObject::Update()
 {
@@ -30,12 +24,12 @@ void engine::GameObject::SetPosition(float x, float y)
 	m_Transform.SetPosition(x, y, 0.0f);
 }
 
-void engine::GameObject::SetPosition(Float2 pox)
+void engine::GameObject::SetPosition(const Float2& pox)
 {
 	m_Transform.SetPosition(pox.x, pox.y, 0.0f);
 }
 
-const engine::Transform& engine::GameObject::GetTransform()
+const engine::Transform& engine::GameObject::GetTransform() const
 {
 	return m_Transform;
 }

@@ -3,14 +3,14 @@
 #include "GameObject.h"
 #include "CounterComponent.h"
 
-ScoreObserver::ScoreObserver(std::weak_ptr<engine::CounterComponent> target)
+ScoreObserver::ScoreObserver(const std::weak_ptr<engine::CounterComponent>& target)
 	:Observer()
 	, m_pTarget{ target }
 {
 
 }
 
-void ScoreObserver::OnNotify(engine::Event, std::weak_ptr<engine::GameObject>)
+void ScoreObserver::OnNotify(engine::Event, const std::weak_ptr<engine::GameObject>&)
 {
 	
 }

@@ -5,7 +5,7 @@ namespace engine
 	class Audio;
 	class NullAudio;
 	
-	class AudioLocator
+	class AudioLocator final
 	{
 	public:
 		static Audio* getAudioSystem();

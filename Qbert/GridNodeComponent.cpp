@@ -7,7 +7,7 @@
 #include "ScoreObserver.h"
 #include "SubjectComponent.h"
 
-GridNodeComponent::GridNodeComponent(std::shared_ptr<engine::GameObject> owner, bool revertOverIncrement, const std::vector<std::string>& blockPaths)
+GridNodeComponent::GridNodeComponent(const std::shared_ptr<engine::GameObject>& owner, bool revertOverIncrement, const std::vector<std::string>& blockPaths)
 	:Component(owner)
 	, m_pConnections{
 		std::shared_ptr<GridNodeComponent>(nullptr),
@@ -44,7 +44,7 @@ std::weak_ptr<GridNodeComponent> GridNodeComponent::GetConnection(Direction conn
 	return m_pConnections[static_cast<size_t>(connectionDirection)];
 }
 
-void GridNodeComponent::SetConnection(Direction connectionDirection, std::weak_ptr<GridNodeComponent> pThisNode, std::weak_ptr<GridNodeComponent> pOtherNode)
+void GridNodeComponent::SetConnection(Direction connectionDirection, const std::weak_ptr<GridNodeComponent>& pThisNode, const std::weak_ptr<GridNodeComponent>& pOtherNode)
 {
 	m_pConnections[static_cast<size_t>(connectionDirection)] = pOtherNode;
 	
@@ -80,7 +80,7 @@ void GridNodeComponent::SetConnection(Direction connectionDirection, std::weak_p
 	engine::DebugManager::GetInstance().print("Node: " + std::to_string(static_cast<int>(connectionDirection)) + " connected.", NODE_DEBUG);
 }
 
-void GridNodeComponent::SetDiscs(std::pair<std::weak_ptr<DiscComponent>, std::weak_ptr<DiscComponent>> pDiscs)
+void GridNodeComponent::SetDiscs(const std::pair<std::weak_ptr<DiscComponent>, std::weak_ptr<DiscComponent>>& pDiscs)
 {
 	m_pDiscs = pDiscs;
 }

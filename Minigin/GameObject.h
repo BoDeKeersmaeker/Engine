@@ -14,7 +14,8 @@ namespace engine
 	{
 	public:
 		GameObject() = default;
-		virtual ~GameObject();
+		~GameObject() = default;
+		
 		GameObject(const GameObject & other) = delete;
 		GameObject(GameObject && other) = delete;
 		GameObject& operator=(const GameObject & other) = delete;
@@ -25,7 +26,7 @@ namespace engine
 
 		Float2 GetPosition() const;
 		void SetPosition(float x, float y);
-		void SetPosition(Float2 pox);
+		void SetPosition(const Float2& pox);
 		template <typename T>
 		void AddComponent(const std::weak_ptr<Component>& component);
 
@@ -58,12 +59,12 @@ namespace engine
 			}), m_pComponents.end());
 		}
 		
-		const Transform& GetTransform();
+		const Transform& GetTransform() const;
 	
 	private:
 
 		Transform m_Transform;
-		std::vector<std::shared_ptr<Component>> m_pComponents;
+		std::vector<std::shared_ptr<Component>> m_pComponents{};
 		bool m_NeedsDestruction = false;
 	};
 
@@ -82,4 +83,3 @@ namespace engine
 			m_pComponents.push_back(component.lock());
 	}
 }
-

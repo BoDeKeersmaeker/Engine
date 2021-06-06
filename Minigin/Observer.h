@@ -14,8 +14,15 @@ namespace engine
 	class Observer
 	{
 	public:
+		Observer() = default;
 		virtual ~Observer() =default;
-		virtual void OnNotify(Event event, std::weak_ptr<GameObject> gameObject) = 0;
+		
+		Observer(const Observer& other) = delete;
+		Observer(Observer&& other) = delete;
+		Observer& operator=(const Observer& other) = delete;
+		Observer& operator=(Observer&& other) = delete;
+		
+		virtual void OnNotify(Event event, const std::weak_ptr<GameObject>& gameObject) = 0;
 		virtual void OnNotify(Event event, int number) = 0;
 	};
 }

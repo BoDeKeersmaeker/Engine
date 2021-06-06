@@ -10,7 +10,7 @@
 #include "DiscComponent.h"
 #include "EngineTime.h"
 
-PlayerComponent::PlayerComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<GridNodeComponent> pStartNode, float moveCooldown, int lives)
+PlayerComponent::PlayerComponent(const std::shared_ptr<engine::GameObject>& owner, const std::weak_ptr<GridNodeComponent>& pStartNode, float moveCooldown, int lives)
 	:Component(owner)
 	, m_pStartNode{ pStartNode }
 	, m_pCurrentNode{ pStartNode }
@@ -44,8 +44,8 @@ void PlayerComponent::Move(Direction direction)
 	m_CurrentMoveCooldown = m_MoveCooldown;
 
 	engine::AudioLocator::getAudioSystem()->play(1);
-	
-	auto temp = m_pCurrentNode.lock()->GetConnection(direction);
+
+	const auto temp = m_pCurrentNode.lock()->GetConnection(direction);
 	if (!temp.expired())
 	{
 		engine::DebugManager::GetInstance().print("Qbert moved: " + std::to_string(static_cast<size_t>(direction)), PLAYER_DEBUG);
@@ -93,7 +93,7 @@ void PlayerComponent::Die()
 		m_pOwner.lock()->Destroy();
 }
 
-void PlayerComponent::SetCurrentNode(std::weak_ptr<GridNodeComponent> pNode)
+void PlayerComponent::SetCurrentNode(const std::weak_ptr<GridNodeComponent>& pNode)
 {
 	m_pCurrentNode = pNode;
 }
@@ -103,7 +103,7 @@ void PlayerComponent::SetIsOnDisk(bool isOnDisk)
 	m_IsOnDisk = isOnDisk;
 }
 
-std::weak_ptr<GridNodeComponent> PlayerComponent::GetCurrentNode()
+std::weak_ptr<GridNodeComponent> PlayerComponent::GetCurrentNode() const
 {
 	return m_pCurrentNode;
 }
@@ -118,7 +118,7 @@ int PlayerComponent::GetLives() const
 	return m_Lives;
 }
 
-void PlayerComponent::Reset(std::weak_ptr<GridNodeComponent> newStartNode)
+void PlayerComponent::Reset(const std::weak_ptr<GridNodeComponent>& newStartNode)
 {
 	if (!newStartNode.expired())
 		m_pStartNode = newStartNode;

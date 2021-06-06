@@ -10,7 +10,7 @@
 #include "Observer.h"
 #include "SubjectComponent.h"
 
-GreenEnemyComponent::GreenEnemyComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<GridNodeComponent> pStartNode, float moveCooldown)
+GreenEnemyComponent::GreenEnemyComponent(const std::shared_ptr<engine::GameObject>& owner, const std::weak_ptr<GridNodeComponent>& pStartNode, float moveCooldown)
 	:Component(owner)
 	, m_pCurrentNode{ pStartNode }
 	, m_MoveCooldown{ moveCooldown }
@@ -42,7 +42,7 @@ std::weak_ptr<GridNodeComponent> GreenEnemyComponent::GetCurrentNode() const
 	return m_pCurrentNode;
 }
 
-bool GreenEnemyComponent::CheckOverlap(std::weak_ptr<GridNodeComponent> node)
+bool GreenEnemyComponent::CheckOverlap(std::weak_ptr<GridNodeComponent> node) const
 {
 	if(m_pCurrentNode.lock() == node.lock())
 	{
@@ -76,7 +76,7 @@ void GreenEnemyComponent::Move(Direction direction)
 		Die();
 }
 
-void GreenEnemyComponent::Die()
+void GreenEnemyComponent::Die() const
 {
 	m_pOwner.lock()->Destroy();
 }

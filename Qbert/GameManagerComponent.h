@@ -19,13 +19,13 @@ enum class GameMode
 	Versus
 };
 
-class GameManagerComponent : public engine::Component
+class GameManagerComponent final : public engine::Component
 {
 public:
-	GameManagerComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<engine::Scene> scene, GameMode gameMode,const std::vector<std::string>& levelPaths);
+	GameManagerComponent(const std::shared_ptr<engine::GameObject>& owner, const std::weak_ptr<engine::Scene>& scene, GameMode gameMode, const std::vector<std::string>& levelPaths);
 	
-	virtual void Update() override;
-	virtual void Render(const engine::Transform& transform) override;
+	void Update() override;
+	void Render(const engine::Transform& transform) override;
 
 	void NextLevel();
 	bool isGameWon() const;
