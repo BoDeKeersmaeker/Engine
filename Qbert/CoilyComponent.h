@@ -2,7 +2,9 @@
 #include "Component.h"
 #include "Structs.h"
 
-namespace engine { class RenderComponent; }
+namespace engine {
+	class SubjectComponent;
+	class RenderComponent; }
 class PlayerComponent;
 class GridNodeComponent;
 
@@ -14,6 +16,8 @@ public:
 	virtual void Update() override;
 	virtual void Render(const engine::Transform& transform) override;
 
+	std::weak_ptr<GridNodeComponent> GetCurrentNode() const;
+
 private:
 	engine::Direction Chase();
 	void Move(engine::Direction direction);
@@ -23,6 +27,7 @@ private:
 	std::weak_ptr<engine::RenderComponent>  m_pRenderComponent;
 	std::weak_ptr<GridNodeComponent> m_pCurrentNode;
 	std::weak_ptr<PlayerComponent> m_pTarget;
+	std::weak_ptr<engine::SubjectComponent> m_pSubject;
 	float m_CurrentMoveCooldown = 0;
 	float m_MoveCooldown;
 	bool m_Activated = false;

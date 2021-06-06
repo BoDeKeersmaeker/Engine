@@ -14,24 +14,28 @@ Scene::~Scene() = default;
 void Scene::Add(std::shared_ptr<GameObject> object, size_t priority)
 {
 	m_Objects.push_back({ object, priority });
-	std::sort(m_Objects.begin(), m_Objects.end(), [](std::pair<std::shared_ptr<GameObject>, size_t> object1, std::pair<std::shared_ptr<GameObject>, size_t> object2)
-		{
-			return object1.second > object2.second;
-		});
+	m_NeedsSorting = true;
 }
 
 void Scene::Update()
 {
-	for(auto object : m_Objects)
-			object.first->Update();
+	for(auto& object : m_Objects)
+		object.first->Update();
 
-	const auto temp = std::remove_if(m_Objects.begin(), m_Objects.end(), [](std::pair<std::shared_ptr<GameObject>, size_t> object) { return object.first->NeedsDestruction(); });
-	if(temp != m_Objects.end())
-		m_Objects.erase(temp, m_Objects.end());
+	m_Objects.erase(std::remove_if(m_Objects.begin(), m_Objects.end(), [](const std::pair<std::shared_ptr<GameObject>, size_t>& object) { return object.first->NeedsDestruction(); }), m_Objects.end());
+
+	if (m_NeedsSorting)
+	{
+		std::sort(m_Objects.begin(), m_Objects.end(), [](const std::pair<std::shared_ptr<GameObject>, size_t>& object1, const std::pair<std::shared_ptr<GameObject>, size_t>& object2)
+			{
+				return object1.second > object2.second;
+			});
+	}
 }
 
 void Scene::Render() const
 {
-	for (const auto object : m_Objects)
-		object.first->Render();
+	for (const auto& object : m_Objects)
+		if (object.first)
+			object.first->Render();
 }

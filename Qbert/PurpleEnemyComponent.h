@@ -2,6 +2,10 @@
 #include "Component.h"
 #include "Structs.h"
 
+namespace engine {
+	class SubjectComponent;
+}
+
 class GridNodeComponent;
 
 class PurpleEnemyComponent : public engine::Component
@@ -11,11 +15,15 @@ public:
 	virtual void Update() override;
 	virtual void Render(const engine::Transform& transform) override;
 
+	std::weak_ptr<GridNodeComponent> GetCurrentNode() const;
+	bool CheckOverlap(std::weak_ptr<GridNodeComponent> node);
+
 private:
 	void Move(engine::Direction direction);
 	void Die() const;
 
 	std::weak_ptr<GridNodeComponent> m_pCurrentNode;
+	std::weak_ptr<engine::SubjectComponent> m_pSubject;
 	float m_MoveCooldown;
 	float m_CurrentMoveCooldown;
 	bool m_MoveLeft;

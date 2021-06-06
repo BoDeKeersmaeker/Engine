@@ -57,7 +57,6 @@ void engine::DebugManager::Update()
 			m_Queue.pop();
 		}
 		
-		if(tempLock.owns_lock())
-			tempLock.unlock();
+		tempLock.unlock();
 	}
 }

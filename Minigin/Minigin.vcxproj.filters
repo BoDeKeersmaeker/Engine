@@ -122,17 +122,11 @@
     <ClInclude Include="SubjectComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerDeathObserver.h">
-      <Filter>Observers</Filter>
-    </ClInclude>
     <ClInclude Include="LivesComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="ScoreComponent.h">
       <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerScoreObserver.h">
-      <Filter>Observers</Filter>
     </ClInclude>
     <ClInclude Include="CounterComponent.h">
       <Filter>Components</Filter>
@@ -154,24 +148,6 @@
     </ClInclude>
     <ClInclude Include="DebugManager.h">
       <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="RemainingDisc.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorChange.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Kill.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="CoilyDiscBait.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="CatchSlick.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="CatchSam.h">
-      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -256,17 +232,11 @@
     <ClCompile Include="SubjectComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerDeathObserver.cpp">
-      <Filter>Observers</Filter>
-    </ClCompile>
     <ClCompile Include="LivesComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="ScoreComponent.cpp">
       <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerScoreObserver.cpp">
-      <Filter>Observers</Filter>
     </ClCompile>
     <ClCompile Include="CounterComponent.cpp">
       <Filter>Components</Filter>
@@ -288,24 +258,6 @@
     </ClCompile>
     <ClCompile Include="DebugManager.cpp">
       <Filter>Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="RemainingDisc.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Kill.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="ColorChange.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="CoilyDiscBait.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="CatchSlick.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="CatchSam.cpp">
-      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

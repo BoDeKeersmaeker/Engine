@@ -4,7 +4,9 @@
 #include <vector>
 #include "Structs.h"
 
-namespace engine { class RenderComponent; }
+namespace engine {
+	class SubjectComponent;
+	class RenderComponent; }
 class DiscComponent;
 
 class GridNodeComponent : public engine::Component
@@ -26,6 +28,7 @@ private:
 	std::vector<std::weak_ptr<GridNodeComponent>> m_pConnections;
 	std::pair<std::weak_ptr<DiscComponent>, std::weak_ptr<DiscComponent>> m_pDiscs;
 	std::vector<std::string> m_BlockPaths;
+	std::weak_ptr<engine::SubjectComponent> m_pSubject;
 	size_t m_CurrentBlockIndex = 0;
 	std::weak_ptr<engine::RenderComponent>  m_pRenderComponent;
 	bool m_RevertOverIncrement;

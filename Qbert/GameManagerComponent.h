@@ -1,10 +1,15 @@
 #pragma once
 #include "Component.h"
 
+class ScoreObserver;
+class PurpleEnemyComponent;
+class GreenEnemyComponent;
+class CoilyComponent;
 class PlayerComponent;
 class GridComponent;
 
-namespace engine { class Scene; }
+namespace engine {
+	class Scene; }
 
 enum class GameMode
 {
@@ -21,9 +26,10 @@ public:
 	virtual void Update() override;
 	virtual void Render(const engine::Transform& transform) override;
 
-	void SetEnemyCooldown(float greenEnemyCooldown, float purpleEnemyCooldown, float coilyCooldown);
+	void SetEnemyCooldown(float greenEnemyCooldown = 10.f, float purpleEnemyCooldown = 20.f, float coilyCooldown = 30.f);
 	void NextLevel();
 	bool isGameWon() const;
+	int GetScore() const;
 
 private:
 	void LoadLevel(size_t index);
@@ -34,19 +40,26 @@ private:
 	void SpawnPurpleEnemy();
 	void SpawnCoily();
 	void ClearEnemies();
+	void CleanUppEnemies();
+	void CheckCharacteOverlap();
 	
 	std::vector<std::string> m_LevelPaths;
-	std::vector<std::weak_ptr<engine::GameObject>> m_pEnemies;
 	std::pair<std::weak_ptr<PlayerComponent>, std::weak_ptr<PlayerComponent>> m_pPlayers;
+	std::vector<std::weak_ptr<GreenEnemyComponent>> m_pGreenEnemies;
+	std::vector<std::weak_ptr<PurpleEnemyComponent>> m_pPurpleEnemies;
+	std::weak_ptr<CoilyComponent> m_pCoily;
 	std::weak_ptr<engine::Scene> m_pScene;
 	std::weak_ptr<GridComponent> m_pGrid;
-	float m_GreenEnemyCooldown = 3.f;
+	std::shared_ptr<ScoreObserver> m_pScoreObserver;
+	float m_GreenEnemyCooldown;
 	float m_CurrentGreenEnemyCooldown = 0.f;
-	float m_PurpleEnemyCooldown = 4.f;
+	float m_PurpleEnemyCooldown;
 	float m_CurrentPurpleEnemyCooldown = 0.f;
-	float m_CoilyCooldown = 5.f;
+	float m_CoilyCooldown;
 	float m_CurrentCoilyCooldown = 0.f;
+	int m_Score = 0;
 	size_t m_CurrentLevelIndex = 0;
 	GameMode m_GameMode;
 	bool m_GameWon = false;
+	bool m_ChangingLevel = false;
 };

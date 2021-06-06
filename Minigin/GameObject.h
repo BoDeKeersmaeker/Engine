@@ -7,6 +7,7 @@
 
 namespace engine
 {
+	class Scene;
 	class Texture2D;
 
 	class GameObject final
@@ -22,7 +23,7 @@ namespace engine
 		void Update();
 		void Render() const;
 
-		Float2 GetPosition();
+		Float2 GetPosition() const;
 		void SetPosition(float x, float y);
 		void SetPosition(Float2 pox);
 		template <typename T>
@@ -58,8 +59,9 @@ namespace engine
 		}
 		
 		const Transform& GetTransform();
-
+	
 	private:
+
 		Transform m_Transform;
 		std::vector<std::shared_ptr<Component>> m_pComponents;
 		bool m_NeedsDestruction = false;
@@ -68,6 +70,8 @@ namespace engine
 	template <typename T>
 	void GameObject::AddComponent(const std::weak_ptr<Component>& component)
 	{
+		DebugManager::GetInstance().print("Component added", GAMEOBJECT_DEBUG);
+		
 		if (component.expired())
 			std::cout << "Component is expired!\n";
 		else if (component.use_count() != 1)

@@ -242,10 +242,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="AudioLocator.h" />
     <ClInclude Include="AudioLogger.h" />
     <ClInclude Include="BaseCommand.h" />
-    <ClInclude Include="CatchSam.h" />
-    <ClInclude Include="CatchSlick.h" />
-    <ClInclude Include="CoilyDiscBait.h" />
-    <ClInclude Include="ColorChange.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="CounterComponent.h" />
     <ClInclude Include="DebugManager.h" />
@@ -253,15 +249,11 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="Kill.h" />
     <ClInclude Include="LivesComponent.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="NullAudio.h" />
     <ClInclude Include="Observer.h" />
-    <ClInclude Include="PlayerDeathObserver.h" />
-    <ClInclude Include="PlayerScoreObserver.h" />
-    <ClInclude Include="RemainingDisc.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -352,10 +344,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="AudioLocator.cpp" />
     <ClCompile Include="AudioLogger.cpp" />
     <ClCompile Include="BaseCommand.cpp" />
-    <ClCompile Include="CatchSam.cpp" />
-    <ClCompile Include="CatchSlick.cpp" />
-    <ClCompile Include="CoilyDiscBait.cpp" />
-    <ClCompile Include="ColorChange.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="CounterComponent.cpp" />
     <ClCompile Include="DebugManager.cpp" />
@@ -363,7 +351,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="Kill.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
@@ -376,9 +363,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     </ClCompile>
     <ClCompile Include="NullAudio.cpp" />
     <ClCompile Include="Observer.cpp" />
-    <ClCompile Include="PlayerDeathObserver.cpp" />
-    <ClCompile Include="PlayerScoreObserver.cpp" />
-    <ClCompile Include="RemainingDisc.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />

@@ -4,8 +4,10 @@
 #include "DebugManager.h"
 #include "EngineTime.h"
 #include "GameObject.h"
+#include "Observer.h"
 #include "PlayerComponent.h"
 #include "RenderComponent.h"
+#include "SubjectComponent.h"
 
 CoilyComponent::CoilyComponent(std::shared_ptr<engine::GameObject> owner, const std::pair<std::string, std::string>& texturePaths, std::weak_ptr<GridNodeComponent> pStartNode, std::weak_ptr<PlayerComponent> pTarget, float moveCooldown)
 	:Component(owner)
@@ -14,6 +16,9 @@ CoilyComponent::CoilyComponent(std::shared_ptr<engine::GameObject> owner, const 
 	, m_pTarget{ pTarget }
 	, m_MoveCooldown{ moveCooldown }
 {
+	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
+	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
+	
 	owner->AddComponent<engine::RenderComponent>(std::make_shared<engine::RenderComponent>(owner, m_TexturePaths.first, engine::Float2{ 0.f, -32.f }));
 	m_pRenderComponent = owner->GetComponent<engine::RenderComponent>();
 	m_pRenderComponent.lock()->SetTexture(m_TexturePaths.first);
@@ -33,6 +38,11 @@ void CoilyComponent::Update()
 void CoilyComponent::Render(const engine::Transform&)
 {
 
+}
+
+std::weak_ptr<GridNodeComponent> CoilyComponent::GetCurrentNode() const
+{
+	return m_pCurrentNode;
 }
 
 engine::Direction CoilyComponent::Chase()
@@ -60,17 +70,23 @@ engine::Direction CoilyComponent::Chase()
 
 void CoilyComponent::Move(engine::Direction direction)
 {
-	if(m_pTarget.expired())
+	if (m_pTarget.expired())
+	{
+		Die();
 		return;
+	}
 	
 	auto tempTargetNode = m_pTarget.lock()->GetCurrentNode();
-	if (!tempTargetNode.expired() && m_pCurrentNode.lock() == tempTargetNode.lock() && m_pTarget.lock()->GetIsOnDisk())
+	if (!tempTargetNode.expired() && m_pCurrentNode.lock() == tempTargetNode.lock() && m_pTarget.lock()->IsOnDisk())
 		Die();
 	
 	m_CurrentMoveCooldown = m_MoveCooldown;
 
 	if (m_pCurrentNode.expired())
+	{
+		Die();
 		return;
+	}
 
 	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<engine::Direction>(static_cast<size_t>(direction)));
 	if (!temp.expired())
@@ -89,5 +105,7 @@ void CoilyComponent::Move(engine::Direction direction)
 
 void CoilyComponent::Die()
 {
+	engine::DebugManager::GetInstance().print("Coily was baited ", ENEMY_DEBUG);
+	m_pSubject.lock()->Notify(engine::Event::ScoreChanged, 500);
 	m_pOwner.lock()->Destroy();
 }

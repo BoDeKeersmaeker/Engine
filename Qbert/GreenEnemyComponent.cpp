@@ -4,6 +4,8 @@
 #include "GridNodeComponent.h"
 #include "DebugManager.h"
 #include "EngineTime.h"
+#include "Observer.h"
+#include "SubjectComponent.h"
 
 GreenEnemyComponent::GreenEnemyComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<GridNodeComponent> pStartNode, float moveCooldown)
 	:Component(owner)
@@ -11,6 +13,9 @@ GreenEnemyComponent::GreenEnemyComponent(std::shared_ptr<engine::GameObject> own
 	, m_MoveCooldown{ moveCooldown }
 	, m_CurrentMoveCooldown{ 0.f }
 {
+	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
+	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
+	
 	if (!pStartNode.expired())
 		m_pOwner.lock()->SetPosition(pStartNode.lock()->GetOwner().lock()->GetPosition());
 }
@@ -29,12 +34,30 @@ void GreenEnemyComponent::Render(const engine::Transform&)
 
 }
 
+std::weak_ptr<GridNodeComponent> GreenEnemyComponent::GetCurrentNode() const
+{
+	return m_pCurrentNode;
+}
+
+bool GreenEnemyComponent::CheckOverlap(std::weak_ptr<GridNodeComponent> node)
+{
+	if(m_pCurrentNode.lock() == node.lock())
+	{
+		m_pSubject.lock()->Notify(engine::Event::ScoreChanged, 300);
+		return true;
+	}
+	return false;
+}
+
 void GreenEnemyComponent::Move(engine::Direction direction)
 {
 	m_CurrentMoveCooldown = m_MoveCooldown;
 	
 	if (m_pCurrentNode.expired())
+	{
+		Die();
 		return;
+	}
 
 	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<engine::Direction>(static_cast<size_t>(direction)));
 	if (!temp.expired())

@@ -4,6 +4,8 @@
 #include "GridNodeComponent.h"
 #include "DebugManager.h"
 #include "EngineTime.h"
+#include "Observer.h"
+#include "SubjectComponent.h"
 
 PurpleEnemyComponent::PurpleEnemyComponent(std::shared_ptr<engine::GameObject> owner, bool moveLeft, std::weak_ptr<GridNodeComponent> pStartNode, float moveCooldown)
 	:Component(owner)
@@ -13,6 +15,9 @@ PurpleEnemyComponent::PurpleEnemyComponent(std::shared_ptr<engine::GameObject> o
 	, m_MoveLeft{ moveLeft }
 
 {
+	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
+	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
+	
 	if (!pStartNode.expired())
 		m_pOwner.lock()->SetPosition(pStartNode.lock()->GetOwner().lock()->GetPosition());
 }
@@ -47,12 +52,32 @@ void PurpleEnemyComponent::Render(const engine::Transform&)
 
 }
 
+std::weak_ptr<GridNodeComponent> PurpleEnemyComponent::GetCurrentNode() const
+{
+	return m_pCurrentNode;
+}
+
+bool PurpleEnemyComponent::CheckOverlap(std::weak_ptr<GridNodeComponent> node)
+{
+	if(m_MoveLeft)
+	{
+		auto temp = m_pCurrentNode.lock()->GetConnection(engine::Direction::BOTTOMRIGHT);
+		return (!temp.expired() && temp.lock() == node.lock());
+	}
+	
+	auto temp = m_pCurrentNode.lock()->GetConnection(engine::Direction::BOTTOMLEFT);
+	return (!temp.expired() && temp.lock() == node.lock());
+}
+
 void PurpleEnemyComponent::Move(engine::Direction direction)
 {
 	m_CurrentMoveCooldown = m_MoveCooldown;
 	
 	if (m_pCurrentNode.expired())
+	{
+		Die();
 		return;
+	}
 
 	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<engine::Direction>(static_cast<size_t>(direction)));
 	if (!temp.expired())

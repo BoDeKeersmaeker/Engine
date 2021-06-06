@@ -10,18 +10,17 @@ engine::GameObject::~GameObject()
 
 void engine::GameObject::Update()
 {
-	for (std::shared_ptr<Component> component : m_pComponents)
-		component->Update();
+	for (auto& temp : m_pComponents)
+			temp->Update();
 }
 
 void engine::GameObject::Render() const
 {
-	
-	for (std::shared_ptr<Component> component : m_pComponents)
-		component->Render(m_Transform);
+	for (const auto& temp : m_pComponents)
+		temp->Render(m_Transform);
 }
 
-engine::Float2 engine::GameObject::GetPosition()
+engine::Float2 engine::GameObject::GetPosition() const
 {
 	return { m_Transform.GetPosition().x, m_Transform.GetPosition().y };
 }

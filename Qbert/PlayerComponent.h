@@ -3,6 +3,10 @@
 #include "Structs.h"
 
 
+namespace engine {
+	class SubjectComponent;
+}
+
 class GridNodeComponent;
 
 class PlayerComponent : public engine::Component
@@ -14,23 +18,21 @@ public:
 
 	void Move(engine::Direction direction);
 	void Die();
-	void SetSpawnNode(std::weak_ptr<GridNodeComponent> pNode);
 	void SetCurrentNode(std::weak_ptr<GridNodeComponent> pNode);
 	void SetIsOnDisk(bool isOnDisk);
 	std::weak_ptr<GridNodeComponent> GetCurrentNode();
-	bool GetIsOnDisk() const;
-	void ChangeScore(int deltaScore);
+	bool IsOnDisk() const;
 	int GetLives() const;
-	int GetScore() const;
+	void Reset(std::weak_ptr<GridNodeComponent> newStartNode = std::shared_ptr<GridNodeComponent>(nullptr));
 
 private:
 	void Respawn();
-	
+
+	std::weak_ptr<engine::SubjectComponent> m_pSubject;
 	std::weak_ptr<GridNodeComponent> m_pStartNode;
 	std::weak_ptr<GridNodeComponent> m_pCurrentNode;
 	float m_MoveCooldown;
 	float m_CurrentMoveCooldown;
 	int m_Lives;
-	int m_Score = 0;
 	bool m_IsOnDisk = false;
 };

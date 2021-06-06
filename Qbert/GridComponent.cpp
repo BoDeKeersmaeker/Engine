@@ -6,10 +6,13 @@
 #include "GridNodeComponent.h"
 #include "DiscComponent.h"
 #include "Scene.h"
+#include "ScoreObserver.h"
+#include "SubjectComponent.h"
 
-GridComponent::GridComponent(std::shared_ptr<engine::GameObject> owner, engine::Scene* scene, const std::string& filePath, size_t priority)
+GridComponent::GridComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<engine::Scene> scene, const std::string& filePath, size_t priority, std::weak_ptr<ScoreObserver> pScoreObserver)
 	:Component(owner)
 	, m_pGrid{}
+	, m_pScoreObserver{ pScoreObserver }
 {
 	ReadLevelFile(scene, filePath, priority);
 }
@@ -57,7 +60,7 @@ void GridComponent::Clear()
 		}), m_pDisks.end());
 }
 
-void GridComponent::ReadLevelFile(engine::Scene* scene, const std::string& filePath, size_t priority)
+void GridComponent::ReadLevelFile(std::weak_ptr<engine::Scene> scene, const std::string& filePath, size_t priority)
 {
 	std::ifstream in{ filePath };
 	if (!in)
@@ -132,7 +135,7 @@ bool GridComponent::AreDiskPositionsValid(const std::vector<std::pair<int, bool>
 	return true;
 }
 
-void GridComponent::GenerateLevel(engine::Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions, size_t priority)
+void GridComponent::GenerateLevel(std::weak_ptr<engine::Scene> scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions, size_t priority)
 {
 	engine::DebugManager::GetInstance().print("creating top node", GRID_DEBUG);
 	const auto tempPos = m_pOwner.lock()->GetPosition();
@@ -145,7 +148,7 @@ void GridComponent::GenerateLevel(engine::Scene* scene, size_t amountOfLayers, f
 	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, discPositions, { tempNode }, priority);
 }
 
-void GridComponent::GenerateLayer(engine::Scene* scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer, size_t priority)
+void GridComponent::GenerateLayer(std::weak_ptr<engine::Scene> scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer, size_t priority)
 {
 	m_pCoopStartNodes.first = pPreviousLayer[0];
 	m_pCoopStartNodes.second = pPreviousLayer[pPreviousLayer.size() - 1];
@@ -193,12 +196,13 @@ void GridComponent::GenerateLayer(engine::Scene* scene, size_t amountOfLayers, f
 	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, discPositions, pThisLayer, priority);
 }
 
-std::weak_ptr<GridNodeComponent> GridComponent::AddNode(engine::Scene* scene, engine::Float2 pos, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, size_t priority, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection)
+std::weak_ptr<GridNodeComponent> GridComponent::AddNode(std::weak_ptr<engine::Scene> scene, engine::Float2 pos, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, size_t priority, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection)
 {
 	auto obj = std::make_shared<engine::GameObject>();
-	scene->Add(obj, priority);
+	scene.lock()->Add(obj, priority);
 	auto pGnc = std::make_shared<GridNodeComponent>(obj, revertOverIncrement, blockTexturePaths);
 	obj->AddComponent<GridNodeComponent>(pGnc);
+	obj->GetComponent<engine::SubjectComponent>().lock()->AddObserver(m_pScoreObserver.lock());
 	m_pGrid.push_back(pGnc);
 	obj->SetPosition(pos);
 	
@@ -213,10 +217,10 @@ std::weak_ptr<GridNodeComponent> GridComponent::AddNode(engine::Scene* scene, en
 	return pGnc;
 }
 
-std::weak_ptr<DiscComponent> GridComponent::AddDisc(engine::Scene* scene, engine::Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopNode, size_t priority)
+std::weak_ptr<DiscComponent> GridComponent::AddDisc(std::weak_ptr<engine::Scene> scene, engine::Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopNode, size_t priority)
 {
 	auto obj = std::make_shared<engine::GameObject>();
-	scene->Add(obj, priority);
+	scene.lock()->Add(obj, priority);
 	auto pDisc = std::make_shared<DiscComponent>(obj, m_pTopNode);
 	obj->AddComponent<DiscComponent>(pDisc);
 	m_pDisks.push_back(pDisc);

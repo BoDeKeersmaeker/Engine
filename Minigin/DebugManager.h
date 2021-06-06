@@ -15,7 +15,9 @@ constexpr auto PLAYER_DEBUG = 6;
 constexpr auto ENEMY_DEBUG = 7;
 constexpr auto DISC_DEBUG = 8;
 constexpr auto GAMEMANAGER_DEBUG = 9;
-constexpr auto DEBUG_CHANNEL_SIZE= 10;
+constexpr auto GAMEOBJECT_DEBUG = 10;
+constexpr auto OBSERVER_DEBUG = 11;
+constexpr auto DEBUG_CHANNEL_SIZE= 12;
 
 namespace engine
 {
@@ -34,8 +36,8 @@ namespace engine
 
 		void Update();
 
-		std::map<size_t, bool> m_Channels;
-		std::queue<std::string> m_Queue;
+		std::map<size_t, bool> m_Channels{};
+		std::queue<std::string> m_Queue{};
 		std::thread m_Thread;
 		std::mutex m_Mutex;
 		std::condition_variable m_ConditionVariable;

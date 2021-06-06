@@ -14,10 +14,11 @@ namespace engine
 		virtual void Update() override;
 		virtual void Render(const Transform& transform) override;
 		
-		virtual void AddObserver(const std::shared_ptr<Observer>& observer);
-		virtual void RemoveObserver(const std::shared_ptr<Observer>& observer);
+		virtual void AddObserver(std::shared_ptr<Observer> observer);
+		virtual void RemoveObserver(std::shared_ptr<Observer> observer);
 		
 		void Notify(std::weak_ptr<GameObject> entity, Event event);
+		void Notify(Event event, int number);
 	
 	private:
 		std::vector<std::shared_ptr<Observer>> m_pObservers;

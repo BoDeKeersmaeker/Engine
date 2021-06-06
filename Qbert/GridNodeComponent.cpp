@@ -4,6 +4,8 @@
 #include "DebugManager.h"
 #include "GameObject.h"
 #include "RenderComponent.h"
+#include "ScoreObserver.h"
+#include "SubjectComponent.h"
 
 GridNodeComponent::GridNodeComponent(std::shared_ptr<engine::GameObject> owner, bool revertOverIncrement, const std::vector<std::string>& blockPaths)
 	:Component(owner)
@@ -20,6 +22,8 @@ GridNodeComponent::GridNodeComponent(std::shared_ptr<engine::GameObject> owner, 
 	, m_BlockPaths{ blockPaths }
 	, m_RevertOverIncrement{ revertOverIncrement }
 {
+	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
+	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
 	owner->AddComponent<engine::RenderComponent>(std::make_shared<engine::RenderComponent>(owner, m_BlockPaths[0]));
 	m_pRenderComponent = owner->GetComponent<engine::RenderComponent>();
 	m_pRenderComponent.lock()->SetTexture(m_BlockPaths[0]);
@@ -94,6 +98,8 @@ void GridNodeComponent::Increment()
 	{
 		++m_CurrentBlockIndex;
 		engine::DebugManager::GetInstance().print("Node incremented", NODE_DEBUG);
+		if (!m_pSubject.expired())
+			m_pSubject.lock()->Notify(engine::Event::ScoreChanged, 25);
 	}
 	else if(m_RevertOverIncrement)
 		Decrement();

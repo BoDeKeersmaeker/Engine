@@ -19,6 +19,7 @@ PlayerComponent::PlayerComponent(std::shared_ptr<engine::GameObject> owner, std:
 	, m_CurrentMoveCooldown{ 0.f }
 {
 	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
+	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
 	
 	if (!pStartNode.expired())
 		m_pOwner.lock()->SetPosition(pStartNode.lock()->GetOwner().lock()->GetPosition());
@@ -82,7 +83,8 @@ void PlayerComponent::Move(engine::Direction direction)
 void PlayerComponent::Die()
 {
 	m_Lives--;
-	m_pOwner.lock()->GetComponent<engine::SubjectComponent>().lock()->Notify(m_pOwner, engine::Event::PlayerDied);
+	if (!m_pSubject.expired())
+		m_pSubject.lock()->Notify(m_pOwner, engine::Event::PlayerDied);
 
 	engine::AudioLocator::getAudioSystem()->play(0);
 	
@@ -90,11 +92,6 @@ void PlayerComponent::Die()
 	
 	if (m_Lives  <= 0)
 		m_pOwner.lock()->Destroy();
-}
-
-void PlayerComponent::SetSpawnNode(std::weak_ptr<GridNodeComponent> pNode)
-{
-	m_pStartNode = pNode;
 }
 
 void PlayerComponent::SetCurrentNode(std::weak_ptr<GridNodeComponent> pNode)
@@ -112,15 +109,9 @@ std::weak_ptr<GridNodeComponent> PlayerComponent::GetCurrentNode()
 	return m_pCurrentNode;
 }
 
-bool PlayerComponent::GetIsOnDisk() const
+bool PlayerComponent::IsOnDisk() const
 {
 	return m_IsOnDisk;
-}
-
-void PlayerComponent::ChangeScore(int deltaScore)
-{
-	m_Score += deltaScore;
-	m_pOwner.lock()->GetComponent<engine::SubjectComponent>().lock()->Notify(m_pOwner, engine::Event::ScoreChanged);
 }
 
 int PlayerComponent::GetLives() const
@@ -128,9 +119,12 @@ int PlayerComponent::GetLives() const
 	return m_Lives;
 }
 
-int PlayerComponent::GetScore() const
+void PlayerComponent::Reset(std::weak_ptr<GridNodeComponent> newStartNode)
 {
-	return m_Score;
+	if (!newStartNode.expired())
+		m_pStartNode = newStartNode;
+	m_pCurrentNode = m_pStartNode;
+	m_pOwner.lock()->SetPosition(m_pStartNode.lock()->GetOwner().lock()->GetPosition());
 }
 
 void PlayerComponent::Respawn()
