@@ -22,7 +22,8 @@ namespace engine
 
 		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
 		int GetOpenGLDriverIndex();
-		
+		SDL_Window* GetWindow() const;
+	
 	private:
 		void RenderImguiDemo();
 		void RenderGameModeWindow();

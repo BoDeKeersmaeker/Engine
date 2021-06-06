@@ -84,7 +84,7 @@ void PurpleEnemyComponent::Move(Direction direction)
 {
 	m_CurrentMoveCooldown = m_MoveCooldown;
 
-	engine::AudioLocator::getAudioSystem()->play(1);
+	engine::AudioLocator::getAudioSystem()->play(3);
 	
 	if (m_pCurrentNode.expired())
 	{

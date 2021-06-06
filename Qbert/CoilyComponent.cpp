@@ -94,7 +94,7 @@ void CoilyComponent::Move(Direction direction)
 
 	m_CurrentMoveCooldown = m_MoveCooldown;
 
-	engine::AudioLocator::getAudioSystem()->play(1);
+	engine::AudioLocator::getAudioSystem()->play(4);
 	
 	if (m_pCurrentNode.expired())
 	{
@@ -123,4 +123,5 @@ void CoilyComponent::Die() const
 	engine::DebugManager::GetInstance().print("Coily was baited ", ENEMY_DEBUG);
 	m_pSubject.lock()->Notify(engine::Event::ScoreChanged, 500);
 	m_pOwner.lock()->Destroy();
+	engine::AudioLocator::getAudioSystem()->play(5);
 }

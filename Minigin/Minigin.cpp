@@ -50,7 +50,7 @@ void engine::Minigin::Initialize()
 	}
 
 	Renderer::GetInstance().Init(m_Window);
-
+	
 	AudioLocator::registerAudio(new AudioLogger{ new AudioService{} });
 }
 

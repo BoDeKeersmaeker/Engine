@@ -128,9 +128,12 @@ int GameManagerComponent::GetScore() const
 
 void GameManagerComponent::LoadGameManager(GameMode gameMode)
 {
-	engine::AudioLocator::getAudioSystem()->AddMusic(0, "./../Data/QbertDead.wav");
-	engine::AudioLocator::getAudioSystem()->AddMusic(1, "./../Data/Jump.wav");
-	engine::AudioLocator::getAudioSystem()->SetVolume(25);
+	engine::AudioLocator::getAudioSystem()->AddEffect(0, "./../Data/QbertDeath.wav");
+	engine::AudioLocator::getAudioSystem()->AddEffect(1, "./../Data/QbertJump.mp3");
+	engine::AudioLocator::getAudioSystem()->AddEffect(2, "./../Data/GreenJump.mp3");
+	engine::AudioLocator::getAudioSystem()->AddEffect(3, "./../Data/PurpleJump.mp3");
+	engine::AudioLocator::getAudioSystem()->AddEffect(4, "./../Data/CoilyJump.mp3");
+	engine::AudioLocator::getAudioSystem()->AddEffect(5, "./../Data/CoilyDeath.mp3");
 	
 	auto scoreCounter = std::make_shared<engine::GameObject>();
 	auto font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);

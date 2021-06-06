@@ -56,7 +56,7 @@ void GreenEnemyComponent::Move(Direction direction)
 {
 	m_CurrentMoveCooldown = m_MoveCooldown;
 
-	engine::AudioLocator::getAudioSystem()->play(1);
+	engine::AudioLocator::getAudioSystem()->play(2);
 	
 	if (m_pCurrentNode.expired())
 	{

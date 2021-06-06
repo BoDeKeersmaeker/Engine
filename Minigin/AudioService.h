@@ -35,10 +35,10 @@ namespace engine
 	private:
 		void Update();
 		
-		std::vector<Mix_Chunk*> m_pMixChunks;
-		std::vector<Mix_Music*> m_pMixMusic;
-		std::vector<AudioInfo> m_Infos;
-		std::queue<size_t> m_Queue;
+		std::vector<Mix_Chunk*> m_pMixChunks{};
+		std::vector<Mix_Music*> m_pMixMusic{};
+		std::vector<AudioInfo> m_Infos{};
+		std::queue<size_t> m_Queue{};
 		std::thread m_Thread;
 		std::mutex m_Mutex;
 		std::condition_variable m_ConditionVariable;

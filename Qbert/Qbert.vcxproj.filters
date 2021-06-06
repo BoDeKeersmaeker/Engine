@@ -75,6 +75,9 @@
     <ClCompile Include="..\Minigin\LivesComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="QbertMenuComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoilyComponent.h">
@@ -123,6 +126,9 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Minigin\LivesComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="QbertMenuComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

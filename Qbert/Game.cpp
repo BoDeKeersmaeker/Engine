@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <ctime>
 
+#include "Audio.h"
+#include "AudioLocator.h"
 #include "DebugManager.h"
 #include "GameManagerComponent.h"
 #include "GameObject.h"
@@ -14,8 +16,8 @@ void Game::LoadGame() const
 	srand(static_cast<unsigned>(time(nullptr)));
 	
 	engine::DebugManager::GetInstance().SetChannelDeactivated(true);
-	engine::DebugManager::GetInstance().SetChannelDeactivated(false, GAMEMANAGER_DEBUG);
-
+	engine::AudioLocator::getAudioSystem()->SetVolume(1);
+	
 	auto pScene = engine::SceneManager::GetInstance().CreateScene("Qbert").lock();
 	engine::SceneManager::GetInstance().SetActiveScene("Qbert");
 	

@@ -29,6 +29,10 @@ void engine::Renderer::Render()
 {
 	SDL_RenderClear(m_Renderer);
 
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplSDL2_NewFrame(m_pWindow);
+	ImGui::NewFrame();
+	
 	SceneManager::GetInstance().Render();
 
 	/*if(m_ShowDemo)
@@ -85,6 +89,11 @@ int engine::Renderer::GetOpenGLDriverIndex()
 	return openglIndex;
 }
 
+SDL_Window* engine::Renderer::GetWindow() const
+{
+	return m_pWindow;
+}
+
 void engine::Renderer::RenderImguiDemo()
 {
 	ImGui_ImplOpenGL2_NewFrame();
@@ -99,9 +108,7 @@ void engine::Renderer::RenderImguiDemo()
 
 void engine::Renderer::RenderGameModeWindow()
 {
-	ImGui_ImplOpenGL2_NewFrame();
-	ImGui_ImplSDL2_NewFrame(m_pWindow);
-	ImGui::NewFrame();
+
 
 	ImGui::Begin("Qbert");
 

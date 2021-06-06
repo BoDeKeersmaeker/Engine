@@ -17,7 +17,7 @@ PlayerComponent::PlayerComponent(const std::shared_ptr<engine::GameObject>& owne
 	, m_Lives{ lives }
 	, m_MoveCooldown{ moveCooldown }
 	, m_CurrentMoveCooldown{ moveCooldown }
-{
+{	
 	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
 	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
 

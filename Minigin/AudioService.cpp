@@ -45,7 +45,7 @@ void engine::AudioService::Update()
 
 		if(!m_Queue.empty())
 		{
-			AudioInfo temp = m_Infos[m_Queue.front()];
+			const AudioInfo temp = m_Infos[m_Queue.front()];
 			m_Queue.pop();
 			if (temp.isMusic) 
 				Mix_PlayMusic(m_pMixMusic[temp.location], 1);
@@ -76,6 +76,7 @@ void engine::AudioService::stopAll()
 void engine::AudioService::SetVolume(int volume)
 {
 	DebugManager::GetInstance().print("Set volume to " + std::to_string(volume), AUDIO_DEBUG);
+	Mix_VolumeMusic(volume);
 	Mix_VolumeMusic(volume);
 }
 
