@@ -1,5 +1,8 @@
 #include "MiniginPCH.h"
 #include "CoilyComponent.h"
+
+#include "Audio.h"
+#include "AudioLocator.h"
 #include "GridNodeComponent.h"
 #include "DebugManager.h"
 #include "EngineTime.h"
@@ -15,6 +18,7 @@ CoilyComponent::CoilyComponent(std::shared_ptr<engine::GameObject> owner, const 
 	, m_pCurrentNode{ pStartNode }
 	, m_pTarget{ pTarget }
 	, m_MoveCooldown{ moveCooldown }
+	, m_CurrentMoveCooldown{ moveCooldown }
 	, m_IsAi{ IsAi }
 {
 	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
@@ -23,6 +27,9 @@ CoilyComponent::CoilyComponent(std::shared_ptr<engine::GameObject> owner, const 
 	owner->AddComponent<engine::RenderComponent>(std::make_shared<engine::RenderComponent>(owner, m_TexturePaths.first, engine::Float2{ 0.f, -32.f }));
 	m_pRenderComponent = owner->GetComponent<engine::RenderComponent>();
 	m_pRenderComponent.lock()->SetTexture(m_TexturePaths.first);
+
+	if (!m_pCurrentNode.expired())
+		m_pOwner.lock()->SetPosition(m_pCurrentNode.lock()->GetOwner().lock()->GetPosition());
 }
 
 void CoilyComponent::Update()
@@ -87,6 +94,8 @@ void CoilyComponent::Move(Direction direction)
 
 	m_CurrentMoveCooldown = m_MoveCooldown;
 
+	engine::AudioLocator::getAudioSystem()->play(1);
+	
 	if (m_pCurrentNode.expired())
 	{
 		m_pOwner.lock()->Destroy();

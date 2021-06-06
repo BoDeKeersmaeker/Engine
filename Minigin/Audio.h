@@ -12,5 +12,6 @@ namespace engine
 		virtual void play(int soundID) = 0;
 		virtual void stopAll() = 0;
 		virtual void SetVolume(int volume) = 0;
+		virtual void Reset() = 0;
 	};
 }

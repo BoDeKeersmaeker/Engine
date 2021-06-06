@@ -102,10 +102,10 @@ void engine::Renderer::RenderGameModeWindow()
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplSDL2_NewFrame(m_pWindow);
 	ImGui::NewFrame();
-	
+
 	ImGui::Begin("Qbert");
-	
-	if(m_ShowHowToPlay)
+
+	if (m_ShowHowToPlay)
 	{
 		ImGui::Text("How to play.");
 		ImGui::Text("Player 1: ");
@@ -116,7 +116,7 @@ void engine::Renderer::RenderGameModeWindow()
 		ImGui::Text("Y to Catch Sam.");
 
 		ImGui::Spacing();
-		
+
 		ImGui::Text("Player 2: ");
 		ImGui::Text("Left shoulder to die.");
 		ImGui::Text("DPAD down to change color.");
@@ -125,7 +125,7 @@ void engine::Renderer::RenderGameModeWindow()
 		ImGui::Text("DPAD up to Catch Sam.");
 
 		ImGui::Spacing();
-		
+
 		if (ImGui::Button("Understood."))
 			m_ShowHowToPlay = !m_ShowHowToPlay;
 	}
@@ -141,7 +141,7 @@ void engine::Renderer::RenderGameModeWindow()
 	}
 
 	ImGui::End();
-	
+
 	ImGui::Render();
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 }

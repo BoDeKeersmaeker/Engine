@@ -16,7 +16,7 @@ PlayerComponent::PlayerComponent(std::shared_ptr<engine::GameObject> owner, std:
 	, m_pCurrentNode{ pStartNode }
 	, m_Lives{ lives }
 	, m_MoveCooldown{ moveCooldown }
-	, m_CurrentMoveCooldown{ 0.f }
+	, m_CurrentMoveCooldown{ moveCooldown }
 {
 	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
 	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
@@ -42,6 +42,8 @@ void PlayerComponent::Move(Direction direction)
 		return;
 
 	m_CurrentMoveCooldown = m_MoveCooldown;
+
+	engine::AudioLocator::getAudioSystem()->play(1);
 	
 	auto temp = m_pCurrentNode.lock()->GetConnection(direction);
 	if (!temp.expired())

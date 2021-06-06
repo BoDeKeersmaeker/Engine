@@ -32,7 +32,8 @@
 #pragma endregion
 
 #pragma region Audio
-
+#include "AudioLocator.h"
+#include "Audio.h"
 #pragma endregion
 
 #pragma region Helpers
@@ -48,40 +49,22 @@ GameManagerComponent::GameManagerComponent(std::shared_ptr<engine::GameObject> o
 	, m_GameMode( gameMode )
 	, m_pPlayers{ std::shared_ptr<PlayerComponent>(nullptr), std::shared_ptr<PlayerComponent>(nullptr) }
 {
-	auto scoreCounter = std::make_shared<engine::GameObject>();
-	auto font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-	scoreCounter->AddComponent<engine::CounterComponent>(std::make_shared<engine::CounterComponent>(scoreCounter, font, 0, "Score: "));
-	scoreCounter->SetPosition(m_pOwner.lock()->GetPosition().x, m_pOwner.lock()->GetPosition().y - 50.f);
-	m_pScene.lock()->Add(scoreCounter);
-
-	m_pScoreObserver = std::make_shared<ScoreObserver>(scoreCounter->GetComponent<engine::CounterComponent>());
-
-	LoadLevel(0);
-
-	switch (gameMode)
-	{
-		case GameMode::Single:
-			LoadSingle();
-			break;
-		case GameMode::Coop:
-			LoadCoop();
-			break;
-		case GameMode::Versus:
-			LoadVersus();
-			break;
-	}
+	LoadGameManager(gameMode);
 }
 
 void GameManagerComponent::Update()
 {
 	CleanUppEnemies();
 	CheckCharacterOverlap();
-
-	if (m_ChangingLevel)
+	if (m_EnemiesCleared && m_pGrid.lock()->IsCompleted() && !m_GameWon)
 	{
 		NextLevel();
-		m_ChangingLevel = false;
+		m_EnemiesCleared = false;
 	}
+	else if(m_GameWon)
+		Reset();
+	else if(IsGameOver())
+		Reset();
 	
 	auto elapsedSec = engine::EngineTime::GetInstance().GetElapsedSec();
 	
@@ -100,10 +83,10 @@ void GameManagerComponent::Update()
 	if (m_pCoily.expired() && m_CurrentCoilyCooldown <= 0.f)
 		SpawnCoily();
 
-	if (m_pGrid.lock()->IsCompleted())
+	if (m_pGrid.lock()->IsCompleted() || m_GameWon || IsGameOver())
 	{
 		ClearEnemies();
-		m_ChangingLevel = true;
+		m_EnemiesCleared = true;
 	}
 }
 
@@ -141,6 +124,37 @@ bool GameManagerComponent::isGameWon() const
 int GameManagerComponent::GetScore() const
 {
 	return m_Score;
+}
+
+void GameManagerComponent::LoadGameManager(GameMode gameMode)
+{
+	engine::AudioLocator::getAudioSystem()->AddMusic(0, "./../Data/QbertDead.wav");
+	engine::AudioLocator::getAudioSystem()->AddMusic(1, "./../Data/Jump.wav");
+	engine::AudioLocator::getAudioSystem()->SetVolume(25);
+	
+	auto scoreCounter = std::make_shared<engine::GameObject>();
+	auto font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	scoreCounter->AddComponent<engine::CounterComponent>(std::make_shared<engine::CounterComponent>(scoreCounter, font, 0, "Score: "));
+	scoreCounter->SetPosition(m_pOwner.lock()->GetPosition().x, m_pOwner.lock()->GetPosition().y - 50.f);
+	m_pScene.lock()->Add(scoreCounter);
+	m_pMiscObjects.push_back(scoreCounter);
+	
+	m_pScoreObserver = std::make_shared<ScoreObserver>(scoreCounter->GetComponent<engine::CounterComponent>());
+
+	LoadLevel(m_CurrentLevelIndex);
+
+	switch (gameMode)
+	{
+	case GameMode::Single:
+		LoadSingle();
+		break;
+	case GameMode::Coop:
+		LoadCoop();
+		break;
+	case GameMode::Versus:
+		LoadVersus();
+		break;
+	}
 }
 
 void GameManagerComponent::LoadLevel(size_t index)
@@ -190,11 +204,12 @@ void GameManagerComponent::LoadSingle()
 	lifeCounter->AddComponent<engine::CounterComponent>(std::make_shared<engine::CounterComponent>(lifeCounter, font, obj->GetComponent<PlayerComponent>().lock()->GetLives(), "Lives: "));
 	lifeCounter->SetPosition(m_pOwner.lock()->GetPosition().x - 100.f, m_pOwner.lock()->GetPosition().y - 50.f);
 	m_pScene.lock()->Add(lifeCounter);
-
+	m_pMiscObjects.push_back(lifeCounter);
+	
 	obj->GetComponent<engine::SubjectComponent>().lock()->AddObserver(std::make_shared<LifeObserver>(lifeCounter->GetComponent<engine::CounterComponent>(), m_pOwner));
 	m_pPlayers.first = obj->GetComponent<PlayerComponent>();
 	m_pScene.lock()->Add(obj);
-
+	
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
@@ -224,6 +239,7 @@ void GameManagerComponent::LoadCoop()
 	lifeCounter->AddComponent<engine::CounterComponent>(std::make_shared<engine::CounterComponent>(lifeCounter, font, obj->GetComponent<PlayerComponent>().lock()->GetLives(), "Lives: "));
 	lifeCounter->SetPosition(m_pOwner.lock()->GetPosition().x - 100.f, m_pOwner.lock()->GetPosition().y - 50.f);
 	m_pScene.lock()->Add(lifeCounter);
+	m_pMiscObjects.push_back(lifeCounter);
 
 	obj->GetComponent<engine::SubjectComponent>().lock()->AddObserver(std::make_shared<LifeObserver>(lifeCounter->GetComponent<engine::CounterComponent>(), m_pOwner));
 	m_pPlayers.first = obj->GetComponent<PlayerComponent>();
@@ -287,7 +303,8 @@ void GameManagerComponent::LoadVersus()
 	lifeCounter->AddComponent<engine::CounterComponent>(std::make_shared<engine::CounterComponent>(lifeCounter, font, obj->GetComponent<PlayerComponent>().lock()->GetLives(), "Lives: "));
 	lifeCounter->SetPosition(m_pOwner.lock()->GetPosition().x - 100.f, m_pOwner.lock()->GetPosition().y - 50.f);
 	m_pScene.lock()->Add(lifeCounter);
-
+	m_pMiscObjects.push_back(lifeCounter);
+	
 	obj->GetComponent<engine::SubjectComponent>().lock()->AddObserver(std::make_shared<LifeObserver>(lifeCounter->GetComponent<engine::CounterComponent>(), m_pOwner));
 	m_pPlayers.first = obj->GetComponent<PlayerComponent>();
 	m_pScene.lock()->Add(obj);
@@ -433,8 +450,8 @@ void GameManagerComponent::ClearEnemies()
 
 void GameManagerComponent::CleanUppEnemies()
 {
-	m_pGreenEnemies.erase(std::remove_if(m_pGreenEnemies.begin(), m_pGreenEnemies.end(), [](const std::weak_ptr<GreenEnemyComponent>& comp) { return comp.expired(); }), m_pGreenEnemies.end());
-	m_pPurpleEnemies.erase(std::remove_if(m_pPurpleEnemies.begin(), m_pPurpleEnemies.end(), [](const std::weak_ptr<PurpleEnemyComponent>& comp) { return comp.expired(); }), m_pPurpleEnemies.end());
+	m_pGreenEnemies.erase(std::remove_if(m_pGreenEnemies.begin(), m_pGreenEnemies.end(), [](std::weak_ptr<GreenEnemyComponent> comp) { return comp.expired(); }), m_pGreenEnemies.end());
+	m_pPurpleEnemies.erase(std::remove_if(m_pPurpleEnemies.begin(), m_pPurpleEnemies.end(), [](std::weak_ptr<PurpleEnemyComponent> comp) { return comp.expired(); }), m_pPurpleEnemies.end());
 }
 
 void GameManagerComponent::CheckCharacterOverlap()
@@ -474,4 +491,52 @@ void GameManagerComponent::UpdateCoilyCommands(std::weak_ptr<CoilyComponent> pTa
 {
 	for(auto command : m_pCoilyCommands)
 		command.lock()->ChangeTarget(pTarger);
+}
+
+bool GameManagerComponent::IsGameOver() const
+{
+	switch (m_GameMode) 
+	{
+		case GameMode::Single:
+			return m_pPlayers.first.expired();
+			break;
+		case GameMode::Coop:
+			return m_pPlayers.first.expired() && m_pPlayers.second.expired();
+			break;
+		case GameMode::Versus:
+			return m_pPlayers.first.expired();
+			break;
+		default: 
+			return false;
+	}
+}
+
+void GameManagerComponent::Reset()
+{
+	m_pGrid.lock()->Clear();
+	m_pGrid.lock()->GetOwner().lock()->Destroy();
+
+	m_pMiscObjects.erase(std::remove_if(m_pMiscObjects.begin(), m_pMiscObjects.end(), [](std::weak_ptr<engine::GameObject> obj)
+	{
+		if (!obj.expired())
+		{
+			obj.lock()->Destroy();
+			return true;
+		}
+		return false;
+	}));
+
+	if (!m_pPlayers.first.expired())
+		m_pPlayers.first.lock()->GetOwner().lock()->Destroy();
+	if (!m_pPlayers.second.expired())
+		m_pPlayers.second.lock()->GetOwner().lock()->Destroy();
+	
+	engine::AudioLocator::getAudioSystem()->Reset();
+	engine::InputManager::GetInstance().Reset();
+
+	m_CurrentLevelIndex = 0;
+	m_Score = 0;
+	m_GameWon = false;
+	m_EnemiesCleared = false;
+	LoadGameManager(m_GameMode);
 }

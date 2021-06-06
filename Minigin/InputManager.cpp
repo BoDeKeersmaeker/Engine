@@ -86,3 +86,8 @@ void engine::InputManager::AddKeyBoardCommand(int input, InputTriggerType trigge
 	DebugManager::GetInstance().print("Keyboard input added.", INPUT_DEBUG);
 	m_ControllerCommands[{input, triggerType, true}].push_back(command);
 }
+
+void engine::InputManager::Reset()
+{
+	m_ControllerCommands.clear();
+}

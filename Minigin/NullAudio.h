@@ -12,5 +12,6 @@ namespace engine
 		virtual void play(int) override {};
 		virtual void stopAll() override {};
 		virtual void SetVolume(int) override {};
+		virtual void Reset() override{};
 	};
 }

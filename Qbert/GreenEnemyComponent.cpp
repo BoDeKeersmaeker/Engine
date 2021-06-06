@@ -1,5 +1,8 @@
 #include "MiniginPCH.h"
 #include "GreenEnemyComponent.h"
+
+#include "Audio.h"
+#include "AudioLocator.h"
 #include "GameObject.h"
 #include "GridNodeComponent.h"
 #include "DebugManager.h"
@@ -11,13 +14,13 @@ GreenEnemyComponent::GreenEnemyComponent(std::shared_ptr<engine::GameObject> own
 	:Component(owner)
 	, m_pCurrentNode{ pStartNode }
 	, m_MoveCooldown{ moveCooldown }
-	, m_CurrentMoveCooldown{ 0.f }
+	, m_CurrentMoveCooldown{ moveCooldown }
 {
 	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
 	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
 	
-	if (!pStartNode.expired())
-		m_pOwner.lock()->SetPosition(pStartNode.lock()->GetOwner().lock()->GetPosition());
+	if (!m_pCurrentNode.expired())
+		m_pOwner.lock()->SetPosition(m_pCurrentNode.lock()->GetOwner().lock()->GetPosition());
 }
 
 void GreenEnemyComponent::Update()
@@ -52,6 +55,8 @@ bool GreenEnemyComponent::CheckOverlap(std::weak_ptr<GridNodeComponent> node)
 void GreenEnemyComponent::Move(Direction direction)
 {
 	m_CurrentMoveCooldown = m_MoveCooldown;
+
+	engine::AudioLocator::getAudioSystem()->play(1);
 	
 	if (m_pCurrentNode.expired())
 	{

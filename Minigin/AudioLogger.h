@@ -13,7 +13,8 @@ namespace engine
 		virtual void play(int soundID) override;
 		virtual void stopAll() override;
 		virtual void SetVolume(int volume) override;
-
+		virtual void Reset() override;
+	
 	private:
 		Audio* m_pAudioService;
 		bool m_IsMuted;

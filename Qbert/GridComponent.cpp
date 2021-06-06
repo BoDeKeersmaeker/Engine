@@ -159,7 +159,12 @@ void GridComponent::GenerateLayer(std::weak_ptr<engine::Scene> scene, size_t amo
 	m_pCoopStartNodes.second = pPreviousLayer[pPreviousLayer.size() - 1];
 	
 	if(amountOfLayers < 1)
+	{
+		for (size_t j{ 0 }; j < pPreviousLayer.size(); ++j)
+			if (j > 0)
+				pPreviousLayer[j].lock()->SetConnection(Direction::LEFT, pPreviousLayer[j], pPreviousLayer[j - 1]);
 		return;
+	}
 
 	std::vector<std::weak_ptr<GridNodeComponent>> pThisLayer;
 	for (size_t j{ 0 }; j < pPreviousLayer.size(); ++j)

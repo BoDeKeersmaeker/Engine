@@ -48,3 +48,10 @@ void engine::AudioLogger::SetVolume(int volume)
 	if (!m_IsMuted)
 		m_pAudioService->SetVolume(volume);
 }
+
+void engine::AudioLogger::Reset()
+{
+	std::cout << "Reset audio\n";
+	if (!m_IsMuted)
+		m_pAudioService->Reset();
+}

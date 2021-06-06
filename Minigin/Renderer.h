@@ -34,4 +34,3 @@ namespace engine
 		bool m_ShowStartMenu = true;
 	};
 }
-

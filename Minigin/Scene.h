@@ -2,7 +2,6 @@
 #include "GameObject.h"
 #include "SceneManager.h"
 
-
 namespace engine
 {
 	class Scene
@@ -29,5 +28,4 @@ namespace engine
 		static unsigned int m_IdCounter;
 		bool m_NeedsSorting = false;
 	};
-
 }

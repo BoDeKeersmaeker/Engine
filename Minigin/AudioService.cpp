@@ -78,3 +78,13 @@ void engine::AudioService::SetVolume(int volume)
 	DebugManager::GetInstance().print("Set volume to " + std::to_string(volume), AUDIO_DEBUG);
 	Mix_VolumeMusic(volume);
 }
+
+void engine::AudioService::Reset()
+{
+	DebugManager::GetInstance().print("Resetting the audio service", AUDIO_DEBUG);
+	m_pMixChunks.clear();
+	m_pMixMusic.clear();
+	m_Infos.clear();
+	while (!m_Queue.empty())
+		m_Queue.pop();
+}

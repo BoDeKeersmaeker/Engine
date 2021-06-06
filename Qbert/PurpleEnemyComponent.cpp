@@ -1,5 +1,8 @@
 #include "MiniginPCH.h"
 #include "PurpleEnemyComponent.h"
+
+#include "Audio.h"
+#include "AudioLocator.h"
 #include "GameObject.h"
 #include "GridNodeComponent.h"
 #include "DebugManager.h"
@@ -9,17 +12,26 @@
 
 PurpleEnemyComponent::PurpleEnemyComponent(std::shared_ptr<engine::GameObject> owner, bool moveLeft, std::weak_ptr<GridNodeComponent> pStartNode, float moveCooldown)
 	:Component(owner)
-	, m_pCurrentNode{ pStartNode }
 	, m_MoveCooldown{ moveCooldown }
-	, m_CurrentMoveCooldown{ 0.f }
+	, m_CurrentMoveCooldown{ moveCooldown }
 	, m_MoveLeft{ moveLeft }
-
 {
+	if (moveLeft)
+		if (!pStartNode.lock()->GetConnection(Direction::TOPLEFT).expired())
+			m_pCurrentNode = pStartNode.lock()->GetConnection(Direction::TOPLEFT);
+		else
+			m_pCurrentNode = pStartNode;
+	else
+		if (!pStartNode.lock()->GetConnection(Direction::TOPRIGHT).expired())
+			m_pCurrentNode = pStartNode.lock()->GetConnection(Direction::TOPRIGHT);
+		else
+			m_pCurrentNode = pStartNode;
+	
 	owner->AddComponent<engine::SubjectComponent>(std::make_shared<engine::SubjectComponent>(owner));
 	m_pSubject = owner->GetComponent<engine::SubjectComponent>();
 	
-	if (!pStartNode.expired())
-		m_pOwner.lock()->SetPosition(pStartNode.lock()->GetOwner().lock()->GetPosition());
+	if (!m_pCurrentNode.expired())
+		m_pOwner.lock()->SetPosition(m_pCurrentNode.lock()->GetOwner().lock()->GetPosition());
 }
 
 void PurpleEnemyComponent::Update()
@@ -72,6 +84,8 @@ bool PurpleEnemyComponent::CheckOverlap(std::weak_ptr<GridNodeComponent> node) c
 void PurpleEnemyComponent::Move(Direction direction)
 {
 	m_CurrentMoveCooldown = m_MoveCooldown;
+
+	engine::AudioLocator::getAudioSystem()->play(1);
 	
 	if (m_pCurrentNode.expired())
 	{

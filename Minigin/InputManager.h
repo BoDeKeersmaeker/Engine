@@ -44,6 +44,8 @@ namespace engine
 		
 		void AddControllerCommand(int input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command);
 		void AddKeyBoardCommand(int input, InputTriggerType triggerType, const std::shared_ptr<BaseCommand>& command);
+
+		void Reset();
 	
 	private:
 		XINPUT_KEYSTROKE m_CurrentState{};
