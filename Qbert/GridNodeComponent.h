@@ -2,7 +2,7 @@
 #include "Component.h"
 #include <string>
 #include <vector>
-#include "Structs.h"
+#include "Helpers.h"
 
 namespace engine {
 	class SubjectComponent;
@@ -16,8 +16,8 @@ public:
 	virtual void Update() override;
 	virtual void Render(const engine::Transform& transform) override;
 
-	std::weak_ptr<GridNodeComponent> GetConnection(engine::Direction connectionDirection);
-	void SetConnection(engine::Direction connectionDirection, std::weak_ptr<GridNodeComponent> pThisNode, std::weak_ptr<GridNodeComponent> pOtherNode);
+	std::weak_ptr<GridNodeComponent> GetConnection(Direction connectionDirection);
+	void SetConnection(Direction connectionDirection, std::weak_ptr<GridNodeComponent> pThisNode, std::weak_ptr<GridNodeComponent> pOtherNode);
 	void SetDiscs(std::pair<std::weak_ptr<DiscComponent>, std::weak_ptr<DiscComponent>> pDiscs);
 	std::pair<std::weak_ptr<DiscComponent>, std::weak_ptr<DiscComponent>> GetDiscs() const;
 	void Increment();

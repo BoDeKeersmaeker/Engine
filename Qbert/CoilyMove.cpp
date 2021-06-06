@@ -3,7 +3,7 @@
 #include "CoilyComponent.h"
 #include "DebugManager.h"
 
-CoilyMove::CoilyMove(std::weak_ptr<CoilyComponent> target, engine::Direction direction)
+CoilyMove::CoilyMove(std::weak_ptr<CoilyComponent> target, Direction direction)
 	:BaseCommand()
 	, m_pTarget{ target }
 	, m_Direction{ direction }

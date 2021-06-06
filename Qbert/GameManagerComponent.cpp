@@ -3,24 +3,43 @@
 
 #include <algorithm>
 #include <XInput.h>
-#include "CoilyComponent.h"
-#include "CoilyMove.h"
-#include "CounterComponent.h"
-#include "EngineTime.h"
+#include "../3rdParty/SDL2/include/SDL_keycode.h"
+
+#pragma region Core
+#include "Scene.h"
 #include "GameObject.h"
+#pragma endregion
+
+#pragma region Components
+#include "CoilyComponent.h"
+#include "CounterComponent.h"
 #include "GreenEnemyComponent.h"
 #include "GridComponent.h"
-#include "InputManager.h"
-#include "LifeObserver.h"
-#include "PlayerMove.h"
 #include "PlayerComponent.h"
 #include "PurpleEnemyComponent.h"
 #include "RenderComponent.h"
-#include "ResourceManager.h"
-#include "Scene.h"
-#include "ScoreObserver.h"
 #include "SubjectComponent.h"
-#include "../3rdParty/SDL2/include/SDL_keycode.h"
+#pragma endregion 
+
+#pragma region Commands
+#include "CoilyMove.h"
+#include "PlayerMove.h"
+#pragma endregion 
+
+#pragma region Observers
+#include "ScoreObserver.h"
+#include "LifeObserver.h"
+#pragma endregion
+
+#pragma region Audio
+
+#pragma endregion
+
+#pragma region Helpers
+#include "InputManager.h"
+#include "ResourceManager.h"
+#include "EngineTime.h"
+#pragma endregion
 
 GameManagerComponent::GameManagerComponent(std::shared_ptr<engine::GameObject> owner, std::weak_ptr<engine::Scene> scene, GameMode gameMode, const std::vector<std::string>& levelPaths)
 	:Component(owner)
@@ -176,20 +195,20 @@ void GameManagerComponent::LoadSingle()
 	m_pPlayers.first = obj->GetComponent<PlayerComponent>();
 	m_pScene.lock()->Add(obj);
 
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMLEFT));
 
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_Y, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_B, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_A, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_X, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_Y, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_B, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_A, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_X, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMLEFT));
 
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_a, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_z, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_s, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_q, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_a, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_z, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_s, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_q, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMLEFT));
 }
 
 void GameManagerComponent::LoadCoop()
@@ -210,20 +229,20 @@ void GameManagerComponent::LoadCoop()
 	m_pPlayers.first = obj->GetComponent<PlayerComponent>();
 	m_pScene.lock()->Add(obj);
 
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMLEFT));
 
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_Y, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_B, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_A, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_X, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_Y, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_B, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_A, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_X, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMLEFT));
 
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_a, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_z, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_s, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_q, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_a, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_z, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_s, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_q, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMLEFT));
 	
 	obj = std::make_shared<engine::GameObject>();
 	obj->AddComponent<engine::RenderComponent>(std::make_shared<engine::RenderComponent>(obj, "Qbert2.png", engine::Float2{ 0.f, -32.f }));
@@ -239,20 +258,20 @@ void GameManagerComponent::LoadCoop()
 	m_pPlayers.second = obj->GetComponent<PlayerComponent>();
 	m_pScene.lock()->Add(obj);
 
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::BOTTOMLEFT));
 
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_UP, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_RIGHT, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_DOWN, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_LEFT, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_UP, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_RIGHT, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_DOWN, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_LEFT, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::BOTTOMLEFT));
 	
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_o, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_p, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_m, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_l, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_o, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_p, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_m, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_l, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::BOTTOMLEFT));
 }
 
 void GameManagerComponent::LoadVersus()
@@ -273,57 +292,57 @@ void GameManagerComponent::LoadVersus()
 	m_pPlayers.first = obj->GetComponent<PlayerComponent>();
 	m_pScene.lock()->Add(obj);
 
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMLEFT));
 
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_Y, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_B, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_A, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_X, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_Y, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_B, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_A, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_X, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMLEFT));
 
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_a, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPLEFT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_z, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::TOPRIGHT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_s, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMRIGHT));
-	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_q, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, engine::Direction::BOTTOMLEFT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_a, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_z, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_s, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
+	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_q, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMLEFT));
 
-	auto command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::TOPLEFT);
+	auto command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::TOPLEFT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, command);
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::TOPRIGHT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::TOPRIGHT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, command);
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::BOTTOMRIGHT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::BOTTOMRIGHT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, command);
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::BOTTOMLEFT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::BOTTOMLEFT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_RTHUMB_DOWNLEFT, engine::InputTriggerType::OnInputHold, command);
 
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::TOPLEFT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::TOPLEFT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_UP, engine::InputTriggerType::OnInputDown, command);
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::TOPRIGHT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::TOPRIGHT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_RIGHT, engine::InputTriggerType::OnInputDown, command);
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::BOTTOMRIGHT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::BOTTOMRIGHT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_DOWN, engine::InputTriggerType::OnInputDown, command);
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::BOTTOMLEFT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::BOTTOMLEFT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_LEFT, engine::InputTriggerType::OnInputDown, command);
 
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::TOPLEFT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::TOPLEFT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_o, engine::InputTriggerType::OnInputHold, command);
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::TOPRIGHT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::TOPRIGHT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_p, engine::InputTriggerType::OnInputHold, command);
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::BOTTOMRIGHT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::BOTTOMRIGHT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_m, engine::InputTriggerType::OnInputHold, command);
-	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), engine::Direction::BOTTOMLEFT);
+	command = std::make_shared<CoilyMove>(std::shared_ptr<CoilyComponent>(nullptr), Direction::BOTTOMLEFT);
 	m_pCoilyCommands.push_back(command);
 	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_l, engine::InputTriggerType::OnInputHold, command);
 }

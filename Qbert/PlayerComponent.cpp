@@ -36,7 +36,7 @@ void PlayerComponent::Render(const engine::Transform&)
 	
 }
 
-void PlayerComponent::Move(engine::Direction direction)
+void PlayerComponent::Move(Direction direction)
 {
 	if (m_IsOnDisk || m_CurrentMoveCooldown > 0 || m_pCurrentNode.expired())
 		return;
@@ -56,14 +56,14 @@ void PlayerComponent::Move(engine::Direction direction)
 		std::weak_ptr<DiscComponent> disc;
 		switch (direction)
 		{
-		case engine::Direction::TOPLEFT:
+		case Direction::TOPLEFT:
 			disc = m_pCurrentNode.lock()->GetDiscs().first;
 			if(!disc.expired())
 				disc.lock()->Activate(m_pOwner.lock()->GetComponent<PlayerComponent>());
 			else
 				Die();
 			break;
-		case engine::Direction::TOPRIGHT:
+		case Direction::TOPRIGHT:
 			disc = m_pCurrentNode.lock()->GetDiscs().first;
 			if (!disc.expired())
 				disc.lock()->Activate(m_pOwner.lock()->GetComponent<PlayerComponent>());

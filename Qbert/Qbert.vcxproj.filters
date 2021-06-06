@@ -22,6 +22,9 @@
     <Filter Include="Observers">
       <UniqueIdentifier>{c3304067-eddf-4e92-983f-de219165a9c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{e9f31b6d-ebf2-448d-9ff8-c923a396585f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoilyComponent.cpp">
@@ -106,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="CoilyMove.h">
       <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

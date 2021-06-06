@@ -39,19 +39,19 @@ void GridNodeComponent::Render(const engine::Transform&)
 
 }
 
-std::weak_ptr<GridNodeComponent> GridNodeComponent::GetConnection(engine::Direction connectionDirection)
+std::weak_ptr<GridNodeComponent> GridNodeComponent::GetConnection(Direction connectionDirection)
 {
 	return m_pConnections[static_cast<size_t>(connectionDirection)];
 }
 
-void GridNodeComponent::SetConnection(engine::Direction connectionDirection, std::weak_ptr<GridNodeComponent> pThisNode, std::weak_ptr<GridNodeComponent> pOtherNode)
+void GridNodeComponent::SetConnection(Direction connectionDirection, std::weak_ptr<GridNodeComponent> pThisNode, std::weak_ptr<GridNodeComponent> pOtherNode)
 {
 	m_pConnections[static_cast<size_t>(connectionDirection)] = pOtherNode;
 	
 	auto tempNode = pOtherNode.lock();
 
 	size_t tempDir = static_cast<size_t>(connectionDirection) + 2;
-	if (connectionDirection != engine::Direction::LEFT && connectionDirection != engine::Direction::RIGHT)
+	if (connectionDirection != Direction::LEFT && connectionDirection != Direction::RIGHT)
 	{
 		if (tempDir >= 4)
 			tempDir -= 4;
@@ -60,21 +60,21 @@ void GridNodeComponent::SetConnection(engine::Direction connectionDirection, std
 	{
 		switch (connectionDirection)
 		{
-			case engine::Direction::LEFT:
-				tempDir = static_cast<size_t>(engine::Direction::RIGHT);
+			case Direction::LEFT:
+				tempDir = static_cast<size_t>(Direction::RIGHT);
 				break;
-			case engine::Direction::RIGHT:
-				tempDir = static_cast<size_t>(engine::Direction::LEFT);
+			case Direction::RIGHT:
+				tempDir = static_cast<size_t>(Direction::LEFT);
 				break;
 			default:
 				return;
 		}
 	}
 	
-	if (tempNode->GetConnection(static_cast<engine::Direction>(tempDir)).expired())
+	if (tempNode->GetConnection(static_cast<Direction>(tempDir)).expired())
 	{
 		engine::DebugManager::GetInstance().print("Making return connection", NODE_DEBUG);
-		tempNode->SetConnection(static_cast<engine::Direction>(tempDir), pOtherNode, pThisNode);
+		tempNode->SetConnection(static_cast<Direction>(tempDir), pOtherNode, pThisNode);
 	}
 
 	engine::DebugManager::GetInstance().print("Node: " + std::to_string(static_cast<int>(connectionDirection)) + " connected.", NODE_DEBUG);

@@ -79,7 +79,7 @@ void GridComponent::ReadLevelFile(std::weak_ptr<engine::Scene> scene, const std:
 	float height = 0;
 	std::vector<std::string> blockTexturePaths;
 	bool revertOverIncrement = false;
-	std::vector<std::pair<int, bool>> diskPositions;
+	std::vector<std::pair<size_t, bool>> diskPositions;
 
 
 	engine::DebugManager::GetInstance().print("reading from Level file: ", GRID_DEBUG);
@@ -132,7 +132,7 @@ bool GridComponent::AreBlockTexturePathsValid(const std::vector<std::string>& bl
 	return true;
 }
 
-bool GridComponent::AreDiskPositionsValid(const std::vector<std::pair<int, bool>>& diskPositions)
+bool GridComponent::AreDiskPositionsValid(const std::vector<std::pair<size_t, bool>>& diskPositions)
 {
 	for (const auto diskPosition : diskPositions)
 		if (diskPosition.first < 0)
@@ -140,7 +140,7 @@ bool GridComponent::AreDiskPositionsValid(const std::vector<std::pair<int, bool>
 	return true;
 }
 
-void GridComponent::GenerateLevel(std::weak_ptr<engine::Scene> scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions, size_t priority)
+void GridComponent::GenerateLevel(std::weak_ptr<engine::Scene> scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<size_t, bool>>& discPositions, size_t priority)
 {
 	engine::DebugManager::GetInstance().print("creating top node", GRID_DEBUG);
 	const auto tempPos = m_pOwner.lock()->GetPosition();
@@ -153,7 +153,7 @@ void GridComponent::GenerateLevel(std::weak_ptr<engine::Scene> scene, size_t amo
 	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, discPositions, { tempNode }, priority);
 }
 
-void GridComponent::GenerateLayer(std::weak_ptr<engine::Scene> scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer, size_t priority)
+void GridComponent::GenerateLayer(std::weak_ptr<engine::Scene> scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<size_t, bool>>& discPositions, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer, size_t priority)
 {
 	m_pCoopStartNodes.first = pPreviousLayer[0];
 	m_pCoopStartNodes.second = pPreviousLayer[pPreviousLayer.size() - 1];
@@ -195,7 +195,7 @@ void GridComponent::GenerateLayer(std::weak_ptr<engine::Scene> scene, size_t amo
 		}
 		
 		if (j > 0)
-			pPreviousLayer[j].lock()->SetConnection(engine::Direction::LEFT, pPreviousLayer[j], pPreviousLayer[j - 1]);
+			pPreviousLayer[j].lock()->SetConnection(Direction::LEFT, pPreviousLayer[j], pPreviousLayer[j - 1]);
 	}
 	
 	GenerateLayer(scene, --amountOfLayers, width, height, blockTexturePaths, revertOverIncrement, discPositions, pThisLayer, priority);
@@ -212,10 +212,10 @@ std::weak_ptr<GridNodeComponent> GridComponent::AddNode(std::weak_ptr<engine::Sc
 	obj->SetPosition(pos);
 	
 	if(!m_pTopLeftConnection.expired())
-		pGnc->SetConnection(engine::Direction::TOPLEFT, pGnc, m_pTopLeftConnection);
+		pGnc->SetConnection(Direction::TOPLEFT, pGnc, m_pTopLeftConnection);
 
 	if (!m_pTopRightConnection.expired())
-		pGnc->SetConnection(engine::Direction::TOPRIGHT, pGnc, m_pTopRightConnection);
+		pGnc->SetConnection(Direction::TOPRIGHT, pGnc, m_pTopRightConnection);
 
 	engine::DebugManager::GetInstance().print("Node Created with pos: " + std::to_string(pos.x) + "," + std::to_string(pos.y), NODE_DEBUG);
 	
@@ -236,9 +236,9 @@ std::weak_ptr<DiscComponent> GridComponent::AddDisc(std::weak_ptr<engine::Scene>
 	return pDisc;
 }
 
-bool GridComponent::IsDiscNeeded(const std::vector<std::pair<int, bool>>& diskPositions, size_t layer, bool needsLeft)
+bool GridComponent::IsDiscNeeded(const std::vector<std::pair<size_t, bool>>& diskPositions, size_t layer, bool needsLeft)
 {
-	for(auto diskPos : diskPositions)
+	for(const auto diskPos : diskPositions)
 		if(layer == diskPos.first && diskPos.second == needsLeft)
 			return true;
 	return false;

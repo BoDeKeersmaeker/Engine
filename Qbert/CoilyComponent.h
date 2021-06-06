@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "Structs.h"
+#include "Helpers.h"
 
 namespace engine {
 	class SubjectComponent;
@@ -17,10 +17,10 @@ public:
 	virtual void Render(const engine::Transform& transform) override;
 
 	std::weak_ptr<GridNodeComponent> GetCurrentNode() const;
-	void Move(engine::Direction direction);
+	void Move(Direction direction);
 
 private:
-	engine::Direction Chase();
+	Direction Chase();
 	void Die();
 
 	std::pair<std::string, std::string> m_TexturePaths;

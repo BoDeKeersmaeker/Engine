@@ -1,7 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "Structs.h"
-
+#include "Helpers.h"
 
 namespace engine {
 	class SubjectComponent;
@@ -16,7 +15,7 @@ public:
 	virtual void Update() override;
 	virtual void Render(const engine::Transform& transform) override;
 
-	void Move(engine::Direction direction);
+	void Move(Direction direction);
 	void Die();
 	void SetCurrentNode(std::weak_ptr<GridNodeComponent> pNode);
 	void SetIsOnDisk(bool isOnDisk);

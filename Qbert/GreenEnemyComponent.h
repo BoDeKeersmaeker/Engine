@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "Structs.h"
+#include "Helpers.h"
 
 namespace engine {
 	class SubjectComponent;
@@ -18,7 +18,7 @@ public:
 	bool CheckOverlap(std::weak_ptr<GridNodeComponent> node);
 
 private:
-	void Move(engine::Direction direction);
+	void Move(Direction direction);
 	void Die();
 		
 	std::weak_ptr<GridNodeComponent> m_pCurrentNode;

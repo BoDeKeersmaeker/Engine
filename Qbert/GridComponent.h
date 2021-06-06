@@ -35,13 +35,13 @@ private:
 	//int = layer, bool = isLeft
 	std::pair<int, bool> ReadDisk(const std::string& input) const;
 	static bool AreBlockTexturePathsValid(const std::vector<std::string>& blockTexturePaths);
-	static bool AreDiskPositionsValid(const std::vector<std::pair<int, bool>>& diskPositions);
+	static bool AreDiskPositionsValid(const std::vector<std::pair<size_t, bool>>& diskPositions);
 
-	void GenerateLevel(std::weak_ptr<engine::Scene> scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions, size_t priority);
-	void GenerateLayer(std::weak_ptr<engine::Scene> scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<int, bool>>& discPositions, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer, size_t priority);
+	void GenerateLevel(std::weak_ptr<engine::Scene> scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<size_t, bool>>& discPositions, size_t priority);
+	void GenerateLayer(std::weak_ptr<engine::Scene> scene, size_t amountOfLayers, float width, float height, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, const std::vector<std::pair<size_t, bool>>& discPositions, const std::vector<std::weak_ptr<GridNodeComponent>>& pPreviousLayer, size_t priority);
 	std::weak_ptr<GridNodeComponent> AddNode(std::weak_ptr<engine::Scene> scene, engine::Float2 pos, const std::vector<std::string>& blockTexturePaths, bool revertOverIncrement, size_t priority, std::weak_ptr<GridNodeComponent> m_pTopLeftConnection, std::weak_ptr<GridNodeComponent> m_pTopRightConnection);
 	std::weak_ptr<DiscComponent> AddDisc(std::weak_ptr<engine::Scene> scene, engine::Float2 pos, std::weak_ptr<GridNodeComponent> m_pTopNode, size_t priority);
-	static bool IsDiscNeeded(const std::vector<std::pair<int, bool>>& diskPositions, size_t layer, bool needsLeft);
+	static bool IsDiscNeeded(const std::vector<std::pair<size_t, bool>>& diskPositions, size_t layer, bool needsLeft);
 
 	std::vector<std::weak_ptr<GridNodeComponent>> m_pGrid;
 	std::vector<std::weak_ptr<DiscComponent>> m_pDisks;

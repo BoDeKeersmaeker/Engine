@@ -33,7 +33,8 @@ void engine::Renderer::Render()
 
 	/*if(m_ShowDemo)
 		RenderImguiDemo();*/
-	RenderGameModeWindow();
+	if(m_ShowStartMenu)
+		RenderGameModeWindow();
 
 	SDL_RenderPresent(m_Renderer);
 }
@@ -131,9 +132,12 @@ void engine::Renderer::RenderGameModeWindow()
 	else
 	{
 		ImGui::Text("GameModes");
-		ImGui::Button("SinglePlayer");
-		ImGui::Button("Co-op");
-		ImGui::Button("Versus");
+		if (ImGui::Button("SinglePlayer"))
+			m_ShowStartMenu = false;
+		if (ImGui::Button("Co-op"))
+			m_ShowStartMenu = false;
+		if (ImGui::Button("Versus"))
+			m_ShowStartMenu = false;
 	}
 
 	ImGui::End();

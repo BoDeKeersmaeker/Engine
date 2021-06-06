@@ -26,7 +26,7 @@ void GreenEnemyComponent::Update()
 		m_CurrentMoveCooldown -= engine::EngineTime::GetInstance().GetElapsedSec();
 
 	if(m_CurrentMoveCooldown <= 0)
-		Move(static_cast<engine::Direction>(rand() % 2 + 2));
+		Move(static_cast<Direction>(rand() % 2 + 2));
 }
 
 void GreenEnemyComponent::Render(const engine::Transform&)
@@ -49,7 +49,7 @@ bool GreenEnemyComponent::CheckOverlap(std::weak_ptr<GridNodeComponent> node)
 	return false;
 }
 
-void GreenEnemyComponent::Move(engine::Direction direction)
+void GreenEnemyComponent::Move(Direction direction)
 {
 	m_CurrentMoveCooldown = m_MoveCooldown;
 	
@@ -59,7 +59,7 @@ void GreenEnemyComponent::Move(engine::Direction direction)
 		return;
 	}
 
-	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<engine::Direction>(static_cast<size_t>(direction)));
+	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<Direction>(static_cast<size_t>(direction)));
 	if (!temp.expired())
 	{
 		engine::DebugManager::GetInstance().print("Green enemy moved: " + std::to_string(static_cast<size_t>(direction)), ENEMY_DEBUG);

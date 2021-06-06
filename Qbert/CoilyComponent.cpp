@@ -34,7 +34,7 @@ void CoilyComponent::Update()
 		Move(Chase());
 
 	if(!m_Activated && m_CurrentMoveCooldown <= 0 )
-		Move(static_cast<engine::Direction>(rand() % 2 + 2));
+		Move(static_cast<Direction>(rand() % 2 + 2));
 }
 
 void CoilyComponent::Render(const engine::Transform&)
@@ -47,30 +47,30 @@ std::weak_ptr<GridNodeComponent> CoilyComponent::GetCurrentNode() const
 	return m_pCurrentNode;
 }
 
-engine::Direction CoilyComponent::Chase()
+Direction CoilyComponent::Chase()
 {
 	if (m_pTarget.expired())
-		return engine::Direction(0);
+		return Direction(0);
 	
 	auto ownerPos = m_pOwner.lock()->GetPosition();
 	auto TargetPos = m_pTarget.lock()->GetCurrentNode().lock()->GetOwner().lock()->GetPosition();
 	if(ownerPos.y < TargetPos.y)
 	{
 		if (ownerPos.x < TargetPos.x)
-			return engine::Direction::BOTTOMRIGHT;
+			return Direction::BOTTOMRIGHT;
 		else
-			return engine::Direction::BOTTOMLEFT;
+			return Direction::BOTTOMLEFT;
 	}
 	else
 	{
 		if (ownerPos.x < TargetPos.x)
-			return engine::Direction::TOPRIGHT;
+			return Direction::TOPRIGHT;
 		else
-			return engine::Direction::TOPLEFT;
+			return Direction::TOPLEFT;
 	}
 }
 
-void CoilyComponent::Move(engine::Direction direction)
+void CoilyComponent::Move(Direction direction)
 {
 	if (m_pTarget.expired())
 	{
@@ -93,7 +93,7 @@ void CoilyComponent::Move(engine::Direction direction)
 		return;
 	}
 
-	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<engine::Direction>(static_cast<size_t>(direction)));
+	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<Direction>(static_cast<size_t>(direction)));
 	if (!temp.expired())
 	{
 		engine::DebugManager::GetInstance().print("Coily enemy moved: " + std::to_string(static_cast<size_t>(direction)), ENEMY_DEBUG);

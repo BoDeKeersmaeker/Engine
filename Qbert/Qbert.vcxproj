@@ -203,6 +203,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="GreenEnemyComponent.h" />
     <ClInclude Include="GridComponent.h" />
     <ClInclude Include="GridNodeComponent.h" />
+    <ClInclude Include="Helpers.h" />
     <ClInclude Include="LifeObserver.h" />
     <ClInclude Include="PlayerMove.h" />
     <ClInclude Include="PlayerComponent.h" />

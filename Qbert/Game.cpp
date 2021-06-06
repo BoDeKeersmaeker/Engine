@@ -1,33 +1,16 @@
 #include "Game.h"
-#include "MiniginPCH.h"
 
-#pragma region Core
-#include "GameObject.h"
-#include "Scene.h"
-#pragma endregion
+#include <cstdlib>
+#include <ctime>
 
-#pragma region Components
-#include "TextComponent.h"
-#include "SubjectComponent.h"
-#include "GridComponent.h"
-#include "GameManagerComponent.h"
-#pragma endregion 
-
-#pragma region Commands
-#pragma endregion 
-
-#pragma region Observers
-#pragma endregion
-
-#pragma region Audio
 #include "Audio.h"
 #include "AudioLocator.h"
-#pragma endregion
-
-#pragma region Helpers
 #include "DebugManager.h"
-#include "InputManager.h"
-#pragma endregion
+#include "GameManagerComponent.h"
+#include "GameObject.h"
+#include "Scene.h"
+#include "SceneManager.h"
+//#include "MiniginPCH.h"
 
 using namespace std;
 

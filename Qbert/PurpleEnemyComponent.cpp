@@ -33,16 +33,16 @@ void PurpleEnemyComponent::Update()
 		if(m_MoveLeft)
 		{
 			if (r == 0)
-				Move(engine::Direction::TOPLEFT);
+				Move(Direction::TOPLEFT);
 			else
-				Move(engine::Direction::LEFT);
+				Move(Direction::LEFT);
 		}
 		else
 		{
 			if (r == 0)
-				Move(engine::Direction::TOPRIGHT);
+				Move(Direction::TOPRIGHT);
 			else
-				Move(engine::Direction::RIGHT);
+				Move(Direction::RIGHT);
 		}
 	}
 }
@@ -57,19 +57,19 @@ std::weak_ptr<GridNodeComponent> PurpleEnemyComponent::GetCurrentNode() const
 	return m_pCurrentNode;
 }
 
-bool PurpleEnemyComponent::CheckOverlap(std::weak_ptr<GridNodeComponent> node)
+bool PurpleEnemyComponent::CheckOverlap(std::weak_ptr<GridNodeComponent> node) const
 {
 	if(m_MoveLeft)
 	{
-		auto temp = m_pCurrentNode.lock()->GetConnection(engine::Direction::BOTTOMRIGHT);
+		auto temp = m_pCurrentNode.lock()->GetConnection(Direction::BOTTOMRIGHT);
 		return (!temp.expired() && temp.lock() == node.lock());
 	}
 	
-	auto temp = m_pCurrentNode.lock()->GetConnection(engine::Direction::BOTTOMLEFT);
+	auto temp = m_pCurrentNode.lock()->GetConnection(Direction::BOTTOMLEFT);
 	return (!temp.expired() && temp.lock() == node.lock());
 }
 
-void PurpleEnemyComponent::Move(engine::Direction direction)
+void PurpleEnemyComponent::Move(Direction direction)
 {
 	m_CurrentMoveCooldown = m_MoveCooldown;
 	
@@ -79,7 +79,7 @@ void PurpleEnemyComponent::Move(engine::Direction direction)
 		return;
 	}
 
-	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<engine::Direction>(static_cast<size_t>(direction)));
+	auto temp = m_pCurrentNode.lock()->GetConnection(static_cast<Direction>(static_cast<size_t>(direction)));
 	if (!temp.expired())
 	{
 		engine::DebugManager::GetInstance().print("Purple enemy moved: " + std::to_string(static_cast<size_t>(direction)), ENEMY_DEBUG);

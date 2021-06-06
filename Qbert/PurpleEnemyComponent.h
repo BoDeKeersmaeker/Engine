@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "Structs.h"
+#include "Helpers.h"
 
 namespace engine {
 	class SubjectComponent;
@@ -16,10 +16,10 @@ public:
 	virtual void Render(const engine::Transform& transform) override;
 
 	std::weak_ptr<GridNodeComponent> GetCurrentNode() const;
-	bool CheckOverlap(std::weak_ptr<GridNodeComponent> node);
+	bool CheckOverlap(std::weak_ptr<GridNodeComponent> node) const;
 
 private:
-	void Move(engine::Direction direction);
+	void Move(Direction direction);
 	void Die() const;
 
 	std::weak_ptr<GridNodeComponent> m_pCurrentNode;

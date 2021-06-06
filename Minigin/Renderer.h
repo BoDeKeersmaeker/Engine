@@ -22,7 +22,7 @@ namespace engine
 
 		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
 		int GetOpenGLDriverIndex();
-
+	
 	private:
 		void RenderImguiDemo();
 		void RenderGameModeWindow();
@@ -31,6 +31,7 @@ namespace engine
 		SDL_Window* m_pWindow = nullptr;
 		bool m_ShowDemo = false;
 		bool m_ShowHowToPlay = true;
+		bool m_ShowStartMenu = true;
 	};
 }
 
