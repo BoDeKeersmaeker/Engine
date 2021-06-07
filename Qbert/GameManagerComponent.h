@@ -1,5 +1,8 @@
 #pragma once
 #include "Component.h"
+#include <vector>
+#include <iostream>
+#include "Helpers.h"
 
 class CoilyMove;
 class ScoreObserver;
@@ -10,20 +13,14 @@ class PlayerComponent;
 class GridComponent;
 
 namespace engine {
-	class Scene; }
-
-enum class GameMode
-{
-	Single,
-	Coop,
-	Versus
-};
+	class Scene;
+}
 
 class GameManagerComponent final : public engine::Component
 {
 public:
 	GameManagerComponent(const std::shared_ptr<engine::GameObject>& owner, const std::weak_ptr<engine::Scene>& scene, GameMode gameMode, const std::vector<std::string>& levelPaths);
-	
+
 	void Update() override;
 	void Render(const engine::Transform& transform) override;
 
@@ -47,7 +44,7 @@ private:
 	void CheckCharacterOverlap();
 	void UpdateCoilyCommands(std::weak_ptr<CoilyComponent> pTarger);
 	bool IsGameOver() const;
-	
+
 	std::vector<std::string> m_LevelPaths{};
 	std::pair<std::weak_ptr<PlayerComponent>, std::weak_ptr<PlayerComponent>> m_pPlayers;
 	std::vector<std::weak_ptr<CoilyMove>> m_pCoilyCommands{};

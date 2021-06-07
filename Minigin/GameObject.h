@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <iostream>
 #include "Structs.h"
+#include "DebugManager.h"
 
 namespace engine
 {
@@ -49,7 +50,6 @@ namespace engine
 		template <typename T>
 		void RemoveComponentOfType()
 		{
-			;
 			m_pComponents.erase(std::remove_if(m_pComponents.begin(), m_pComponents.end(), [](std::shared_ptr<Component> comp)
 			{
 				std::weak_ptr<T> temp = std::dynamic_pointer_cast<T>(comp);

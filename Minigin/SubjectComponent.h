@@ -14,8 +14,8 @@ namespace engine
 		void Update() override;
 		void Render(const Transform& transform) override;
 		
-		void AddObserver(const std::shared_ptr<Observer>& observer);
-		void RemoveObserver(const std::shared_ptr<Observer>& observer);
+		void AddObserver(std::shared_ptr<Observer> observer);
+		void RemoveObserver(std::shared_ptr<Observer> observer);
 		
 		void Notify(Event event, const std::weak_ptr<GameObject>& entity);
 		void Notify(Event event, int number);

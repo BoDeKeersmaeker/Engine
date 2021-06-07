@@ -6,8 +6,8 @@
 #include "Audio.h"
 #include "AudioLocator.h"
 #include "DebugManager.h"
-#include "GameManagerComponent.h"
 #include "GameObject.h"
+#include "QbertMenuComponent.h"
 #include "Scene.h"
 #include "SceneManager.h"
 
@@ -22,7 +22,6 @@ void Game::LoadGame() const
 	engine::SceneManager::GetInstance().SetActiveScene("Qbert");
 	
 	auto obj = std::make_shared<engine::GameObject>();
-	obj->SetPosition(275.f, 100.f);
-	obj->AddComponent<GameManagerComponent>(std::make_shared<GameManagerComponent>(obj, pScene, GameMode::Single, std::vector<std::string>{ "./../Data/Level1.txt", "./../Data/Level2.txt", "./../Data/Level3.txt" }));
+	obj->AddComponent<QbertMenuComponent>(std::make_shared<QbertMenuComponent>(obj, pScene));
 	pScene->Add(obj);
 }

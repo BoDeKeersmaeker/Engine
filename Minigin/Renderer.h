@@ -14,24 +14,19 @@ namespace engine
 	{
 	public:
 		void Init(SDL_Window* window);
-		void Render();
+		void Render() const;
 		void Destroy();
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 
 		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
-		int GetOpenGLDriverIndex();
+		static int GetOpenGLDriverIndex();
 		SDL_Window* GetWindow() const;
 	
 	private:
-		void RenderImguiDemo();
-		void RenderGameModeWindow();
 		
 		SDL_Renderer* m_Renderer{};
 		SDL_Window* m_pWindow = nullptr;
-		bool m_ShowDemo = false;
-		bool m_ShowHowToPlay = true;
-		bool m_ShowStartMenu = true;
 	};
 }

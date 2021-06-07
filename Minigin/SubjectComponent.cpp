@@ -18,12 +18,12 @@ void engine::SubjectComponent::Render(const Transform&)
 	
 }
 
-void engine::SubjectComponent::AddObserver(const std::shared_ptr<Observer>& observer)
+void engine::SubjectComponent::AddObserver(std::shared_ptr<Observer> observer)
 {
 	m_pObservers.push_back(observer);
 }
 
-void engine::SubjectComponent::RemoveObserver(const std::shared_ptr<Observer>& observer)
+void engine::SubjectComponent::RemoveObserver(std::shared_ptr<Observer> observer)
 {
 	m_pObservers.erase(std::remove(m_pObservers.begin(), m_pObservers.end(), observer), m_pObservers.end());
 }

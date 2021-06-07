@@ -11,7 +11,6 @@
 
 void engine::Renderer::Init(SDL_Window* window)
 {
-	m_ShowDemo = true;
 	m_pWindow = window;
 	m_Renderer = SDL_CreateRenderer(window, GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (m_Renderer == nullptr) 
@@ -25,7 +24,7 @@ void engine::Renderer::Init(SDL_Window* window)
 	ImGui_ImplOpenGL2_Init();
 }
 
-void engine::Renderer::Render()
+void engine::Renderer::Render() const
 {
 	SDL_RenderClear(m_Renderer);
 
@@ -34,11 +33,9 @@ void engine::Renderer::Render()
 	ImGui::NewFrame();
 	
 	SceneManager::GetInstance().Render();
-
-	/*if(m_ShowDemo)
-		RenderImguiDemo();*/
-	if(m_ShowStartMenu)
-		RenderGameModeWindow();
+	
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_RenderPresent(m_Renderer);
 }
@@ -92,63 +89,4 @@ int engine::Renderer::GetOpenGLDriverIndex()
 SDL_Window* engine::Renderer::GetWindow() const
 {
 	return m_pWindow;
-}
-
-void engine::Renderer::RenderImguiDemo()
-{
-	ImGui_ImplOpenGL2_NewFrame();
-	ImGui_ImplSDL2_NewFrame(m_pWindow);
-	ImGui::NewFrame();
-	
-	ImGui::ShowDemoWindow(&m_ShowDemo);
-	
-	ImGui::Render();
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-}
-
-void engine::Renderer::RenderGameModeWindow()
-{
-
-
-	ImGui::Begin("Qbert");
-
-	if (m_ShowHowToPlay)
-	{
-		ImGui::Text("How to play.");
-		ImGui::Text("Player 1: ");
-		ImGui::Text("Right shoulder to die.");
-		ImGui::Text("A to change color.");
-		ImGui::Text("B to bait coily of the edge.");
-		ImGui::Text("X to Catch Slick.");
-		ImGui::Text("Y to Catch Sam.");
-
-		ImGui::Spacing();
-
-		ImGui::Text("Player 2: ");
-		ImGui::Text("Left shoulder to die.");
-		ImGui::Text("DPAD down to change color.");
-		ImGui::Text("DPAD right to bait coily of the edge.");
-		ImGui::Text("DPAD left to Catch Slick.");
-		ImGui::Text("DPAD up to Catch Sam.");
-
-		ImGui::Spacing();
-
-		if (ImGui::Button("Understood."))
-			m_ShowHowToPlay = !m_ShowHowToPlay;
-	}
-	else
-	{
-		ImGui::Text("GameModes");
-		if (ImGui::Button("SinglePlayer"))
-			m_ShowStartMenu = false;
-		if (ImGui::Button("Co-op"))
-			m_ShowStartMenu = false;
-		if (ImGui::Button("Versus"))
-			m_ShowStartMenu = false;
-	}
-
-	ImGui::End();
-
-	ImGui::Render();
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 }

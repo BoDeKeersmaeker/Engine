@@ -1,16 +1,14 @@
 #include "QbertMenuComponent.h"
-//#include "../3rdParty/imgui-1.81/imgui.h"
-//#include <../3rdParty/imgui-1.81/backends/imgui_impl_opengl2.h>
-//#include <../3rdParty/imgui-1.81/backends/imgui_impl_sdl.h>
 
-#include "imgui.h"
-#include <backends/imgui_impl_opengl2.h>
-#include <backends/imgui_impl_sdl.h>
-
+#include "GameManagerComponent.h"
+#include "GameObject.h"
+#include "Scene.h"
+#include "../3rdParty/imgui-1.81/imgui.h"
 #include "SceneManager.h"
 
-QbertMenuComponent::QbertMenuComponent(const std::shared_ptr<engine::GameObject>& owner)
+QbertMenuComponent::QbertMenuComponent(const std::shared_ptr<engine::GameObject>& owner, const std::weak_ptr<engine::Scene>& scene)
 	:Component(owner)
+	, m_pScene{ scene }
 {
 	
 }
@@ -55,26 +53,30 @@ void QbertMenuComponent::Render(const engine::Transform&)
 	{
 		ImGui::Text("GameModes");
 		if (ImGui::Button("SinglePlayer"))
+		{
 			m_ShowStartMenu = false;
+			auto obj = std::make_shared<engine::GameObject>();
+			obj->SetPosition(275.f, 100.f);
+			obj->AddComponent<GameManagerComponent>(std::make_shared<GameManagerComponent>(obj, m_pScene, GameMode::Single, std::vector<std::string>{ "./../Data/Level1.txt", "./../Data/Level2.txt", "./../Data/Level3.txt" }));
+			m_pScene.lock()->Add(obj);
+		}
 		if (ImGui::Button("Co-op"))
+		{
 			m_ShowStartMenu = false;
+			auto obj = std::make_shared<engine::GameObject>();
+			obj->SetPosition(275.f, 100.f);
+			obj->AddComponent<GameManagerComponent>(std::make_shared<GameManagerComponent>(obj, m_pScene, GameMode::Coop, std::vector<std::string>{ "./../Data/Level1.txt", "./../Data/Level2.txt", "./../Data/Level3.txt" }));
+			m_pScene.lock()->Add(obj);
+		}
 		if (ImGui::Button("Versus"))
+		{
 			m_ShowStartMenu = false;
+			auto obj = std::make_shared<engine::GameObject>();
+			obj->SetPosition(275.f, 100.f);
+			obj->AddComponent<GameManagerComponent>(std::make_shared<GameManagerComponent>(obj, m_pScene, GameMode::Versus, std::vector<std::string>{ "./../Data/Level1.txt", "./../Data/Level2.txt", "./../Data/Level3.txt" }));
+			m_pScene.lock()->Add(obj);
+		}
 	}
 
 	ImGui::End();
-
-	ImGui::Render();
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-}
-
-bool QbertMenuComponent::IsReadyToPlay() const
-{
-	return !m_ShowStartMenu;
-}
-
-void QbertMenuComponent::SetShowWindow(bool showWindow)
-{
-	m_ShowStartMenu = showWindow;
-	m_ShowHowToPlay = showWindow;
 }

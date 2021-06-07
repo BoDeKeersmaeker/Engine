@@ -9,3 +9,10 @@ enum class Direction
 	LEFT = 4,
 	RIGHT = 5
 };
+
+enum class GameMode
+{
+	Single,
+	Coop,
+	Versus
+};

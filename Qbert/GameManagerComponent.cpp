@@ -44,9 +44,9 @@
 
 GameManagerComponent::GameManagerComponent(const std::shared_ptr<engine::GameObject>& owner, const std::weak_ptr<engine::Scene>& scene, GameMode gameMode, const std::vector<std::string>& levelPaths)
 	:Component(owner)
-	, m_LevelPaths( levelPaths )
-	, m_pScene( scene )
-	, m_GameMode( gameMode )
+	, m_LevelPaths(levelPaths)
+	, m_pScene(scene)
+	, m_GameMode(gameMode)
 	, m_pPlayers{ std::shared_ptr<PlayerComponent>(nullptr), std::shared_ptr<PlayerComponent>(nullptr) }
 {
 	LoadGameManager(gameMode);
@@ -61,14 +61,14 @@ void GameManagerComponent::Update()
 		NextLevel();
 		m_EnemiesCleared = false;
 	}
-	else if(m_GameWon)
+	else if (m_GameWon)
 		Reset();
-	else if(IsGameOver())
+	else if (IsGameOver())
 		Reset();
 
 	const auto elapsedSec = engine::EngineTime::GetInstance().GetElapsedSec();
-	
-	if(m_CurrentGreenEnemyCooldown >= 0.f)
+
+	if (m_CurrentGreenEnemyCooldown >= 0.f)
 		m_CurrentGreenEnemyCooldown -= elapsedSec;
 	if (m_CurrentGreenEnemyCooldown <= 0.f)
 		SpawnGreenEnemy();
@@ -107,7 +107,7 @@ void GameManagerComponent::SetEnemyCooldown(float greenEnemyCooldown, float purp
 
 void GameManagerComponent::NextLevel()
 {
-	if(m_CurrentLevelIndex + 1 < m_LevelPaths.size())
+	if (m_CurrentLevelIndex + 1 < m_LevelPaths.size())
 	{
 		m_CurrentLevelIndex++;
 		LoadLevel(m_CurrentLevelIndex);
@@ -134,14 +134,14 @@ void GameManagerComponent::LoadGameManager(GameMode gameMode)
 	engine::AudioLocator::getAudioSystem()->AddEffect(3, "./../Data/PurpleJump.mp3");
 	engine::AudioLocator::getAudioSystem()->AddEffect(4, "./../Data/CoilyJump.mp3");
 	engine::AudioLocator::getAudioSystem()->AddEffect(5, "./../Data/CoilyDeath.mp3");
-	
+
 	auto scoreCounter = std::make_shared<engine::GameObject>();
 	auto font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
 	scoreCounter->AddComponent<engine::CounterComponent>(std::make_shared<engine::CounterComponent>(scoreCounter, font, 0, "Score: "));
 	scoreCounter->SetPosition(m_pOwner.lock()->GetPosition().x, m_pOwner.lock()->GetPosition().y - 50.f);
 	m_pScene.lock()->Add(scoreCounter);
 	m_pMiscObjects.push_back(scoreCounter);
-	
+
 	m_pScoreObserver = std::make_shared<ScoreObserver>(scoreCounter->GetComponent<engine::CounterComponent>());
 
 	LoadLevel(m_CurrentLevelIndex);
@@ -167,52 +167,52 @@ void GameManagerComponent::LoadLevel(size_t index)
 		m_pGrid.lock()->Clear();
 		m_pGrid.lock()->GetOwner().lock()->Destroy();
 	}
-	
+
 	auto obj = std::make_shared<engine::GameObject>();
 	obj->SetPosition(m_pOwner.lock()->GetPosition());
 	obj->AddComponent<GridComponent>(std::make_shared<GridComponent>(obj, m_pScene, m_LevelPaths[index], 1, m_pScoreObserver));
 	obj->GetComponent<engine::SubjectComponent>().lock()->AddObserver(m_pScoreObserver);
 	m_pGrid = obj->GetComponent<GridComponent>();
 	m_pScene.lock()->Add(obj, 1);
-	
+
 	switch (m_GameMode)
 	{
-		case GameMode::Single:
-			if (!m_pPlayers.first.expired())
-				m_pPlayers.first.lock()->Reset(m_pGrid.lock()->GetSoloStartNode());
-			break;
-		case GameMode::Coop:
-			if (!m_pPlayers.first.expired())
-				m_pPlayers.first.lock()->Reset(m_pGrid.lock()->GetCoopStartNodes().first);
-			if (!m_pPlayers.second.expired())
-				m_pPlayers.second.lock()->Reset(m_pGrid.lock()->GetCoopStartNodes().second);
-			break;
-		case GameMode::Versus:
-			if (!m_pPlayers.first.expired())
-				m_pPlayers.first.lock()->Reset(m_pGrid.lock()->GetSoloStartNode());
-			break;
+	case GameMode::Single:
+		if (!m_pPlayers.first.expired())
+			m_pPlayers.first.lock()->Reset(m_pGrid.lock()->GetSoloStartNode());
+		break;
+	case GameMode::Coop:
+		if (!m_pPlayers.first.expired())
+			m_pPlayers.first.lock()->Reset(m_pGrid.lock()->GetCoopStartNodes().first);
+		if (!m_pPlayers.second.expired())
+			m_pPlayers.second.lock()->Reset(m_pGrid.lock()->GetCoopStartNodes().second);
+		break;
+	case GameMode::Versus:
+		if (!m_pPlayers.first.expired())
+			m_pPlayers.first.lock()->Reset(m_pGrid.lock()->GetSoloStartNode());
+		break;
 	}
 }
 
 void GameManagerComponent::LoadSingle()
 {
 	SetEnemyCooldown(10, 7.5, 15);
-	
+
 	auto obj = std::make_shared<engine::GameObject>();
 	obj->AddComponent<engine::RenderComponent>(std::make_shared<engine::RenderComponent>(obj, "Qbert.png", engine::Float2{ 0.f, -32.f }));
 	obj->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(obj, m_pGrid.lock()->GetSoloStartNode()));
-	
+
 	auto lifeCounter = std::make_shared<engine::GameObject>();
 	auto font = engine::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
 	lifeCounter->AddComponent<engine::CounterComponent>(std::make_shared<engine::CounterComponent>(lifeCounter, font, obj->GetComponent<PlayerComponent>().lock()->GetLives(), "Lives: "));
 	lifeCounter->SetPosition(m_pOwner.lock()->GetPosition().x - 100.f, m_pOwner.lock()->GetPosition().y - 50.f);
 	m_pScene.lock()->Add(lifeCounter);
 	m_pMiscObjects.push_back(lifeCounter);
-	
+
 	obj->GetComponent<engine::SubjectComponent>().lock()->AddObserver(std::make_shared<LifeObserver>(lifeCounter->GetComponent<engine::CounterComponent>(), m_pOwner));
 	m_pPlayers.first = obj->GetComponent<PlayerComponent>();
 	m_pScene.lock()->Add(obj);
-	
+
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPLEFT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPLEFT));
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_UPRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_LTHUMB_DOWNRIGHT, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
@@ -232,7 +232,7 @@ void GameManagerComponent::LoadSingle()
 void GameManagerComponent::LoadCoop()
 {
 	SetEnemyCooldown(10, 7.5, 15);
-	
+
 	auto obj = std::make_shared<engine::GameObject>();
 	obj->AddComponent<engine::RenderComponent>(std::make_shared<engine::RenderComponent>(obj, "Qbert.png", engine::Float2{ 0.f, -32.f }));
 	obj->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(obj, m_pGrid.lock()->GetCoopStartNodes().first));
@@ -262,7 +262,7 @@ void GameManagerComponent::LoadCoop()
 	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_z, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::TOPRIGHT));
 	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_s, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMRIGHT));
 	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_q, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.first, Direction::BOTTOMLEFT));
-	
+
 	obj = std::make_shared<engine::GameObject>();
 	obj->AddComponent<engine::RenderComponent>(std::make_shared<engine::RenderComponent>(obj, "Qbert2.png", engine::Float2{ 0.f, -32.f }));
 	obj->AddComponent<PlayerComponent>(std::make_shared<PlayerComponent>(obj, m_pGrid.lock()->GetCoopStartNodes().second));
@@ -272,7 +272,7 @@ void GameManagerComponent::LoadCoop()
 	lifeCounter->AddComponent<engine::CounterComponent>(std::make_shared<engine::CounterComponent>(lifeCounter, font, obj->GetComponent<PlayerComponent>().lock()->GetLives(), "Lives: "));
 	lifeCounter->SetPosition(m_pOwner.lock()->GetPosition().x + 150.f, m_pOwner.lock()->GetPosition().y - 50.f);
 	m_pScene.lock()->Add(lifeCounter);
-	
+
 	obj->GetComponent<engine::SubjectComponent>().lock()->AddObserver(std::make_shared<LifeObserver>(lifeCounter->GetComponent<engine::CounterComponent>(), m_pOwner));
 	m_pPlayers.second = obj->GetComponent<PlayerComponent>();
 	m_pScene.lock()->Add(obj);
@@ -286,7 +286,7 @@ void GameManagerComponent::LoadCoop()
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_RIGHT, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::TOPRIGHT));
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_DOWN, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::BOTTOMRIGHT));
 	engine::InputManager::GetInstance().AddControllerCommand(VK_PAD_DPAD_LEFT, engine::InputTriggerType::OnInputDown, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::BOTTOMLEFT));
-	
+
 	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_o, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::TOPLEFT));
 	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_p, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::TOPRIGHT));
 	engine::InputManager::GetInstance().AddKeyBoardCommand(SDLK_m, engine::InputTriggerType::OnInputHold, std::make_shared<PlayerMove>(m_pPlayers.second, Direction::BOTTOMRIGHT));
@@ -307,7 +307,7 @@ void GameManagerComponent::LoadVersus()
 	lifeCounter->SetPosition(m_pOwner.lock()->GetPosition().x - 100.f, m_pOwner.lock()->GetPosition().y - 50.f);
 	m_pScene.lock()->Add(lifeCounter);
 	m_pMiscObjects.push_back(lifeCounter);
-	
+
 	obj->GetComponent<engine::SubjectComponent>().lock()->AddObserver(std::make_shared<LifeObserver>(lifeCounter->GetComponent<engine::CounterComponent>(), m_pOwner));
 	m_pPlayers.first = obj->GetComponent<PlayerComponent>();
 	m_pScene.lock()->Add(obj);
@@ -372,8 +372,8 @@ void GameManagerComponent::SpawnGreenEnemy()
 	m_CurrentGreenEnemyCooldown = m_GreenEnemyCooldown;
 
 	auto obj = std::make_shared<engine::GameObject>();
-	
-	if(rand() % 2)
+
+	if (rand() % 2)
 		obj->AddComponent<engine::RenderComponent>(std::make_shared<engine::RenderComponent>(obj, "Slick.png", engine::Float2{ 0.f, -32.f }));
 	else
 		obj->AddComponent<engine::RenderComponent>(std::make_shared<engine::RenderComponent>(obj, "Sam.png", engine::Float2{ 0.f, -32.f }));
@@ -382,7 +382,7 @@ void GameManagerComponent::SpawnGreenEnemy()
 	obj->GetComponent<engine::SubjectComponent>().lock()->AddObserver(m_pScoreObserver);
 	m_pScene.lock()->Add(obj);
 	m_pGreenEnemies.push_back(obj->GetComponent<GreenEnemyComponent>());
-	
+
 	engine::DebugManager::GetInstance().print("Green enemy spawned.", GAMEMANAGER_DEBUG);
 }
 
@@ -404,7 +404,7 @@ void GameManagerComponent::SpawnPurpleEnemy()
 	}
 	m_pScene.lock()->Add(obj);
 	m_pPurpleEnemies.push_back(obj->GetComponent<PurpleEnemyComponent>());
-	
+
 	engine::DebugManager::GetInstance().print("Purple enemy spawned.", GAMEMANAGER_DEBUG);
 }
 
@@ -413,24 +413,24 @@ void GameManagerComponent::SpawnCoily()
 	m_CurrentCoilyCooldown = m_CoilyCooldown;
 
 	auto obj = std::make_shared<engine::GameObject>();
-	
+
 	switch (m_GameMode)
 	{
-		case GameMode::Single:
+	case GameMode::Single:
+		obj->AddComponent<CoilyComponent>(std::make_shared<CoilyComponent>(obj, std::pair<std::string, std::string>{ "Egg.png", "Coily.png" }, true, m_pGrid.lock()->GetSoloStartNode(), m_pPlayers.first));
+		break;
+	case GameMode::Coop:
+		if (rand() % 2)
 			obj->AddComponent<CoilyComponent>(std::make_shared<CoilyComponent>(obj, std::pair<std::string, std::string>{ "Egg.png", "Coily.png" }, true, m_pGrid.lock()->GetSoloStartNode(), m_pPlayers.first));
-			break;
-		case GameMode::Coop:
-			if (rand() % 2)
-				obj->AddComponent<CoilyComponent>(std::make_shared<CoilyComponent>(obj, std::pair<std::string, std::string>{ "Egg.png", "Coily.png" }, true, m_pGrid.lock()->GetSoloStartNode(), m_pPlayers.first));
-			else
-				obj->AddComponent<CoilyComponent>(std::make_shared<CoilyComponent>(obj, std::pair<std::string, std::string>{ "Egg.png", "Coily.png" }, true, m_pGrid.lock()->GetSoloStartNode(), m_pPlayers.second));
-			break;
-		case GameMode::Versus:
-			obj->AddComponent<CoilyComponent>(std::make_shared<CoilyComponent>(obj, std::pair<std::string, std::string>{ "Egg.png", "Coily.png" }, false, m_pGrid.lock()->GetSoloStartNode(), m_pPlayers.first));
-			UpdateCoilyCommands(obj->GetComponent<CoilyComponent>());
-			break;
+		else
+			obj->AddComponent<CoilyComponent>(std::make_shared<CoilyComponent>(obj, std::pair<std::string, std::string>{ "Egg.png", "Coily.png" }, true, m_pGrid.lock()->GetSoloStartNode(), m_pPlayers.second));
+		break;
+	case GameMode::Versus:
+		obj->AddComponent<CoilyComponent>(std::make_shared<CoilyComponent>(obj, std::pair<std::string, std::string>{ "Egg.png", "Coily.png" }, false, m_pGrid.lock()->GetSoloStartNode(), m_pPlayers.first));
+		UpdateCoilyCommands(obj->GetComponent<CoilyComponent>());
+		break;
 	}
-	
+
 	m_pCoily = obj->GetComponent<CoilyComponent>();
 	obj->GetComponent<engine::SubjectComponent>().lock()->AddObserver(m_pScoreObserver);
 	m_pScene.lock()->Add(obj);
@@ -440,14 +440,14 @@ void GameManagerComponent::SpawnCoily()
 void GameManagerComponent::ClearEnemies()
 {
 	for (auto comp : m_pGreenEnemies)
-		if(!comp.expired())
+		if (!comp.expired())
 			comp.lock()->GetOwner().lock()->Destroy();
 
 	for (auto comp : m_pPurpleEnemies)
-		if(!comp.expired())
+		if (!comp.expired())
 			comp.lock()->GetOwner().lock()->Destroy();
-	
-	if(!m_pCoily.expired())
+
+	if (!m_pCoily.expired())
 		m_pCoily.lock()->GetOwner().lock()->Destroy();
 }
 
@@ -469,7 +469,7 @@ void GameManagerComponent::CheckCharacterOverlap()
 				comp.lock()->GetOwner().lock()->Destroy();
 		}
 	}
-	
+
 	for (auto comp : m_pPurpleEnemies)
 	{
 		if (!comp.expired())
@@ -481,9 +481,9 @@ void GameManagerComponent::CheckCharacterOverlap()
 		}
 	}
 
-	if(!m_pCoily.expired())
+	if (!m_pCoily.expired())
 	{
-		if(!m_pPlayers.first.expired() && !m_pPlayers.first.lock()->IsOnDisk() && m_pCoily.lock()->GetCurrentNode().lock() == m_pPlayers.first.lock()->GetCurrentNode().lock())
+		if (!m_pPlayers.first.expired() && !m_pPlayers.first.lock()->IsOnDisk() && m_pCoily.lock()->GetCurrentNode().lock() == m_pPlayers.first.lock()->GetCurrentNode().lock())
 			m_pPlayers.first.lock()->Die();
 		if (!m_pPlayers.second.expired() && !m_pPlayers.second.lock()->IsOnDisk() && m_pCoily.lock()->GetCurrentNode().lock() == m_pPlayers.second.lock()->GetCurrentNode().lock())
 			m_pPlayers.second.lock()->Die();
@@ -492,25 +492,26 @@ void GameManagerComponent::CheckCharacterOverlap()
 
 void GameManagerComponent::UpdateCoilyCommands(std::weak_ptr<CoilyComponent> pTarger)
 {
-	for(auto command : m_pCoilyCommands)
-		command.lock()->ChangeTarget(pTarger);
+	for (auto command : m_pCoilyCommands)
+		if(!command.expired() && !pTarger.expired())
+			command.lock()->ChangeTarget(pTarger);
 }
 
 bool GameManagerComponent::IsGameOver() const
 {
-	switch (m_GameMode) 
+	switch (m_GameMode)
 	{
-		case GameMode::Single:
-			return m_pPlayers.first.expired();
-			break;
-		case GameMode::Coop:
-			return m_pPlayers.first.expired() && m_pPlayers.second.expired();
-			break;
-		case GameMode::Versus:
-			return m_pPlayers.first.expired();
-			break;
-		default: 
-			return false;
+	case GameMode::Single:
+		return m_pPlayers.first.expired();
+		break;
+	case GameMode::Coop:
+		return m_pPlayers.first.expired() && m_pPlayers.second.expired();
+		break;
+	case GameMode::Versus:
+		return m_pPlayers.first.expired();
+		break;
+	default:
+		return false;
 	}
 }
 
@@ -520,20 +521,20 @@ void GameManagerComponent::Reset()
 	m_pGrid.lock()->GetOwner().lock()->Destroy();
 
 	m_pMiscObjects.erase(std::remove_if(m_pMiscObjects.begin(), m_pMiscObjects.end(), [](std::weak_ptr<engine::GameObject> obj)
-	{
-		if (!obj.expired())
 		{
-			obj.lock()->Destroy();
-			return true;
-		}
-		return false;
-	}));
+			if (!obj.expired())
+			{
+				obj.lock()->Destroy();
+				return true;
+			}
+			return false;
+		}));
 
 	if (!m_pPlayers.first.expired())
 		m_pPlayers.first.lock()->GetOwner().lock()->Destroy();
 	if (!m_pPlayers.second.expired())
 		m_pPlayers.second.lock()->GetOwner().lock()->Destroy();
-	
+
 	engine::AudioLocator::getAudioSystem()->Reset();
 	engine::InputManager::GetInstance().Reset();
 
