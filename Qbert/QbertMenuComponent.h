@@ -15,8 +15,7 @@ public:
 	void Render(const engine::Transform& transform) override;
 
 private:
-bool m_ShowHowToPlay = true;
-bool m_ShowStartMenu = true;
-std::weak_ptr<engine::Scene> m_pScene;
-//	GameMode m_GameMode;
+	bool m_ShowHowToPlay = true;
+	bool m_ShowStartMenu = true;
+	std::weak_ptr<engine::Scene> m_pScene;
 };

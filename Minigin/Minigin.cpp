@@ -74,24 +74,22 @@ void engine::Minigin::Run()
 
 	LoadGame();
 
+	auto& renderer = Renderer::GetInstance();
+	auto& sceneManager = SceneManager::GetInstance();
+	auto& input = InputManager::GetInstance();
+
+	bool doContinue = true;
+	auto lastTime = std::chrono::high_resolution_clock::now();
+	while (doContinue)
 	{
-		auto& renderer = Renderer::GetInstance();
-		auto& sceneManager = SceneManager::GetInstance();
-		auto& input = InputManager::GetInstance();
+		const auto currentTime = high_resolution_clock::now();
+		EngineTime::GetInstance().UpdateElapsedSec(duration_cast<duration<float>>(currentTime - lastTime).count());
 
-		bool doContinue = true;
-		auto lastTime = std::chrono::high_resolution_clock::now();
-		while (doContinue)
-		{
-			const auto currentTime = high_resolution_clock::now();
-			EngineTime::GetInstance().UpdateElapsedSec(duration_cast<duration<float>>(currentTime - lastTime).count());
-
-			doContinue = input.ProcessInput();
-			sceneManager.Update();
-			renderer.Render();
+		doContinue = input.ProcessInput();
+		sceneManager.Update();
+		renderer.Render();
 			
-			lastTime = currentTime;
-		}
+		lastTime = currentTime;
 	}
 
 	Cleanup();

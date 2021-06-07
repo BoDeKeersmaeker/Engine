@@ -28,22 +28,47 @@ void QbertMenuComponent::Render(const engine::Transform&)
 	if (m_ShowHowToPlay)
 	{
 		ImGui::Text("How to play.");
+		
+		ImGui::Spacing();
+		
 		ImGui::Text("Player 1: ");
-		ImGui::Text("Right shoulder to die.");
-		ImGui::Text("A to change color.");
-		ImGui::Text("B to bait coily of the edge.");
-		ImGui::Text("X to Catch Slick.");
-		ImGui::Text("Y to Catch Sam.");
+		ImGui::Text("Controller movement:");
+		ImGui::Text("Left stick to move or");
+		ImGui::Text("Y to move top left");
+		ImGui::Text("B to move top right");
+		ImGui::Text("X to move bottom left");
+		ImGui::Text("A to move bottom right");
 
+		ImGui::Spacing();
+		
+		ImGui::Text("Keyboard movement:");
+		ImGui::Text("Q to move top left");
+		ImGui::Text("W to move top right");
+		ImGui::Text("A to move bottom left");
+		ImGui::Text("S to move bottom right");
+
+		ImGui::Spacing();
+		ImGui::Spacing();
 		ImGui::Spacing();
 
 		ImGui::Text("Player 2: ");
-		ImGui::Text("Left shoulder to die.");
-		ImGui::Text("DPAD down to change color.");
-		ImGui::Text("DPAD right to bait coily of the edge.");
-		ImGui::Text("DPAD left to Catch Slick.");
-		ImGui::Text("DPAD up to Catch Sam.");
+		ImGui::Text("Controller movement:");
+		ImGui::Text("Right stick to move or");
+		ImGui::Text("DPAD up to move top left");
+		ImGui::Text("DPAD right to move top right");
+		ImGui::Text("DPAD left to move bottom left");
+		ImGui::Text("DPAD down to move bottom right");
 
+		ImGui::Spacing();
+		
+		ImGui::Text("Keyboard movement:");
+		ImGui::Text("I to move top left");
+		ImGui::Text("O to move top right");
+		ImGui::Text("K to move bottom left");
+		ImGui::Text("L to move bottom right");
+
+		ImGui::Spacing();
+		ImGui::Spacing();
 		ImGui::Spacing();
 
 		if (ImGui::Button("Understood."))
